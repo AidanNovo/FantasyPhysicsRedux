@@ -1,13 +1,12 @@
 import random
 import tkinter as tk
-from tkinter import messagebox
 from tkinter import PhotoImage
 import math
 
 import cards
 import vars
 import time
-from copy import deepcopy
+
 
 
 # TODO: Implement a GUI to reorganize your active row
@@ -36,9 +35,6 @@ def crack_booster_pack(pack_size=5,
 
     print('Deck:', vars.deck)
 
-
-j = 0
-
 def add_card_to_deck(card_name):
     """Add a card by name to the deck, bind its function to the instance, and grid the corresponding button."""
 
@@ -51,38 +47,54 @@ def add_card_to_deck(card_name):
 
     card.gui_button.configure(command=lambda c=card: move_card_to_active_row(c))
     # Grid the corresponding GUI button into the deck frame
-    deck_index = vars.deck.index(card)
-    card.gui_button.grid(row=math.floor(deck_index/3), column=deck_index % 3, padx=2, pady=2)
+    card_index = vars.deck.index(card)
+    card.gui_button.grid(row=math.floor(card_index/3), column=card_index % 3, padx=2, pady=2)
 
 
+# TODO: Generalize the move to active row and move to deck commands to allow a move from anywhere.
+#   - Essentially, stop assuming that cards will only ever be in either the active row or the deck
 
 def move_card_to_active_row(card):
-    deck_index = vars.deck.index(card)
+    old_index = vars.deck.index(card)
 
-    if len(active_row) < vars.max_active_cards:
-        print(f'Moving card from deck index {deck_index} to active row')
+    if len(vars.active_row) < vars.max_active_cards:
+        print(f'Moving card from deck index {old_index} to active row')
         cfg = card.gui_button.config()
         card.gui_button.destroy()
-        active_row.append(vars.deck.pop(deck_index))
-        card.gui_button = tk.Button(F_active_cards, image=cfg['image'][4], command=cfg['command'][4])
-        card.gui_button.grid(row=0, column=active_row.index(card))
+        vars.active_row.append(vars.deck.pop(old_index))
+        card.gui_button = tk.Button(F_active_cards, image=cfg['image'][4],
+                                    command=lambda c=card: move_card_to_deck(c))
+        card.gui_button.grid(row=0, column=vars.active_row.index(card))
     else:
         print(f'Free up a slot in the active row first!')
 
+def move_card_to_deck(card):
+    old_index = vars.active_row.index(card)
+
+    print(f'Moving card from active row index {old_index} to deck')
+    cfg = card.gui_button.config()
+    card.gui_button.destroy()
+    vars.deck.append(vars.active_row.pop(old_index))
+    card.gui_button = tk.Button(F_deck_images, image=cfg['image'][4],
+                                command=lambda c=card: move_card_to_active_row(c))
+
+    new_index = vars.deck.index(card)
+    card.gui_button.grid(row=math.floor(new_index/3), column=new_index % 3, padx=2, pady=2)
+
 # TODO: For convenience, add a button to reset the current active row.
 # def reset():
-#     active_row = []
+#     vars.active_row = []
 #     vars.deck = []
 
 def activate_cards():
-    print('\nCard order:', active_row)
+    print('\nCard order:', vars.active_row)
 
     print('\n--------START--------')
-    for card in active_row:
+    for card in vars.active_row:
         active_card_pointer.grid(row=1, column=active_row.index(card))
         root.update()
         root.update_idletasks()
-        card.function(active_row)
+        card.function(vars.active_row)
         time.sleep(1)
 
     active_card_pointer.grid_remove()
@@ -90,33 +102,21 @@ def activate_cards():
 
 
 def update_deck_display():
-    # for card in vars.deck:
-    #     card.gui_button.grid_forget()
-
     for card in vars.deck:
         deck_index = vars.deck.index(card)
         card.gui_button.grid(row=math.floor(deck_index / 3), column=deck_index % 3, padx=2, pady=2)
 
     root.after(250, update_deck_display)
 
-    # def update_deck_display():
-#     try:
-#         for card in card_button_list:
-#             card.configure(image=image_dict[vars.deck[card_button_list.index(card)].image_file])
-#     except IndexError:
-#         card.configure(image=placeholder_img)  # This may be wasting some resources? But it is quick and easy.
-#         # print('IndexError')
-#     root.after(250, update_deck_display)
 
+def update_active_row_display():
+    try:
+        for item in active_item_label_list:
+            item.config(image=image_dict[active_row[active_item_label_list.index(item)].image_file])
+    except IndexError:
+        pass
 
-# def update_active_row_display():
-#     try:
-#         for item in active_item_label_list:
-#             item.config(image=image_dict[active_row[active_item_label_list.index(item)].image_file])
-#     except IndexError:
-#         pass
-
-    # root.after(250, update_active_row_display)
+    root.after(250, update_active_row_display)
 
 
 def update_score():
@@ -152,8 +152,6 @@ if __name__ == '__main__':
     #     'fp_small_ml.png': ml_img,
     #     'fp_small_recompute.png': recompute_img
     # }
-
-    active_row = []
 
     F_sidebar = tk.Frame(root, bd=2, bg='#bbbbbb', relief=tk.GROOVE)
     F_sidebar.grid(row=0, column=0, rowspan=2, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.N + tk.S)
@@ -191,16 +189,3 @@ if __name__ == '__main__':
     # root.after(0, update_active_row_display)
 
     root.mainloop()
-
-    # crack_booster_pack()
-    #
-    # # This is the 'on-screen' row that contains the currently active card_dict.
-    # active_row = [vars.deck[-1], vars.deck[1], vars.deck[2], vars.deck[3]]
-    # print('Card order:', active_row)
-    #
-    # print('\n--------START--------')
-    # for item in active_row:
-    #     item.function(active_row)
-    #
-    # print('---------END---------')
-    # print(f'Score: {vars.score}')

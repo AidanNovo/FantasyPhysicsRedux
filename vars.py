@@ -1,15 +1,19 @@
 # To solve circular import issues, this is a module where all the floating variables live
 # There is surely a much better way to do this.
 
+# class CardHolder:
+#     def __init__(self, contents=[], max_size=999):
+#         self.contents = contents
+#         self.max_size = max_size
+
 neutrino_flux = 1000  # Should vary by week in actual version, pulled from actual data
 
 data = 0
 score = 0
 
 deck = []
-
+active_row = []
 max_active_cards = 5  # The max number of cards that may be in the active row
-
 
 # Card rarity coefficients. Used when opening booster packs.
 
