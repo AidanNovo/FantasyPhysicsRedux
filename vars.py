@@ -7,3 +7,13 @@ data = 0
 score = 0
 
 deck = []
+
+
+# Card rarity coefficients. Used when opening booster packs.
+
+# Keep in mind that the "true" rarity of any type is equal to the rarity coefficient times the number of cards of that
+# rarity. So if you don't make many legendary cards, they will be getting hit twice.
+r_common = 10
+r_uncommon = 5
+r_rare = 3
+r_legendary = 1

@@ -11,21 +11,27 @@ from copy import deepcopy
 
 # TODO: Implement a GUI to reorganize your active row
 
-def crack_booster_pack():
+def crack_booster_pack(pack_size=5,
+                       draw_pool=tuple(cards.card_dict.keys()),
+                       draw_weights=tuple(int(cards.card_dict[c].rarity) for c in cards.card_dict.keys())):
+    """
+    Add n randomly-chosen cards to the deck, weighted by rarity, with replacement.
+
+    Args:
+        pack_size: The number of cards to draw and add to deck.
+        draw_pool: A tuple of cards.card_dict keys comprising the pool to pick cards from.
+        draw_weights: The weights to draw cards with. Must be same size as draw_pool.
+    """
+
     print('Opening a booster pack...')
 
     # TODO: Implement random booster pack contents
 
-    for _ in range(0, 3):
-        pulled_card = random.choice(list(cards.card_dict.keys()))
-        print(f'You found a(n) {pulled_card} card!')
-        give_card(pulled_card)
-    # give_card('IceCube')
-    # give_card('IceCube')
-    # give_card('Neutr. Gen')
-    # give_card('Neutr. Gen')
-    # give_card('Re-Trigger')
-    # give_card('Re-Trigger')
+    pulled_cards = random.choices(population=draw_pool, weights=draw_weights, k=pack_size)
+
+    for c in pulled_cards:
+        print(f'You found a(n) {c} card!')
+        give_card(c)
 
     print('Deck:', vars.deck)
 
@@ -38,7 +44,7 @@ def give_card(card_name):
     vars.deck[-1].function = vars.deck[-1].function.__get__(vars.deck[-1], cards.Card)  # Bind instance method
 
 
-def choose_card(index):
+def add_card_to_active_row(index):
     try:
         active_row.append(vars.deck.pop(index))
 
@@ -146,7 +152,7 @@ if __name__ == '__main__':
     # Populate the decklist frame.
     card_button_list = []
     for i in range(0, 12):
-        button = tk.Button(F_deck_images, image=placeholder_img, command=lambda i=i: choose_card(i))
+        button = tk.Button(F_deck_images, image=placeholder_img, command=lambda i=i: add_card_to_active_row(i))
         button.grid(row=math.floor(i/3), column=i % 3, padx=2, pady=2)
         card_button_list.append(button)
 

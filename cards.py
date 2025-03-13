@@ -9,23 +9,6 @@ def f_default():
     raise Exception('Card activated with undefined function')
 
 
-class Card:
-    """A class for the general card_name object. Specific card_dict inherit from this."""
-
-    def __init__(self, name='', image=None, card_type='', tags=(), function=f_default, param=0.0):
-        self.name = name
-        self.image = image
-
-        self.card_type = card_type
-        self.tags = tags
-        self.function = function
-
-        self.param = param  # Mostly for testing purposes as a general-purpose card parameter. Tracks ML mult, for example
-
-    def __repr__(self):
-        return self.name
-
-
 def f_icecube(self, ar):
     """Generate data from neutrino flux."""
     active_row = ar
@@ -73,8 +56,26 @@ def f_recompute(self, ar):
             card.function(ar)
 
 
+class Card:
+    def __init__(self, name='', image=None, card_type='', tags=(), function=f_default, param=0.0, rarity=vars.r_common):
+        self.name = name
+        self.image = image
+
+        self.card_type = card_type
+        self.tags = tags
+        self.function = function
+
+        #: int: asdkd kwkw
+        self.param = param
+
+        self.rarity = rarity  # Coefficient to weight draw rarity. Higher number = more common card.
+
+    def __repr__(self):
+        return self.name
+
+
 def card_factory(card_name):
-    """Factory Method (I think)"""
+    """Factory method."""
 
     global card_dict
 
@@ -87,9 +88,9 @@ card_dict = {
     'Neutr. Gen':   Card(name='Neutr. Gen', card_type='prototype', tags=['neutrino'],
                          image='fp_small_neutrino_gen.png', function=f_neutrino_generator),
     'ReCompute':    Card(name='ReCompute', card_type='prototype',
-                         image='fp_small_recompute.png', function=f_recompute),
+                         image='fp_small_recompute.png', rarity=vars.r_uncommon, function=f_recompute),
     'Re-Trigger':   Card(name='Re-Trigger', card_type='prototype',
-                         image='fp_small_retrigger.png', function=f_retrigger_left),
+                         image='fp_small_retrigger.png', rarity=vars.r_uncommon, function=f_retrigger_left),
 
 
     # Detector Cards
@@ -98,7 +99,7 @@ card_dict = {
 
     # Analysis Cards
     'Mach. Lrn.':   Card(name='Mach. Lrn.', card_type='analysis', tags=['computer'],
-                         image='fp_small_ml.png', function=f_machine_learning, param=0.8),
+                         image='fp_small_ml.png', param=0.8, function=f_machine_learning),
 
     # Auxiliary Cards
 
