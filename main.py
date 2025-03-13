@@ -37,6 +37,7 @@ def crack_booster_pack(pack_size=5,
     print('Deck:', vars.deck)
 
 
+j = 0
 
 def add_card_to_deck(card_name):
     """Add a card by name to the deck, bind its function to the instance, and grid the corresponding button."""
@@ -50,8 +51,9 @@ def add_card_to_deck(card_name):
 
     card.gui_button.configure(command=lambda c=card: move_card_to_active_row(c))
     # Grid the corresponding GUI button into the deck frame
-    i = vars.deck.index(card)
-    card.gui_button.grid(row=math.floor(i/3), column=i % 3, padx=2, pady=2)
+    deck_index = vars.deck.index(card)
+    card.gui_button.grid(row=math.floor(deck_index/3), column=deck_index % 3, padx=2, pady=2)
+
 
 
 def move_card_to_active_row(card):
@@ -88,23 +90,33 @@ def activate_cards():
 
 
 def update_deck_display():
-    try:
-        for card in card_button_list:
-            card.configure(image=image_dict[vars.deck[card_button_list.index(card)].image_file])
-    except IndexError:
-        card.configure(image=placeholder_img)  # This may be wasting some resources? But it is quick and easy.
-        # print('IndexError')
+    # for card in vars.deck:
+    #     card.gui_button.grid_forget()
+
+    for card in vars.deck:
+        deck_index = vars.deck.index(card)
+        card.gui_button.grid(row=math.floor(deck_index / 3), column=deck_index % 3, padx=2, pady=2)
+
     root.after(250, update_deck_display)
 
+    # def update_deck_display():
+#     try:
+#         for card in card_button_list:
+#             card.configure(image=image_dict[vars.deck[card_button_list.index(card)].image_file])
+#     except IndexError:
+#         card.configure(image=placeholder_img)  # This may be wasting some resources? But it is quick and easy.
+#         # print('IndexError')
+#     root.after(250, update_deck_display)
 
-def update_active_row_display():
-    try:
-        for item in active_item_label_list:
-            item.config(image=image_dict[active_row[active_item_label_list.index(item)].image_file])
-    except IndexError:
-        pass
 
-    root.after(250, update_active_row_display)
+# def update_active_row_display():
+#     try:
+#         for item in active_item_label_list:
+#             item.config(image=image_dict[active_row[active_item_label_list.index(item)].image_file])
+#     except IndexError:
+#         pass
+
+    # root.after(250, update_active_row_display)
 
 
 def update_score():
@@ -152,22 +164,10 @@ if __name__ == '__main__':
     F_active_cards = tk.Frame(root)
     F_active_cards.grid(row=0, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N)
 
-
     active_card_pointer = tk.Label(F_active_cards, text='ACTIVE')
-    # for i in range(0, 5):
-    #     active_item = tk.Label(F_active_cards, image=placeholder_img)
-    #     active_item.grid(row=0, column=i)
-    #     active_item_label_list.append(active_item)
 
     F_deck_images = tk.Frame(F_sidebar, width=350, height=450)
     F_deck_images.grid(row=2, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N + tk.S)
-
-    # Populate the decklist frame.
-    # card_button_list = []
-    # for i in range(0, 12):
-    #     button = tk.Button(F_deck_images, image=placeholder_img, command=lambda i=i: add_card_to_active_row(i))
-    #     button.grid(row=math.floor(i/3), column=i % 3, padx=2, pady=2)
-    #     card_button_list.append(button)
 
     score_label = tk.Label(F_sidebar, text='SCORE: 0', bg='#777777', padx=125, pady=20)
     score_label.grid(row=3, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E)
@@ -187,7 +187,7 @@ if __name__ == '__main__':
     # reset_button.grid(row=1, column=2)
 
     root.after(0, update_score)
-    # root.after(0, update_deck_display)
+    root.after(0, update_deck_display)
     # root.after(0, update_active_row_display)
 
     root.mainloop()
