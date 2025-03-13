@@ -8,6 +8,8 @@ score = 0
 
 deck = []
 
+max_active_cards = 5  # The max number of cards that may be in the active row
+
 
 # Card rarity coefficients. Used when opening booster packs.
 

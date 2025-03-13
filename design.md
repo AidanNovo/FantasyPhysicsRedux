@@ -19,6 +19,17 @@ The core question I am asking for everything is:
 "How is this experiment/detector/analysis method different from others?"
 
 
+## GUI Card Class
+I want to make a class to handle the cards as they appear in the GUI
+Ideas:
+- Make it inherit from tk.Button (probably)
+  - Clicking it moves it from active row to deck and back.
+- Click and drag feature?
+- Have it linked to the backend Card object to which it is bound
+- Have hover text for displaying up-to-date card function data (just for development)
+  - This is so I don't need to make a new card image every single time I want to tweak a parameter
+  - Pull this from the card_dict
+
 
 ## Card Design Elements
 

@@ -1,4 +1,5 @@
 import vars
+import tkinter as tk
 from copy import deepcopy
 
 # Contains the general card_name class and the special functions for invoking each card_name.
@@ -57,18 +58,27 @@ def f_recompute(self, ar):
 
 
 class Card:
-    def __init__(self, name='', image=None, card_type='', tags=(), function=f_default, param=0.0, rarity=vars.r_common):
+    """The general class used for each card in the game."""
+    def __init__(self, name='', image_file=None, card_type='', tags=(), function=f_default, param=0.0, rarity=vars.r_common):
         self.name = name
-        self.image = image
+        self.image_file = image_file
 
         self.card_type = card_type
         self.tags = tags
-        self.function = function
+        self.rarity = rarity  # Coefficient to weight draw rarity. Higher number = more common card.
 
         #: int: asdkd kwkw
         self.param = param
+        self.function = function
 
-        self.rarity = rarity  # Coefficient to weight draw rarity. Higher number = more common card.
+        self.gui_button = None
+    # def make_gui_button(self):
+    #     # The GUI object linked to this particular card.
+    #     self.gui_Button = tk.Button(text='placeholder')
+
+
+
+
 
     def __repr__(self):
         return self.name
@@ -86,20 +96,20 @@ def card_factory(card_name):
 card_dict = {
     # Prototype Cards
     'Neutr. Gen':   Card(name='Neutr. Gen', card_type='prototype', tags=['neutrino'],
-                         image='fp_small_neutrino_gen.png', function=f_neutrino_generator),
+                         image_file='fp_small_neutrino_gen.png', function=f_neutrino_generator),
     'ReCompute':    Card(name='ReCompute', card_type='prototype',
-                         image='fp_small_recompute.png', rarity=vars.r_uncommon, function=f_recompute),
+                         image_file='fp_small_recompute.png', rarity=vars.r_uncommon, function=f_recompute),
     'Re-Trigger':   Card(name='Re-Trigger', card_type='prototype',
-                         image='fp_small_retrigger.png', rarity=vars.r_uncommon, function=f_retrigger_left),
+                         image_file='fp_small_retrigger.png', rarity=vars.r_uncommon, function=f_retrigger_left),
 
 
     # Detector Cards
     'IceCube':      Card(name='IceCube', card_type='detector', tags=['neutrino', 'astro'],
-                         image='fp_small_icecube.png', function=f_icecube),
+                         image_file='fp_small_icecube.png', function=f_icecube),
 
     # Analysis Cards
     'Mach. Lrn.':   Card(name='Mach. Lrn.', card_type='analysis', tags=['computer'],
-                         image='fp_small_ml.png', param=0.8, function=f_machine_learning),
+                         image_file='fp_small_ml.png', param=0.8, function=f_machine_learning),
 
     # Auxiliary Cards
 
