@@ -110,13 +110,19 @@ def update_deck_display():
 
 
 def update_active_row_display():
-    try:
-        for item in active_item_label_list:
-            item.config(image=image_dict[active_row[active_item_label_list.index(item)].image_file])
-    except IndexError:
-        pass
+    for card in vars.active_row:
+        card.gui_button.grid(row=0, column=vars.active_row.index(card))
 
     root.after(250, update_active_row_display)
+
+# def update_active_row_display():
+#     try:
+#         for item in active_item_label_list:
+#             item.config(image=image_dict[active_row[active_item_label_list.index(item)].image_file])
+#     except IndexError:
+#         pass
+#
+#     root.after(250, update_active_row_display)
 
 
 def update_score():
@@ -186,6 +192,6 @@ if __name__ == '__main__':
 
     root.after(0, update_score)
     root.after(0, update_deck_display)
-    # root.after(0, update_active_row_display)
+    root.after(0, update_active_row_display)
 
     root.mainloop()
