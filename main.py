@@ -40,7 +40,7 @@ def add_card_to_deck(card_name):
 
     card = cards.card_factory(card_name)
     card.image = tk.PhotoImage(file=card.image_file)  # Would be more memory-efficient to point to a shared PhotoImage
-    card.gui_button = tk.Button(F_deck_images, image=card.image)
+    card.gui_button = tk.Button(F_internal_deck_frame, image=card.image)
 
     vars.deck.append(card)  # Add new card object
     vars.deck[-1].function = vars.deck[-1].function.__get__(vars.deck[-1], cards.Card)  # Bind instance method
@@ -75,7 +75,7 @@ def move_card_to_deck(card):
     cfg = card.gui_button.config()
     card.gui_button.destroy()
     vars.deck.append(vars.active_row.pop(old_index))
-    card.gui_button = tk.Button(F_deck_images, image=cfg['image'][4],
+    card.gui_button = tk.Button(F_internal_deck_frame, image=cfg['image'][4],
                                 command=lambda c=card: move_card_to_active_row(c))
 
     new_index = vars.deck.index(card)
@@ -170,8 +170,33 @@ if __name__ == '__main__':
 
     active_card_pointer = tk.Label(F_active_cards, text='ACTIVE')
 
-    F_deck_images = tk.Frame(F_sidebar, width=350, height=450)
+
+    F_deck_images = tk.Frame(F_sidebar)
     F_deck_images.grid(row=2, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N + tk.S)
+
+    deck_canvas = tk.Canvas(F_deck_images, width=350, height=450, scrollregion=(0,0,0,800), yscrollincrement=10)
+    deck_vbar = tk.Scrollbar(F_deck_images, orient=tk.VERTICAL, command=deck_canvas.yview)
+    deck_canvas.configure(yscrollcommand=deck_vbar.set)
+
+    F_internal_deck_frame = tk.Frame(deck_canvas)
+    F_internal_deck_frame.bind("<Configure>", lambda e: deck_canvas.configure(scrollregion=deck_canvas.bbox("all")))
+
+    deck_canvas.create_window((0, 0), window=F_internal_deck_frame, anchor="nw")
+    deck_canvas.pack(side=tk.LEFT)
+    deck_vbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+
+    def _on_mousewheel(event):
+        dir = 0
+        if event.num == 5 or event.delta < 0:
+            dir = 1
+        elif event.num == 4 or event.delta > 0:
+            dir = -1
+
+        deck_canvas.yview_scroll(dir, "units")
+
+    deck_canvas.bind_all("<MouseWheel>", _on_mousewheel)
+
 
     score_label = tk.Label(F_sidebar, text='SCORE: 0', bg='#777777', padx=125, pady=20)
     score_label.grid(row=3, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E)
