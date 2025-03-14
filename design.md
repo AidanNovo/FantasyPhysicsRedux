@@ -15,6 +15,23 @@ What if data storage is a thing? Like you have a certain max amount of data?
 
 For aesthetic reasons at the very _least_, neutrino flux should be high but neutrino detectors convert flux to data inefficiently
 
+Neutrino cards could ignore some impediments? Flavored after neutrino non-interaction
+Maybe neutrinos are unique in that there is a global 'neutrino flux' value, whereas say protons are only available to
+the next few cards? To represent how you can just shoot a neutron beam to _anywhere_.
+
+Specific card ideas:
+- Nuclear reactor : Increases neutrino flux, supplies power
+  - Power is a resource that can be used by active particle sources
+    - Maybe can also be used by computer cards?
+    - Consider having power not be just a resource but a positional thing.
+    - Right now, there is maybe no reason to not generate power first?
+      - But actually, maybe you want to save your power to get used by your ml cluster instead of your beam?
+  
+
+Change my card function architecture so all functions call a base function first (inheritance basically)
+and that base function is responsible for performing universal card behaviors
+- E.g. all computer cards will draw power if available
+
 The core question I am asking for everything is:
 "How is this experiment/detector/analysis method different from others?"
 

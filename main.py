@@ -7,8 +7,6 @@ import cards
 import vars
 import time
 
-
-
 # TODO: Implement a GUI to reorganize your active row
 
 def crack_booster_pack(pack_size=5,
@@ -34,6 +32,12 @@ def crack_booster_pack(pack_size=5,
         add_card_to_deck(c)
 
     print('Deck:', vars.deck)
+
+
+def get_all_cards():
+    """Add one copy of each card in card_dict to the deck."""
+    for card_name in cards.card_dict.keys():
+        add_card_to_deck(card_name)
 
 def add_card_to_deck(card_name):
     """Add a card by name to the deck, bind its function to the instance, and grid the corresponding button."""
@@ -90,8 +94,11 @@ def activate_cards():
     print('\nCard order:', vars.active_row)
 
     print('\n--------START--------')
+    print('Allocating grid power tokens...')
+    cards.allocate_power_tokens(-1, vars.active_row)
+
     for card in vars.active_row:
-        active_card_pointer.grid(row=1, column=active_row.index(card))
+        active_card_pointer.grid(row=1, column=vars.active_row.index(card))
         root.update()
         root.update_idletasks()
         card.function(vars.active_row)
@@ -115,19 +122,10 @@ def update_active_row_display():
 
     root.after(250, update_active_row_display)
 
-# def update_active_row_display():
-#     try:
-#         for item in active_item_label_list:
-#             item.config(image=image_dict[active_row[active_item_label_list.index(item)].image_file])
-#     except IndexError:
-#         pass
-#
-#     root.after(250, update_active_row_display)
-
-
-def update_score():
-    score_label.config(text=f'SCORE: {vars.score}')
-    root.after(250, update_score)
+def update_stat_display():
+    stat_display_label.config(text=f'SCORE: {vars.score}  |  DATA:  {vars.data}  |  '
+                                   f'POWER TOKENS: {vars.unused_power_tokens}')
+    root.after(250, update_stat_display)
 
 if __name__ == '__main__':
     # print('-----------------------------------------------------------------------------\n'
@@ -174,7 +172,7 @@ if __name__ == '__main__':
     F_deck_images = tk.Frame(F_sidebar)
     F_deck_images.grid(row=2, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N + tk.S)
 
-    deck_canvas = tk.Canvas(F_deck_images, width=350, height=450, scrollregion=(0,0,0,800), yscrollincrement=10)
+    deck_canvas = tk.Canvas(F_deck_images, width=350, height=500, scrollregion=(0,0,0,800), yscrollincrement=15)
     deck_vbar = tk.Scrollbar(F_deck_images, orient=tk.VERTICAL, command=deck_canvas.yview)
     deck_canvas.configure(yscrollcommand=deck_vbar.set)
 
@@ -198,8 +196,8 @@ if __name__ == '__main__':
     deck_canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
 
-    score_label = tk.Label(F_sidebar, text='SCORE: 0', bg='#777777', padx=125, pady=20)
-    score_label.grid(row=3, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E)
+    stat_display_label = tk.Label(F_sidebar, text='SCORE: 0', bg='#777777', padx=20, pady=20)
+    stat_display_label.grid(row=3, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E)
 
     F_controls = tk.Frame(root, bd=2, bg='#bbbbbb', relief=tk.GROOVE)
     F_controls.grid(row=1, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.E + tk.W)
@@ -215,7 +213,9 @@ if __name__ == '__main__':
     # reset_button = tk.Button(F_controls, text='Reset', command=reset)
     # reset_button.grid(row=1, column=2)
 
-    root.after(0, update_score)
+    get_all_cards()
+
+    root.after(0, update_stat_display)
     root.after(0, update_deck_display)
     root.after(0, update_active_row_display)
 
