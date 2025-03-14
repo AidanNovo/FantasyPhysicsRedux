@@ -91,6 +91,9 @@ def move_card_to_deck(card):
 #     vars.deck = []
 
 def activate_cards():
+
+
+
     print('\nCard order:', vars.active_row)
 
     print('\n--------START--------')
@@ -98,13 +101,8 @@ def activate_cards():
     cards.allocate_power_tokens(-1, vars.active_row)
 
     for card in vars.active_row:
-        active_card_pointer.grid(row=1, column=vars.active_row.index(card))
-        root.update()
-        root.update_idletasks()
-        card.function(vars.active_row)
-        time.sleep(1)
+        card.function(vars.active_row, root)
 
-    active_card_pointer.grid_remove()
     print('---------END---------')
 
 
@@ -166,9 +164,6 @@ if __name__ == '__main__':
     F_active_cards = tk.Frame(root)
     F_active_cards.grid(row=0, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N)
 
-    active_card_pointer = tk.Label(F_active_cards, text='ACTIVE')
-
-
     F_deck_images = tk.Frame(F_sidebar)
     F_deck_images.grid(row=2, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N + tk.S)
 
@@ -200,9 +195,10 @@ if __name__ == '__main__':
     stat_display_label.grid(row=3, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E)
 
     F_controls = tk.Frame(root, bd=2, bg='#bbbbbb', relief=tk.GROOVE)
-    F_controls.grid(row=1, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.E + tk.W)
-    controls_label = tk.Label(F_controls, text='CONTROLS', bg='#777777', padx=250, pady=20)
-    controls_label.grid(row=0, column=0, columnspan=5, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.S + tk.E)
+    F_controls.grid(row=1, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.E + tk.W + tk.S)
+    controls_label = tk.Label(F_controls, text='CONTROLS', bg='#777777', padx=vars.max_active_cards * 50, pady=20)
+    controls_label.grid(row=0, column=0, columnspan=vars.max_active_cards, padx=5, pady=5, ipadx=1, ipady=1,
+                        sticky=tk.W + tk.S + tk.E)
 
     booster_button = tk.Button(F_controls, text='Open Booster', command=crack_booster_pack)
     booster_button.grid(row=1, column=0)
@@ -210,10 +206,16 @@ if __name__ == '__main__':
     activate_cards_button = tk.Button(F_controls, text='Activate Cards', command=activate_cards)
     activate_cards_button.grid(row=1, column=1)
 
+    card_sampler_button = tk.Button(F_controls, text='Get 1 of Each Card', command=get_all_cards)
+    card_sampler_button.grid(row=1, column=2)
+
+    vars.do_slow_activation = tk.IntVar()
+    slow_activate_checkbox = tk.Checkbutton(F_controls, variable=vars.do_slow_activation,
+                                            text= 'Press space to advance activation')
+    slow_activate_checkbox.grid(row=1, column=3)
+
     # reset_button = tk.Button(F_controls, text='Reset', command=reset)
     # reset_button.grid(row=1, column=2)
-
-    get_all_cards()
 
     root.after(0, update_stat_display)
     root.after(0, update_deck_display)

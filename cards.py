@@ -1,6 +1,7 @@
 import vars
 import tkinter as tk
 from copy import deepcopy
+import time
 
 def allocate_power_tokens(index, active_row):
     """Allocate as many unused power tokens as possible to active powered cards with indices > index."""
@@ -14,6 +15,7 @@ def allocate_power_tokens(index, active_row):
                 break
         if tokens_added > 0:
             print(f'Allocated {tokens_added} power token(s) to {active_row.index(card)} {card}!')
+            card.gui_button.configure(text='(P)'*card.power_tokens, compound=tk.TOP)
         if vars.unused_power_tokens == 0:
             print('All power tokens allocated!')
             break
@@ -25,45 +27,68 @@ def f_default():
     """Default card_name function as a fallback."""
     raise Exception('Card activated with undefined function')
 
-def f_base(self, ar):
-    """Perform functions universal to all cards."""
+def f_start(self, ar, root):
+    """Perform functions universal to all cards at activation start."""
+    self.gui_button.configure(text='ACTIVE', compound=tk.TOP)
+    root.update()
+    pass
 
-    # Display the activation pointer under the current card
+def f_end(self, ar, root):
+    """Perform functions universal to all cards at activation end."""
+
+    def wait_for_spacebar():
+        spacebar_pressed = False
+
+        def _on_spacebar(event):
+            nonlocal spacebar_pressed
+            spacebar_pressed = True
+
+        root.bind("<space>", _on_spacebar)
+
+        while not spacebar_pressed:
+            root.update()
+            root.update_idletasks()
+            pass
+
+    if vars.do_slow_activation.get():
+        wait_for_spacebar()
+    else:
+        time.sleep(1)
+
+    self.gui_button.configure(text='', compound=tk.NONE)
+    root.update()
+    pass
 
 
 
-    # # If we have any unused power tokens, try to put them on this card
-    # if vars.unused_power_tokens > 0:
-    #     if 'computer' in self.tags:
-    #         for _ in range(3):  # Attempt to put up to 3 unused_power_tokens tokens on the card
-    #             vars.unused_power_tokens -= 1
-    #             self.power_tokens += 1
-    #             if vars.unused_power_tokens == 0:
-    #                 break
-    #         print(f'{ar.index(self)} {self.name}:\t Card now has {self.power_tokens} power tokens!')
 
 
-def f_icecube(self, ar):
+
+
+def f_icecube(self, ar, root):
     """Generate data from neutrino flux."""
-    # f_base(self, ar)
-    active_row = ar
+    f_start(self, ar, root)
     vars.data += vars.neutrino_flux
     print(f'{ar.index(self)} {self.name}:\tData increased by {vars.neutrino_flux}!')
+    f_end(self, ar, root)
 
-
-def f_super_kamiokande(self, ar):
+def f_super_kamiokande(self, ar, root):
     """Generate data from neutrino flux, more efficiently if the neutrino oscillation card is in the active row."""
+    f_start(self, ar, root)
     if 'Neutrino Oscill.' in [card.name for card in ar]:
         vars.data += vars.neutrino_flux * 1.5
+        print(f'{ar.index(self)} {self.name}:\tData increased by {vars.neutrino_flux * 1.5}! (More efficient due to '
+              f'neutrino oscillation card)')
     else:
         vars.data += vars.neutrino_flux * 0.8
+        print(f'{ar.index(self)} {self.name}:\tData increased by {vars.neutrino_flux * 0.8}!')
+    f_end(self, ar, root)
 
 
 # Prototype functions for the initial demo / testing
-def f_retrigger_left(self, ar):
+def f_retrigger_left(self, ar, root):
     """Re-activate the ability of the card_name to the left."""
-    # f_base(self, ar)
-
+    f_start(self, ar, root)
     active_row = ar
     my_index = active_row.index(self)  # The index of this retrigger card
 
@@ -71,19 +96,20 @@ def f_retrigger_left(self, ar):
         print(f'{ar.index(self)} {self.name}:\tNo card found to the left!')
     else:
         print(f'{ar.index(self)} {self.name}:\tRe-activating card to the left!')
-        active_row[active_row.index(self) - 1].function(active_row)  # I don't like passing the active row every time.
+        active_row[active_row.index(self) - 1].function(active_row, root)  # I don't like passing the active row every time.
+    f_end(self, ar, root)
 
-
-def f_neutrino_generator(self, ar):
+def f_neutrino_generator(self, ar, root):
     """Increase the current neutrino flux."""
-    # f_base(self, ar)
+    f_start(self, ar, root)
     vars.neutrino_flux += 500
     print(f'{ar.index(self)} {self.name}:\tIncreased Neutrino Flux by 500 (flux is now {vars.neutrino_flux}).')
+    f_end(self, ar, root)
 
 
-def f_machine_learning(self, ar):
+def f_machine_learning(self, ar, root):
     """Generate score from data based on the card's current multiplier, then increase the multiplier."""
-    # f_base(self, ar)
+    f_start(self, ar, root)
     if self.power_tokens == 0: # Card requires 1 token to run
         print(f'{ar.index(self)} {self.name}:\tUnpowered!')
     else:
@@ -98,18 +124,19 @@ def f_machine_learning(self, ar):
 
         print(f'{ar.index(self)} {self.name}:\tGenerated {score_increase} score from {vars.data} data! '
               f'ML multiplier increased to {self.param}.')
+    f_end(self, ar, root)
 
-
-def f_recompute(self, ar):
+def f_recompute(self, ar, root):
     """Re-activate all cards with the 'computer' tag."""
-    # f_base(self, ar)
+    f_start(self, ar, root)
     for card in ar:
         if 'computer' in card.tags:
             print(f'{ar.index(self)} {self.name}:\tRe-activating {ar.index(card)} {card.name} due to its computer tag!')
-            card.function(ar)
+            card.function(ar, root)
+    f_end(self, ar, root)
 
-
-def f_fission_reactor(self, ar):
+def f_fission_reactor(self, ar, root):
+    f_start(self, ar, root)
     vars.neutrino_flux += 1000
     print(f'{ar.index(self)} {self.name}\t: Increased Neutrino Flux by 1000 (flux is now {vars.neutrino_flux}).')
 
@@ -118,24 +145,28 @@ def f_fission_reactor(self, ar):
 
     i = ar.index(self)
     allocate_power_tokens(i, ar)
+    f_end(self, ar, root)
 
 
-def f_lbnf_beam(self, ar):
+def f_lbnf_beam(self, ar, root):
+    f_start(self, ar, root)
     if self.power_tokens == 0: # Card requires at least 1 token to run
         print(f'{ar.index(self)} {self.name}:\tUnpowered!')
     else:
         vars.neutrino_flux += 1000 * self.power_tokens
         print(f'{ar.index(self)} {self.name}\t: Increased Neutrino Flux by {1000 * self.power_tokens} '
               f'(flux is now {vars.neutrino_flux}).')
+    f_end(self, ar, root)
 
-def f_neutrino_oscillation(self, ar):
+def f_neutrino_oscillation(self, ar, root):
+    f_start(self, ar, root)
     print(f'{ar.index(self)} {self.name}\t: Multiplying score for each [neutrino] card...')
     for card in ar:
         if 'neutrino' in card.tags:
             vars.score = vars.score * 1.5
             print(f'{ar.index(self)} {self.name}\t: Multiplied score by 1.5 due to {ar.index(card)} {card.name}`s '
                   f'[neutrino] tag! Score is now {vars.score}!')
-
+    f_end(self, ar, root)
     # TODO: As mentioned on the card, come up with a cooler name for this
 
 class Card:
@@ -174,7 +205,7 @@ def card_factory(card_name):
 card_dict = {
     # Prototype Cards
     'Neutrino Gen':     Card(name='Neutrino Gen', card_type='prototype', tags=['neutrino'],
-                             image_file='fp_small_neutrino_gen.png', function=f_neutrino_generator),
+                             image_file='fp_small_neutrino_gen.png', rarity=vars.r_uncommon, function=f_neutrino_generator),
     'ReCompute':        Card(name='ReCompute', card_type='prototype',
                              image_file='fp_small_recompute.png', rarity=vars.r_uncommon, function=f_recompute),
     'Re-Trigger':       Card(name='Re-Trigger', card_type='prototype',
