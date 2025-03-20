@@ -1,11 +1,13 @@
 import random
 import tkinter as tk
+from tkinter import ttk
 from tkinter import PhotoImage
 import math
 
 import cards
 import vars
 import time
+import gui_theme
 
 # TODO: Implement a GUI to reorganize your active row
 
@@ -91,9 +93,6 @@ def move_card_to_deck(card):
 #     vars.deck = []
 
 def activate_cards():
-
-
-
     print('\nCard order:', vars.active_row)
 
     print('\n--------START--------')
@@ -120,10 +119,12 @@ def update_active_row_display():
 
     root.after(250, update_active_row_display)
 
+
 def update_stat_display():
     stat_display_label.config(text=f'SCORE: {vars.score}  |  DATA:  {vars.data}  |  '
                                    f'POWER TOKENS: {vars.unused_power_tokens}')
     root.after(250, update_stat_display)
+
 
 if __name__ == '__main__':
     # print('-----------------------------------------------------------------------------\n'
@@ -139,6 +140,7 @@ if __name__ == '__main__':
 
     # UI STUFF BELOW HERE
     root = tk.Tk()
+    gui_theme.set_style(root)
     root.title('FantasyPhysics')
     placeholder_img = PhotoImage(file='small_card_images/fp_small_placeholder.png')
     # ic_img = PhotoImage(file='fp_med_icecube.png')
@@ -156,27 +158,31 @@ if __name__ == '__main__':
     #     'fp_med_recompute.png': recompute_img
     # }
 
-    F_sidebar = tk.Frame(root, bd=2, bg='#bbbbbb', relief=tk.GROOVE)
+    # background_image = PhotoImage(file='img.png')
+    # bg = ttk.Label(root, image=background_image)
+    # bg.pack()
+
+    F_sidebar = ttk.Frame(root)
     F_sidebar.grid(row=0, column=0, rowspan=2, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.N + tk.S)
 
-    decklist_label = tk.Label(F_sidebar, text='DECK LIST', bg='#777777', padx=125, pady=20)
+    decklist_label = ttk.Label(F_sidebar, text='DECK LIST', font='Helvetica 18 bold')
     decklist_label.grid(row=1, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E)
 
-    F_active_cards = tk.Frame(root)
+    F_active_cards = ttk.Frame(root, height=140)
     F_active_cards.grid(row=0, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N)
 
-    F_deck_images = tk.Frame(F_sidebar)
+    F_deck_images = ttk.Frame(F_sidebar)
     F_deck_images.grid(row=2, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N + tk.S)
 
-    deck_canvas = tk.Canvas(F_deck_images, width=350, height=500, scrollregion=(0,0,0,800), yscrollincrement=15)
-    deck_vbar = tk.Scrollbar(F_deck_images, orient=tk.VERTICAL, command=deck_canvas.yview)
-    deck_canvas.configure(yscrollcommand=deck_vbar.set)
+    C_deck_canvas = tk.Canvas(F_deck_images, width=340, height=500, scrollregion=(0, 0, 0, 800), yscrollincrement=15)
+    deck_vbar = ttk.Scrollbar(F_deck_images, orient=tk.VERTICAL, command=C_deck_canvas.yview)
+    C_deck_canvas.configure(yscrollcommand=deck_vbar.set)
 
-    F_internal_deck_frame = tk.Frame(deck_canvas)
-    F_internal_deck_frame.bind("<Configure>", lambda e: deck_canvas.configure(scrollregion=deck_canvas.bbox("all")))
+    F_internal_deck_frame = ttk.Frame(C_deck_canvas)
+    F_internal_deck_frame.bind("<Configure>", lambda e: C_deck_canvas.configure(scrollregion=C_deck_canvas.bbox("all")))
 
-    deck_canvas.create_window((0, 0), window=F_internal_deck_frame, anchor="nw")
-    deck_canvas.pack(side=tk.LEFT)
+    C_deck_canvas.create_window((0, 0), window=F_internal_deck_frame, anchor="nw")
+    C_deck_canvas.pack(side=tk.LEFT)
     deck_vbar.pack(side=tk.RIGHT, fill=tk.Y)
 
 
@@ -187,35 +193,35 @@ if __name__ == '__main__':
         elif event.num == 4 or event.delta > 0:
             dir = -1
 
-        deck_canvas.yview_scroll(dir, "units")
+        C_deck_canvas.yview_scroll(dir, "units")
 
-    deck_canvas.bind_all("<MouseWheel>", _on_mousewheel)
+    C_deck_canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
 
-    stat_display_label = tk.Label(F_sidebar, text='SCORE: 0', bg='#777777', padx=20, pady=20)
+    stat_display_label = ttk.Label(F_sidebar, text='SCORE: 0')
     stat_display_label.grid(row=3, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E)
 
-    F_controls = tk.Frame(root, bd=2, bg='#bbbbbb', relief=tk.GROOVE)
+    F_controls = ttk.Frame(root)
     F_controls.grid(row=1, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.E + tk.W + tk.S)
-    controls_label = tk.Label(F_controls, text='CONTROLS', bg='#777777', padx=vars.max_active_cards * 50, pady=20)
+    controls_label = ttk.Label(F_controls, text='CONTROLS')
     controls_label.grid(row=0, column=0, columnspan=vars.max_active_cards, padx=5, pady=5, ipadx=1, ipady=1,
                         sticky=tk.W + tk.S + tk.E)
 
-    booster_button = tk.Button(F_controls, text='Open Booster', command=crack_booster_pack)
+    booster_button = ttk.Button(F_controls, text='Open Booster', command=crack_booster_pack)
     booster_button.grid(row=1, column=0)
 
-    activate_cards_button = tk.Button(F_controls, text='Activate Cards', command=activate_cards)
+    activate_cards_button = ttk.Button(F_controls, text='Activate Cards', command=activate_cards)
     activate_cards_button.grid(row=1, column=1)
 
-    card_sampler_button = tk.Button(F_controls, text='Get 1 of Each Card', command=get_all_cards)
+    card_sampler_button = ttk.Button(F_controls, text='Get 1 of Each Card', command=get_all_cards)
     card_sampler_button.grid(row=1, column=2)
 
     vars.do_slow_activation = tk.IntVar()
-    slow_activate_checkbox = tk.Checkbutton(F_controls, variable=vars.do_slow_activation,
+    slow_activate_checkbox = ttk.Checkbutton(F_controls, variable=vars.do_slow_activation,
                                             text= 'Press space to advance activation')
     slow_activate_checkbox.grid(row=1, column=3)
 
-    # reset_button = tk.Button(F_controls, text='Reset', command=reset)
+    # reset_button = ttk.Button(F_controls, text='Reset', command=reset)
     # reset_button.grid(row=1, column=2)
 
     root.after(0, update_stat_display)

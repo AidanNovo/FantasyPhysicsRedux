@@ -206,11 +206,14 @@ def card_factory(card_name):
 card_dict = {
     # Prototype Cards
     'Neutrino Gen':     Card(name='Neutrino Gen', card_type='prototype', tags=['neutrino'],
-                             image_file='small_card_images/fp_small_neutrino_gen.png', rarity=vars.r_uncommon, function=f_neutrino_generator),
+                             image_file='small_card_images/fp_small_neutrino_gen.png',
+                             rarity=vars.r_uncommon, function=f_neutrino_generator),
     'ReCompute':        Card(name='ReCompute', card_type='prototype',
-                             image_file='small_card_images/fp_small_recompute.png', rarity=vars.r_uncommon, function=f_recompute),
+                             image_file='small_card_images/fp_small_recompute.png',
+                             rarity=vars.r_uncommon, function=f_recompute),
     'Re-Trigger':       Card(name='Re-Trigger', card_type='prototype',
-                             image_file='small_card_images/fp_small_retrigger.png', rarity=vars.r_uncommon, function=f_retrigger_left),
+                             image_file='small_card_images/fp_small_retrigger.png',
+                             rarity=vars.r_uncommon, function=f_retrigger_left),
 
     # Detector Cards
     'IceCube':          Card(name='IceCube', card_type='detector', tags=['neutrino', 'astro'],
