@@ -139,20 +139,21 @@ if __name__ == '__main__':
 
     # UI STUFF BELOW HERE
     root = tk.Tk()
-    placeholder_img = PhotoImage(file='fp_small_placeholder.png')
-    # ic_img = PhotoImage(file='fp_small_icecube.png')
-    # neutrino_img = PhotoImage(file='fp_small_neutrino_gen.png')
+    root.title('FantasyPhysics')
+    placeholder_img = PhotoImage(file='small_card_images/fp_small_placeholder.png')
+    # ic_img = PhotoImage(file='fp_med_icecube.png')
+    # neutrino_img = PhotoImage(file='fp_med_neutrino_gen.png')
     # retrigger_img = PhotoImage(file='fp_small_retrigger.png')
-    # ml_img = PhotoImage(file='fp_small_ml.png')
-    # recompute_img = PhotoImage(file='fp_small_recompute.png')
+    # ml_img = PhotoImage(file='fp_med_ml.png')
+    # recompute_img = PhotoImage(file='fp_med_recompute.png')
 
     # image_dict = {
     #     'fp_small_placeholder.png': placeholder_img,
-    #     'fp_small_icecube.png': ic_img,
-    #     'fp_small_neutrino_gen.png': neutrino_img,
+    #     'fp_med_icecube.png': ic_img,
+    #     'fp_med_neutrino_gen.png': neutrino_img,
     #     'fp_small_retrigger.png': retrigger_img,
-    #     'fp_small_ml.png': ml_img,
-    #     'fp_small_recompute.png': recompute_img
+    #     'fp_med_ml.png': ml_img,
+    #     'fp_med_recompute.png': recompute_img
     # }
 
     F_sidebar = tk.Frame(root, bd=2, bg='#bbbbbb', relief=tk.GROOVE)
