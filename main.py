@@ -217,24 +217,19 @@ if __name__ == '__main__':
     controls_label.grid(row=0, column=0, columnspan=vars.max_active_cards, padx=5, pady=5, ipadx=1, ipady=1,
                         sticky=tk.W + tk.S + tk.E)
 
-    booster_button = ttk.Button(F_controls, text='Open Booster', command=crack_booster_pack)
+    booster_button = ttk.Button(F_controls, text='Open Booster', command=crack_booster_pack, takefocus=False)
     booster_button.grid(row=1, column=0)
 
-    activate_cards_button = ttk.Button(F_controls, text='Activate Cards', command=activate_cards)
+    activate_cards_button = ttk.Button(F_controls, text='Activate Cards', command=activate_cards, takefocus=False)
     activate_cards_button.grid(row=1, column=1)
 
-    card_sampler_button = ttk.Button(F_controls, text='Get 1 of Each Card', command=get_all_cards)
+    card_sampler_button = ttk.Button(F_controls, text='Get 1 of Each Card', command=get_all_cards, takefocus=False)
     card_sampler_button.grid(row=1, column=2)
 
     vars.do_slow_activation = tk.IntVar()
-    slow_activate_checkbox = ttk.Checkbutton(F_controls, variable=vars.do_slow_activation,
+    slow_activate_checkbox = ttk.Checkbutton(F_controls, variable=vars.do_slow_activation, takefocus=False,
                                             text= 'Press space to advance activation')
     slow_activate_checkbox.grid(row=1, column=3)
-
-    # TODO: Fix issue where slow activation checkbox takes focus and activates buttons on pressing space
-
-    # reset_button = ttk.Button(F_controls, text='Reset', command=reset)
-    # reset_button.grid(row=1, column=2)
 
     root.after(0, update_stat_display)
     root.after(0, update_deck_display)
