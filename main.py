@@ -69,10 +69,12 @@ def move_card_to_active_row(card):
         card.gui_button.destroy()
         vars.active_row.append(vars.deck.pop(old_index))
         card.gui_button = tk.Button(F_active_cards, image=cfg['image'][4],
-                                    command=lambda c=card: move_card_to_deck(c))
+                                    command=lambda c=card: move_card_to_deck(c), compound=tk.TOP)
         card.gui_button.grid(row=0, column=vars.active_row.index(card))
     else:
         print(f'Free up a slot in the active row first!')
+
+    update_active_row_display(repeat=False)
 
 def move_card_to_deck(card):
     old_index = vars.active_row.index(card)
@@ -113,11 +115,19 @@ def update_deck_display():
     root.after(250, update_deck_display)
 
 
-def update_active_row_display():
+def update_active_row_display(repeat=True):
     for card in vars.active_row:
         card.gui_button.grid(row=0, column=vars.active_row.index(card))
 
-    root.after(250, update_active_row_display)
+        # Update token string
+        if card.power_slots != 0:
+            card.token_string = '(P)'*card.power_tokens + '( )'*(card.power_slots - card.power_tokens)
+
+        # Update card status string to reflect any changes.
+        card.gui_button.configure(text=card.status_string())
+
+    if repeat:
+        root.after(250, update_active_row_display)
 
 
 def update_stat_display():
@@ -220,6 +230,8 @@ if __name__ == '__main__':
     slow_activate_checkbox = ttk.Checkbutton(F_controls, variable=vars.do_slow_activation,
                                             text= 'Press space to advance activation')
     slow_activate_checkbox.grid(row=1, column=3)
+
+    # TODO: Fix issue where slow activation checkbox takes focus and activates buttons on pressing space
 
     # reset_button = ttk.Button(F_controls, text='Reset', command=reset)
     # reset_button.grid(row=1, column=2)

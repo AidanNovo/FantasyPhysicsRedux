@@ -15,5 +15,4 @@ def set_style(root):
 
     # style.configure()
 
-    print('tada')
     return style

@@ -14,6 +14,7 @@ def allocate_power_tokens(index, active_row):
             if vars.unused_power_tokens == 0:
                 break
         if tokens_added > 0:
+            card.gui_button.configure(text=f'{card.gui_button["text"]} {"(P)"*tokens_added}')
             print(f'Allocated {tokens_added} power token(s) to {active_row.index(card)} {card}!')
 
             # card.gui_button.configure(text='(P)'*card.power_tokens, compound=tk.TOP)
@@ -30,7 +31,8 @@ def f_default():
 
 def f_start(self, ar, root):
     """Perform functions universal to all cards at activation start."""
-    self.gui_button.configure(text='ACTIVE', compound=tk.TOP)
+    self.activity_string = 'ACTIVE'
+    self.gui_button.configure(text=self.status_string(), compound=tk.TOP)
     root.update()
     pass
 
@@ -56,13 +58,10 @@ def f_end(self, ar, root):
     else:
         time.sleep(1)
 
-    self.gui_button.configure(text='', compound=tk.NONE)
+    self.activity_string = '--'
+    self.gui_button.configure(text=self.status_string(), compound=tk.TOP)
     root.update()
     pass
-
-
-
-
 
 
 
@@ -188,10 +187,32 @@ class Card:
 
         self.function = function
 
+
+        # Attributes that are not intrinsic to the meaning of the card go below here
+        # i.e. Attributes that we wouldn't want to pass to __init__
+
+        self.token_string = '[no tokens]'  # For testing. The string in which power tokens (if any) are displayed
+        self.activity_string = '--'
+        # self.status_string = (f'{self.token_string}\n'
+        #                       f'{self.activity_string}')
+
         self.gui_button = None
 
     def __repr__(self):
         return self.name
+
+
+    def status_string(self):
+        """
+        Return the card's status string.
+
+        The status string is what gets displayed under the card in the active row.
+        Includes whether the card is active, the token display, etc.
+        """
+        status_string = (f'{self.token_string}\n'
+                         f'{self.activity_string}')
+
+        return status_string
 
 
 def card_factory(card_name):
