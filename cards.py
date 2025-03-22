@@ -46,7 +46,7 @@ def f_end(self, ar, root):
             nonlocal spacebar_pressed
             spacebar_pressed = True
 
-        root.bind("<space>", _on_spacebar)
+        root.bind("<Space>", _on_spacebar)
 
         while not spacebar_pressed:
             root.update()
@@ -198,6 +198,7 @@ class Card:
 
         self.gui_button = None
 
+
     def __repr__(self):
         return self.name
 
@@ -227,37 +228,37 @@ def card_factory(card_name):
 card_dict = {
     # Prototype Cards
     'Neutrino Gen':     Card(name='Neutrino Gen', card_type='prototype', tags=['neutrino'],
-                             image_file='small_card_images/fp_small_neutrino_gen.png',
+                             image_file='card_images/fp_neutrino_gen.png',
                              rarity=vars.r_uncommon, function=f_neutrino_generator),
     'ReCompute':        Card(name='ReCompute', card_type='prototype',
-                             image_file='small_card_images/fp_small_recompute.png',
+                             image_file='card_images/fp_recompute.png',
                              rarity=vars.r_uncommon, function=f_recompute),
     'Re-Trigger':       Card(name='Re-Trigger', card_type='prototype',
-                             image_file='small_card_images/fp_small_retrigger.png',
+                             image_file='card_images/fp_retrigger.png',
                              rarity=vars.r_uncommon, function=f_retrigger_left),
 
     # Detector Cards
     'IceCube':          Card(name='IceCube', card_type='detector', tags=['neutrino', 'astro'],
-                             image_file='small_card_images/fp_small_icecube.png', function=f_icecube),
-    'SuperKamiokande':  Card(name='SuperKamiokande', card_type='detector', tags=['neutrino', 'astro'],
-                             image_file='small_card_images/fp_small_sk.png', function=f_super_kamiokande),
+                             image_file='card_images/fp_icecube.png', function=f_icecube),
+    'Super Kamiokande': Card(name='Super Kamiokande', card_type='detector', tags=['neutrino', 'astro'],
+                             image_file='card_images/fp_super_k.png', function=f_super_kamiokande),
 
     # Analysis Cards
     'Machine Learning': Card(name='Machine Learning', card_type='analysis', tags=['computer'],
-                             image_file='small_card_images/fp_small_ml.png', param=0.8, power_slots=1,
+                             image_file='card_images/fp_machine_learning.png', param=0.8, power_slots=1,
                              function=f_machine_learning),
 
     # Special Cards
     'Fission Reactor':  Card(name='Fission Reactor', card_type='special', tags=['reactor', 'neutrino'],
-                             image_file='small_card_images/fp_small_fission_reactor.png', rarity=vars.r_uncommon,
+                             image_file='card_images/fp_fission_reactor.png', rarity=vars.r_uncommon,
                              function=f_fission_reactor),
     'LBNF Beam':        Card(name='LBNF Beam', card_type='special', tags=['beam', 'neutrino'],
-                             image_file='small_card_images/fp_small_lbnf_beam.png', power_slots=3,
+                             image_file='card_images/fp_lbnf_beam.png', power_slots=3,
                              function=f_lbnf_beam),
 
     # Physics Cards (temporary name)
     'Neutrino Oscill.': Card(name='Neutrino Oscill.', card_type='physics', tags=['neutrino'],
-                             image_file='small_card_images/fp_small_neutrino_oscillation.png', rarity=vars.r_rare,
+                             image_file='card_images/fp_neutrino_oscillation.png', rarity=vars.r_rare,
                              function=f_neutrino_oscillation),
 
     }

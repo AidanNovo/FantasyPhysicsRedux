@@ -2,6 +2,7 @@ import random
 import tkinter as tk
 from tkinter import ttk
 from tkinter import PhotoImage
+from PIL import Image, ImageTk
 import math
 
 import cards
@@ -41,19 +42,34 @@ def get_all_cards():
     for card_name in cards.card_dict.keys():
         add_card_to_deck(card_name)
 
+
+def show_big_card(event, card):
+    """Create a large w"""
+    popup = tk.Toplevel(root)
+    big_image = card.large_image
+    image_label = tk.Label(popup, image=big_image)
+    image_label.pack()
+
+
 def add_card_to_deck(card_name):
     """Add a card by name to the deck, bind its function to the instance, and grid the corresponding button."""
 
     card = cards.card_factory(card_name)
-    card.image = tk.PhotoImage(file=card.image_file)  # Would be more memory-efficient to point to a shared PhotoImage
+
+    base_img = Image.open(card.image_file)
+    card.image = ImageTk.PhotoImage(base_img.resize((100, 140)))
+    card.large_image = ImageTk.PhotoImage(base_img.resize((250, 350)))
+
     card.gui_button = tk.Button(F_internal_deck_frame, image=card.image)
 
     vars.deck.append(card)  # Add new card object
     vars.deck[-1].function = vars.deck[-1].function.__get__(vars.deck[-1], cards.Card)  # Bind instance method
 
+    # Initialize the GUI Button and put it in the deck
     card.gui_button.configure(command=lambda c=card: move_card_to_active_row(c))
-    # Grid the corresponding GUI button into the deck frame
     card_index = vars.deck.index(card)
+    card.gui_button.bind('<Button-2>', lambda event, c=card: show_big_card(event, c))  # Right-click is Button-2 on Mac
+    card.gui_button.bind('<Button-3>', lambda event, c=card: show_big_card(event, c))  # Right-click is Button-3 on PC
     card.gui_button.grid(row=math.floor(card_index/3), column=card_index % 3, padx=2, pady=2)
 
 
@@ -85,6 +101,9 @@ def move_card_to_deck(card):
     vars.deck.append(vars.active_row.pop(old_index))
     card.gui_button = tk.Button(F_internal_deck_frame, image=cfg['image'][4],
                                 command=lambda c=card: move_card_to_active_row(c))
+
+    card.gui_button.bind('<Button-2>', lambda event, c=card: show_big_card(event, c))  # Right-click is Button-2 on Mac
+    card.gui_button.bind('<Button-3>', lambda event, c=card: show_big_card(event, c))  # Right-click is Button-3 on PC
 
     new_index = vars.deck.index(card)
     card.gui_button.grid(row=math.floor(new_index/3), column=new_index % 3, padx=2, pady=2)
@@ -137,40 +156,10 @@ def update_stat_display():
 
 
 if __name__ == '__main__':
-    # print('-----------------------------------------------------------------------------\n'
-    #       'Welcome to the prototype for the redesigned fantasy physics outreach project!\n'
-    #       '\n'
-    #       'Commands:\n'
-    #       'o - open a booster pack\n'
-    #       'l - list available cards\n'
-    #       'a - add cards of your choice to your deck\n'
-    #       'd - view your deck\n'
-    #       'h - display this message again\n'
-    #       '-----------------------------------------------------------------------------\n')
-
     # UI STUFF BELOW HERE
     root = tk.Tk()
     gui_theme.set_style(root)
     root.title('FantasyPhysics')
-    placeholder_img = PhotoImage(file='small_card_images/fp_small_placeholder.png')
-    # ic_img = PhotoImage(file='fp_med_icecube.png')
-    # neutrino_img = PhotoImage(file='fp_med_neutrino_gen.png')
-    # retrigger_img = PhotoImage(file='fp_small_retrigger.png')
-    # ml_img = PhotoImage(file='fp_med_ml.png')
-    # recompute_img = PhotoImage(file='fp_med_recompute.png')
-
-    # image_dict = {
-    #     'fp_small_placeholder.png': placeholder_img,
-    #     'fp_med_icecube.png': ic_img,
-    #     'fp_med_neutrino_gen.png': neutrino_img,
-    #     'fp_small_retrigger.png': retrigger_img,
-    #     'fp_med_ml.png': ml_img,
-    #     'fp_med_recompute.png': recompute_img
-    # }
-
-    # background_image = PhotoImage(file='img.png')
-    # bg = ttk.Label(root, image=background_image)
-    # bg.pack()
 
     F_sidebar = ttk.Frame(root)
     F_sidebar.grid(row=0, column=0, rowspan=2, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.N + tk.S)
