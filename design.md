@@ -15,17 +15,34 @@ What if data storage is a thing? Like you have a certain max amount of data?
 
 For aesthetic reasons at the very _least_, neutrino flux should be high but neutrino detectors convert flux to data inefficiently
 
+Incorporate particle energies somehow?
+- Make particle beams scale energy based on power?
+- Really this is kind of poking at a deeper idea, which is the idea of having qualities/attributes to the things you generate
+
+### Idea: Token Expansion
+- Second row of cards (or tokens or coins or whatever we want to call them)
+- This second row are the particles and data and such that our experiment is generating
+  - Could be sort of nice aesthetically to see your sources generate things then your detectors act on them
+  - This can also incorporate some of the "capacity" things I like the idea of--e.g. max amount of data
+    - The capacities can visually be the width of the token's row
+    - Consider whether it is fun to have to need to manage your capacities
+  - Particle tokens can decay after X ticks (i.e. X card activations)
+    - I really like this idea
+    - Teaches people about decay modes also?
+      - Will probably need to simplify a bit
+
 Neutrino cards could ignore some impediments? Flavored after neutrino non-interaction
 Maybe neutrinos are unique in that there is a global 'neutrino flux' value, whereas say protons are only available to
 the next few cards? To represent how you can just shoot a neutron beam to _anywhere_.
 
-Specific card ideas:
+### Specific card ideas:
 - Nuclear reactor : Increases neutrino flux, supplies power
   - Power is a resource that can be used by active particle sources
     - Maybe can also be used by computer cards?
     - Consider having power not be just a resource but a positional thing.
     - Right now, there is maybe no reason to not generate power first?
       - But actually, maybe you want to save your power to get used by your ml cluster instead of your beam?
+- 
   
 
 Change my card function architecture so all functions call a base function first (inheritance basically)
@@ -35,18 +52,8 @@ and that base function is responsible for performing universal card behaviors
 The core question I am asking for everything is:
 "How is this experiment/detector/analysis method different from others?"
 
-
-## GUI Card Class
-I want to make a class to handle the cards as they appear in the GUI
-Ideas:
-- Make it inherit from tk.Button (probably)
-  - Clicking it moves it from active row to deck and back.
-- Click and drag feature?
-- Have it linked to the backend Card object to which it is bound
-- Have hover text for displaying up-to-date card function data (just for development)
-  - This is so I don't need to make a new card image every single time I want to tweak a parameter
-  - Pull this from the card_dict
-
+Idea:
+- Display power tokens under cards like energy cards in the pokemon TCG
 
 ## Card Design Elements
 

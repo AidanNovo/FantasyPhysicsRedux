@@ -26,8 +26,6 @@ def crack_booster_pack(pack_size=5,
 
     print('Opening a booster pack...')
 
-    # TODO: Implement random booster pack contents
-
     pulled_cards = random.choices(population=draw_pool, weights=draw_weights, k=pack_size)
 
     for c in pulled_cards:
@@ -186,13 +184,13 @@ if __name__ == '__main__':
 
 
     def _on_mousewheel(event):
-        dir = 0
+        direction = 0
         if event.num == 5 or event.delta < 0:
-            dir = 1
+            direction = 1
         elif event.num == 4 or event.delta > 0:
-            dir = -1
+            direction = -1
 
-        C_deck_canvas.yview_scroll(dir, "units")
+        C_deck_canvas.yview_scroll(direction, "units")
 
     C_deck_canvas.bind_all("<MouseWheel>", _on_mousewheel)
 

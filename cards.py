@@ -46,7 +46,7 @@ def f_end(self, ar, root):
             nonlocal spacebar_pressed
             spacebar_pressed = True
 
-        root.bind("<Space>", _on_spacebar)
+        root.bind("<space>", _on_spacebar)
 
         while not spacebar_pressed:
             root.update()
