@@ -22,21 +22,19 @@ def allocate_power_tokens(index, active_row):
             print('All power tokens allocated!')
             break
 
-# Contains the general card_name class and the special functions for invoking each card_name.
-
 # f stands for function
 def f_default():
-    """Default card_name function as a fallback."""
-    raise Exception('Card activated with undefined function')
+    """Default function as a fallback."""
+    raise Exception('Card/token activated with undefined function')
 
-def f_start(self, ar, root):
+def f_card_start(self, ar, root):
     """Perform functions universal to all cards at activation start."""
     self.activity_string = 'ACTIVE'
     self.gui_button.configure(text=self.status_string(), compound=tk.TOP)
     root.update()
     pass
 
-def f_end(self, ar, root):
+def f_card_end(self, ar, root):
     """Perform functions universal to all cards at activation end."""
 
     def wait_for_spacebar():
@@ -67,14 +65,14 @@ def f_end(self, ar, root):
 
 def f_icecube(self, ar, root):
     """Generate data from neutrino flux."""
-    f_start(self, ar, root)
+    f_card_start(self, ar, root)
     vars.data += vars.neutrino_flux
     print(f'{ar.index(self)} {self.name}:\tData increased by {vars.neutrino_flux}!')
-    f_end(self, ar, root)
+    f_card_end(self, ar, root)
 
 def f_super_kamiokande(self, ar, root):
     """Generate data from neutrino flux, more efficiently if the neutrino oscillation card is in the active row."""
-    f_start(self, ar, root)
+    f_card_start(self, ar, root)
     if 'Neutrino Oscill.' in [card.name for card in ar]:
         vars.data += vars.neutrino_flux * 1.5
         print(f'{ar.index(self)} {self.name}:\tData increased by {vars.neutrino_flux * 1.5}! (More efficient due to '
@@ -82,13 +80,12 @@ def f_super_kamiokande(self, ar, root):
     else:
         vars.data += vars.neutrino_flux * 0.8
         print(f'{ar.index(self)} {self.name}:\tData increased by {vars.neutrino_flux * 0.8}!')
-    f_end(self, ar, root)
-
+    f_card_end(self, ar, root)
 
 # Prototype functions for the initial demo / testing
 def f_retrigger_left(self, ar, root):
     """Re-activate the ability of the card_name to the left."""
-    f_start(self, ar, root)
+    f_card_start(self, ar, root)
     active_row = ar
     my_index = active_row.index(self)  # The index of this retrigger card
 
@@ -97,19 +94,18 @@ def f_retrigger_left(self, ar, root):
     else:
         print(f'{ar.index(self)} {self.name}:\tRe-activating card to the left!')
         active_row[active_row.index(self) - 1].function(active_row, root)  # I don't like passing the active row every time.
-    f_end(self, ar, root)
+    f_card_end(self, ar, root)
 
 def f_neutrino_generator(self, ar, root):
     """Increase the current neutrino flux."""
-    f_start(self, ar, root)
+    f_card_start(self, ar, root)
     vars.neutrino_flux += 500
     print(f'{ar.index(self)} {self.name}:\tIncreased Neutrino Flux by 500 (flux is now {vars.neutrino_flux}).')
-    f_end(self, ar, root)
-
+    f_card_end(self, ar, root)
 
 def f_machine_learning(self, ar, root):
     """Generate score from data based on the card's current multiplier, then increase the multiplier."""
-    f_start(self, ar, root)
+    f_card_start(self, ar, root)
     if self.power_tokens == 0: # Card requires 1 token to run
         print(f'{ar.index(self)} {self.name}:\tUnpowered!')
     else:
@@ -124,19 +120,19 @@ def f_machine_learning(self, ar, root):
 
         print(f'{ar.index(self)} {self.name}:\tGenerated {score_increase} score from {vars.data} data! '
               f'ML multiplier increased to {self.param}.')
-    f_end(self, ar, root)
+    f_card_end(self, ar, root)
 
 def f_recompute(self, ar, root):
     """Re-activate all cards with the 'computer' tag."""
-    f_start(self, ar, root)
+    f_card_start(self, ar, root)
     for card in ar:
         if 'computer' in card.tags:
             print(f'{ar.index(self)} {self.name}:\tRe-activating {ar.index(card)} {card.name} due to its computer tag!')
             card.function(ar, root)
-    f_end(self, ar, root)
+    f_card_end(self, ar, root)
 
 def f_fission_reactor(self, ar, root):
-    f_start(self, ar, root)
+    f_card_start(self, ar, root)
     vars.neutrino_flux += 1000
     print(f'{ar.index(self)} {self.name}\t: Increased Neutrino Flux by 1000 (flux is now {vars.neutrino_flux}).')
 
@@ -145,62 +141,57 @@ def f_fission_reactor(self, ar, root):
 
     i = ar.index(self)
     allocate_power_tokens(i, ar)
-    f_end(self, ar, root)
-
+    f_card_end(self, ar, root)
 
 def f_lbnf_beam(self, ar, root):
-    f_start(self, ar, root)
+    f_card_start(self, ar, root)
     if self.power_tokens == 0: # Card requires at least 1 token to run
         print(f'{ar.index(self)} {self.name}:\tUnpowered!')
     else:
         vars.neutrino_flux += 1000 * self.power_tokens
         print(f'{ar.index(self)} {self.name}\t: Increased Neutrino Flux by {1000 * self.power_tokens} '
               f'(flux is now {vars.neutrino_flux}).')
-    f_end(self, ar, root)
+    f_card_end(self, ar, root)
 
 def f_neutrino_oscillation(self, ar, root):
-    f_start(self, ar, root)
+    f_card_start(self, ar, root)
     print(f'{ar.index(self)} {self.name}\t: Multiplying score for each [neutrino] card...')
     for card in ar:
         if 'neutrino' in card.tags:
             vars.score = vars.score * 1.5
             print(f'{ar.index(self)} {self.name}\t: Multiplied score by 1.5 due to {ar.index(card)} {card.name}`s '
                   f'[neutrino] tag! Score is now {vars.score}!')
-    f_end(self, ar, root)
+    f_card_end(self, ar, root)
     # TODO: As mentioned on the card, come up with a cooler name for this
 
-class Card:
-    """The general class used for each card in the game."""
-    def __init__(self, name='', image_file=None, card_type='', tags=(), function=f_default, param=0.0,
-                 rarity=vars.r_common, power_slots=0, power_tokens=0):
+def f_t_test(self):
+    print('token activated')
+
+class Item:
+    def __init__(self, name='', image_file=None, item_type='', tags=(), function=f_default):
         self.name = name
         self.image_file = image_file
-
-        self.card_type = card_type
+        self.item_type = item_type
         self.tags = tags
-        self.rarity = rarity  # Coefficient to weight draw rarity. Higher number = more common card.
-
-        self.param = param
-
-        self.power_slots = power_slots  # The max number of power tokens that can be on the card
-        self.power_tokens = power_tokens  # The number of power tokens that are on the card. Generally starts at 0
-
         self.function = function
-
-
-        # Attributes that are not intrinsic to the meaning of the card go below here
-        # i.e. Attributes that we wouldn't want to pass to __init__
-
-        self.token_string = '[no tokens]'  # For testing. The string in which power tokens (if any) are displayed
-        self.activity_string = '--'
-        # self.status_string = (f'{self.token_string}\n'
-        #                       f'{self.activity_string}')
-
-        self.gui_button = None
-
 
     def __repr__(self):
         return self.name
+
+
+class Card(Item):
+    """The general class used for each card in the game."""
+    def __init__(self, rarity=vars.r_common, param=0.0, power_slots=0, power_tokens=0, **kwargs):
+        super().__init__(**kwargs)
+        self.rarity = rarity  # Coefficient to weight draw rarity. Higher number = more common card.
+        self.param = param
+        self.power_slots = power_slots # The max number of power tokens that can be on the card
+        self.power_tokens = power_tokens # The number of power tokens that are on the card. Generally starts at 0
+
+        self.token_string = '[no tokens]'  # For testing/demo. The string in which power tokens (if any) are displayed
+        self.activity_string = '--'
+
+        self.gui_button = None
 
 
     def status_string(self):
@@ -216,6 +207,11 @@ class Card:
         return status_string
 
 
+class Token(Item):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+
 def card_factory(card_name):
     """Factory method."""
 
@@ -227,38 +223,52 @@ def card_factory(card_name):
 # Huge master dict of all the cards and their effects.
 card_dict = {
     # Prototype Cards
-    'Neutrino Gen':     Card(name='Neutrino Gen', card_type='prototype', tags=['neutrino'],
+    'Neutrino Gen':     Card(name='Neutrino Gen', item_type='prototype', tags=['neutrino'],
                              image_file='card_images/fp_neutrino_gen.png',
                              rarity=vars.r_uncommon, function=f_neutrino_generator),
-    'ReCompute':        Card(name='ReCompute', card_type='prototype',
+    'ReCompute':        Card(name='ReCompute', item_type='prototype',
                              image_file='card_images/fp_recompute.png',
                              rarity=vars.r_uncommon, function=f_recompute),
-    'Re-Trigger':       Card(name='Re-Trigger', card_type='prototype',
+    'Re-Trigger':       Card(name='Re-Trigger', item_type='prototype',
                              image_file='card_images/fp_retrigger.png',
                              rarity=vars.r_uncommon, function=f_retrigger_left),
 
     # Detector Cards
-    'IceCube':          Card(name='IceCube', card_type='detector', tags=['neutrino', 'astro'],
+    'IceCube':          Card(name='IceCube', item_type='detector', tags=['neutrino', 'astro'],
                              image_file='card_images/fp_icecube.png', function=f_icecube),
-    'Super Kamiokande': Card(name='Super Kamiokande', card_type='detector', tags=['neutrino', 'astro'],
+    'Super Kamiokande': Card(name='Super Kamiokande', item_type='detector', tags=['neutrino', 'astro'],
                              image_file='card_images/fp_super_k.png', function=f_super_kamiokande),
 
     # Analysis Cards
-    'Machine Learning': Card(name='Machine Learning', card_type='analysis', tags=['computer'],
+    'Machine Learning': Card(name='Machine Learning', item_type='analysis', tags=['computer'],
                              image_file='card_images/fp_machine_learning.png', param=0.8, power_slots=1,
                              function=f_machine_learning),
 
     # Special Cards
-    'Fission Reactor':  Card(name='Fission Reactor', card_type='special', tags=['reactor', 'neutrino'],
+    'Fission Reactor':  Card(name='Fission Reactor', item_type='special', tags=['reactor', 'neutrino'],
                              image_file='card_images/fp_fission_reactor.png', rarity=vars.r_uncommon,
                              function=f_fission_reactor),
-    'LBNF Beam':        Card(name='LBNF Beam', card_type='special', tags=['beam', 'neutrino'],
+    'LBNF Beam':        Card(name='LBNF Beam', item_type='special', tags=['beam', 'neutrino'],
                              image_file='card_images/fp_lbnf_beam.png', power_slots=3,
                              function=f_lbnf_beam),
 
     # Physics Cards (temporary name)
-    'Neutrino Oscill.': Card(name='Neutrino Oscill.', card_type='physics', tags=['neutrino'],
+    'Neutrino Oscill.': Card(name='Neutrino Oscill.', item_type='physics', tags=['neutrino'],
                              image_file='card_images/fp_neutrino_oscillation.png', rarity=vars.r_rare,
                              function=f_neutrino_oscillation),
-
     }
+
+# TODO: Consider whether particle should be a tag or a token subtype. Perhaps we don't even need the TOKEN supertype?
+# TODO: Consider what the point of item types is
+#  - Draw pools?
+#  - Glorified tags?
+
+token_dict = {
+    # Particle Tokens
+    # 'E- Neutrino':      Token(name='E- Neutrino', item_type='token', tags=['particle', 'neutrino'],
+    #                           image_file='token_images/fp_token_e_neutrino.png', function=f_t_test),
+
+    # Resource Tokens
+    'Power':            Token(name='Power', item_type='token', tags=['resource'],
+                              image_file='token_images/fp_token_power.png', function=f_t_test),
+}

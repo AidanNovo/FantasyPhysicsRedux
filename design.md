@@ -30,10 +30,22 @@ Incorporate particle energies somehow?
     - I really like this idea
     - Teaches people about decay modes also?
       - Will probably need to simplify a bit
+  - Do background particles get constantly added?
+    - E.g. if you have a proton detector build, do you need to worry about neutrinos coming in?
+    - This is only a problem (mechanically) if you have a max particle capacity
+    - Maybe ask Dr. Rogan if particle pollution is a problem
+      - Noise?
 
 Neutrino cards could ignore some impediments? Flavored after neutrino non-interaction
 Maybe neutrinos are unique in that there is a global 'neutrino flux' value, whereas say protons are only available to
 the next few cards? To represent how you can just shoot a neutron beam to _anywhere_.
+
+So, under this design, rounds flow like this:
+1. Pick / arrange cards
+2. Start round
+3. Each tick:
+   1. Activate all tokens (top to bottom, left to right)
+   2. Activate current card
 
 ### Specific card ideas:
 - Nuclear reactor : Increases neutrino flux, supplies power
@@ -45,6 +57,21 @@ the next few cards? To represent how you can just shoot a neutron beam to _anywh
 - 
   
 
+### Outreach scaling rework
+I don't really like the 'current' idea for outreach scaling where each card just gets
+a numerical bonus based on some nebulous outside factor.
+
+Can I do my outreach scaling differently? Current problems:
+- Inelegant
+- Makes cards extremely wordy
+- Kind of overcomplicated if we want detailed bonuses
+- We want people to be able to precisely predict what the outreach bonus will be
+
+Idea:
+- Sidebar includes a breakdown of the outreach multipliers
+  - This fixes the problem with cards having limited real estate
+  - But also makes it harder for people to predict exactly what the outreach bonus will be
+
 Change my card function architecture so all functions call a base function first (inheritance basically)
 and that base function is responsible for performing universal card behaviors
 - E.g. all computer cards will draw power if available
@@ -54,6 +81,13 @@ The core question I am asking for everything is:
 
 Idea:
 - Display power tokens under cards like energy cards in the pokemon TCG
+
+Idea:
+- Tentpole physics card effects can change how the basic physics works
+- e.g. If you have a card representing a theory that says that protons can decay, then protons can decay
+
+Idea:
+- Neutrino oscillation card can reward you more for having different flavors of neutrino?
 
 ## Card Design Elements
 

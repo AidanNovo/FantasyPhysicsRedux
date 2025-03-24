@@ -11,6 +11,8 @@ import time
 import gui_theme
 
 # TODO: Implement a GUI to reorganize your active row
+# TODO: Implement a basic score attack mode (ala Balatro, Nubby, Luck be a Landlord, etc.)
+# TODO: Implement outreach scaling
 
 def crack_booster_pack(pack_size=5,
                        draw_pool=tuple(cards.card_dict.keys()),
