@@ -89,9 +89,13 @@ Idea:
 Idea:
 - Neutrino oscillation card can reward you more for having different flavors of neutrino?
 
-## Card Design Elements
+## Token Refactor Structure
+cards.py - hold card (and token) definitions
 
-The card design needs all of the following:
+
+## Card Design Graphic Elements
+
+The final card design needs all of the following:
 - Card name
 - Card type
 - Card tags
