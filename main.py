@@ -10,6 +10,11 @@ import vars
 import time
 import gui_theme
 
+
+
+
+
+
 # TODO: Implement a GUI to reorganize your active row
 # TODO: Implement a basic score attack mode (ala Balatro, Nubby, Luck be a Landlord, etc.)
 # TODO: Implement outreach scaling
@@ -32,81 +37,74 @@ def crack_booster_pack(pack_size=5,
 
     for c in pulled_cards:
         print(f'You found a(n) {c} card!')
-        add_card_to_deck(c)
+        create_item(c, holder=vars.deck)
 
-    print('Deck:', vars.deck)
+    print('Deck:', vars.deck.list)
 
 
 def get_all_cards():
     """Add one copy of each card in card_dict to the deck."""
     for card_name in cards.card_dict.keys():
-        add_card_to_deck(card_name)
+        create_item(card_name, holder=vars.deck)
 
 
 def show_big_card(event, card):
-    """Create a large w"""
+    """Create a window displaying a larger version of a card."""
     popup = tk.Toplevel(root)
     big_image = card.large_image
     image_label = tk.Label(popup, image=big_image)
     image_label.pack()
 
 
-def add_card_to_deck(card_name):
-    """Add a card by name to the deck, bind its function to the instance, and grid the corresponding button."""
+def create_item(item_name, holder):
+    if len(holder.list) == holder.max_length:
+        print(f'Could not add item to {holder}.')
 
-    card = cards.card_factory(card_name)
-
-    base_img = Image.open(card.image_file)
-    card.image = ImageTk.PhotoImage(base_img.resize((100, 140)))
-    card.large_image = ImageTk.PhotoImage(base_img.resize((250, 350)))
-
-    card.gui_button = tk.Button(F_internal_deck_frame, image=card.image)
-
-    vars.deck.append(card)  # Add new card object
-    vars.deck[-1].function = vars.deck[-1].function.__get__(vars.deck[-1], cards.Card)  # Bind instance method
-
-    # Initialize the GUI Button and put it in the deck
-    card.gui_button.configure(command=lambda c=card: move_card_to_active_row(c))
-    card_index = vars.deck.index(card)
-    card.gui_button.bind('<Button-2>', lambda event, c=card: show_big_card(event, c))  # Right-click is Button-2 on Mac
-    card.gui_button.bind('<Button-3>', lambda event, c=card: show_big_card(event, c))  # Right-click is Button-3 on PC
-    card.gui_button.grid(row=math.floor(card_index/3), column=card_index % 3, padx=2, pady=2)
-
-
-# TODO: Generalize the move to active row and move to deck commands to allow a move from anywhere.
-#   - Essentially, stop assuming that cards will only ever be in either the active row or the deck
-
-def move_card_to_active_row(card):
-    old_index = vars.deck.index(card)
-
-    if len(vars.active_row) < vars.max_active_cards:
-        print(f'Moving card from deck index {old_index} to active row')
-        cfg = card.gui_button.config()
-        card.gui_button.destroy()
-        vars.active_row.append(vars.deck.pop(old_index))
-        card.gui_button = tk.Button(F_active_cards, image=cfg['image'][4],
-                                    command=lambda c=card: move_card_to_deck(c), compound=tk.TOP)
-        card.gui_button.grid(row=0, column=vars.active_row.index(card))
     else:
-        print(f'Free up a slot in the active row first!')
+        item = cards.card_factory(item_name)
 
-    update_active_row_display(repeat=False)
+        base_img = Image.open(item.image_file)
+        item.image = ImageTk.PhotoImage(base_img.resize((100, 140)))
+        item.large_image = ImageTk.PhotoImage(base_img.resize((250, 350)))
 
-def move_card_to_deck(card):
-    old_index = vars.active_row.index(card)
+        item.gui_button = tk.Button(holder.gui_frame, image=item.image)
 
-    print(f'Moving card from active row index {old_index} to deck')
-    cfg = card.gui_button.config()
-    card.gui_button.destroy()
-    vars.deck.append(vars.active_row.pop(old_index))
-    card.gui_button = tk.Button(F_internal_deck_frame, image=cfg['image'][4],
-                                command=lambda c=card: move_card_to_active_row(c))
+        holder.list.append(item)
 
-    card.gui_button.bind('<Button-2>', lambda event, c=card: show_big_card(event, c))  # Right-click is Button-2 on Mac
-    card.gui_button.bind('<Button-3>', lambda event, c=card: show_big_card(event, c))  # Right-click is Button-3 on PC
+        holder.list[-1].function = holder.list[-1].function.__get__(holder.list[-1], type(item))  # Bind instance method
 
-    new_index = vars.deck.index(card)
-    card.gui_button.grid(row=math.floor(new_index/3), column=new_index % 3, padx=2, pady=2)
+        item.gui_button.bind('<Button-2>', lambda event, c=item: show_big_card(event, c))  # r-click is Button-2 on Mac
+        item.gui_button.bind('<Button-3>', lambda event, c=item: show_big_card(event, c))  # r-click is Button-3 on PC
+
+        if holder == vars.deck:  # Deck specific for now
+            item.gui_button.configure(command=lambda c=item: move_item(c, vars.deck, vars.active_row))
+            item_index = holder.list.index(item)
+            item.gui_button.grid(row=math.floor(item_index / 3), column=item_index % 3, padx=2, pady=2)
+
+
+def move_item(item, old_holder, new_holder):
+    if len(new_holder.list) == new_holder.max_length:
+        print(f'Could not add item to {new_holder}.')
+    else:
+        cfg = item.gui_button.config()
+        item.gui_button.destroy()
+
+        old_index = old_holder.list.index(item)
+        new_holder.list.append(old_holder.list.pop(old_index))
+
+        item.gui_button = tk.Button(new_holder.gui_frame, image=cfg['image'][4], compound=tk.TOP)
+
+        if new_holder == vars.active_row:
+            item.gui_button.configure(command=lambda c=item: move_item(c, vars.active_row, vars.deck))
+            item.gui_button.grid(row=0, column=vars.active_row.list.index(item))
+
+        elif new_holder == vars.deck:
+            item.gui_button.configure(command=lambda c=item: move_item(c, vars.deck, vars.active_row))
+            item_index = new_holder.list.index(item)
+            item.gui_button.grid(row=math.floor(item_index / 3), column=item_index % 3, padx=2, pady=2)
+
+        item.gui_button.bind('<Button-2>', lambda event, c=item: show_big_card(event, c))  # r-click is Button-2 on Mac
+        item.gui_button.bind('<Button-3>', lambda event, c=item: show_big_card(event, c))  # r-click is Button-3 on PC
 
 # TODO: For convenience, add a button to reset the current active row.
 # def reset():
@@ -114,29 +112,29 @@ def move_card_to_deck(card):
 #     vars.deck = []
 
 def activate_cards():
-    print('\nCard order:', vars.active_row)
+    print('\nCard order:', vars.active_row.list)
 
     print('\n--------START--------')
     print('Allocating grid power tokens...')
-    cards.allocate_power_tokens(-1, vars.active_row)
+    cards.allocate_power_tokens(-1, vars.active_row.list)
 
-    for card in vars.active_row:
-        card.function(vars.active_row, root)
+    for card in vars.active_row.list:
+        card.function(vars.active_row.list, root)
 
     print('---------END---------')
 
 
 def update_deck_display():
-    for card in vars.deck:
-        deck_index = vars.deck.index(card)
+    for card in vars.deck.list:
+        deck_index = vars.deck.list.index(card)
         card.gui_button.grid(row=math.floor(deck_index / 3), column=deck_index % 3, padx=2, pady=2)
 
     root.after(250, update_deck_display)
 
 
 def update_active_row_display(repeat=True):
-    for card in vars.active_row:
-        card.gui_button.grid(row=0, column=vars.active_row.index(card))
+    for card in vars.active_row.list:
+        card.gui_button.grid(row=0, column=vars.active_row.list.index(card))
 
         # Update token string
         if card.power_slots != 0:
@@ -161,6 +159,7 @@ if __name__ == '__main__':
     gui_theme.set_style(root)
     root.title('FantasyPhysics')
 
+
     F_sidebar = ttk.Frame(root)
     F_sidebar.grid(row=0, column=0, rowspan=2, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.N + tk.S)
 
@@ -169,6 +168,7 @@ if __name__ == '__main__':
 
     F_active_cards = ttk.Frame(root, height=140)
     F_active_cards.grid(row=0, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N)
+    vars.active_row.gui_frame = F_active_cards
 
     F_deck_images = ttk.Frame(F_sidebar)
     F_deck_images.grid(row=2, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N + tk.S)
@@ -179,6 +179,9 @@ if __name__ == '__main__':
 
     F_internal_deck_frame = ttk.Frame(C_deck_canvas)
     F_internal_deck_frame.bind("<Configure>", lambda e: C_deck_canvas.configure(scrollregion=C_deck_canvas.bbox("all")))
+
+    vars.deck.gui_frame = F_internal_deck_frame
+
 
     C_deck_canvas.create_window((0, 0), window=F_internal_deck_frame, anchor="nw")
     C_deck_canvas.pack(side=tk.LEFT)

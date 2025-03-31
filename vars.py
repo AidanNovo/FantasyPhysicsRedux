@@ -16,8 +16,17 @@ data = 0
 score = 0
 
 
-deck = []
-active_row = []
+class CardHolder:
+    def __init__(self, max_length=-1, gui_frame=None):
+        self.list = []  # In theory, could be better to have CardHolder inherit from list
+        self.max_length = max_length
+
+        self.gui_frame = gui_frame
+
+deck = CardHolder()
+active_row = CardHolder(max_length=6)
+# deck = []
+# active_row = []
 max_active_cards = 6  # The max number of cards that may be in the active row
 
 

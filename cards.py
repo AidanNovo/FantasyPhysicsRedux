@@ -118,6 +118,13 @@ def card_factory(card_name):
     return deepcopy(card_dict[card_name])
 
 
+def token_factory(token_name):
+    """Factory method."""
+    global token_dict
+
+    return deepcopy(token_dict[token_name])
+
+
 # Huge master dict of all the cards and their effects.
 card_dict = {}
 
@@ -257,7 +264,6 @@ card_dict.update({'Re-Trigger': Card(
     name='Re-Trigger', function=f_retrigger_left, image_file='card_images/fp_retrigger.png',
     item_type='prototype', rarity=vars.r_uncommon)})
 
-# TODO: Consider whether particle should be a tag or a token subtype. Perhaps we don't even need the TOKEN supertype?
 # TODO: Consider what the point of item types is
 #  - Draw pools?
 #  - Glorified tags?

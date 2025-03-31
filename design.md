@@ -47,6 +47,17 @@ So, under this design, rounds flow like this:
    1. Activate all tokens (top to bottom, left to right)
    2. Activate current card
 
+## Token Refactor Structure
+cards.py - hold card (and token) definitions
+
+main.py - gui stuff
+
+Each place cards can go is a card_holder object
+Function to add a new card to a card_holder
+Function to move them between card_holders
+When activating cards, you go down the row in the order of card_holder activation
+
+
 ### Specific card ideas:
 - Nuclear reactor : Increases neutrino flux, supplies power
   - Power is a resource that can be used by active particle sources
@@ -89,8 +100,7 @@ Idea:
 Idea:
 - Neutrino oscillation card can reward you more for having different flavors of neutrino?
 
-## Token Refactor Structure
-cards.py - hold card (and token) definitions
+
 
 
 ## Card Design Graphic Elements
