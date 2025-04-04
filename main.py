@@ -95,11 +95,13 @@ def move_item(item, old_holder, new_holder):
         item.gui_button = tk.Button(new_holder.gui_frame, image=cfg['image'][4], compound=tk.TOP)
 
         if new_holder == vars.active_row:
-            item.gui_button.configure(command=lambda c=item: move_item(c, vars.active_row, vars.deck))
+            item.gui_button.configure(command=lambda c=item: move_item(c, vars.active_row, vars.deck),
+                                      compound=tk.TOP)
             item.gui_button.grid(row=0, column=vars.active_row.list.index(item))
 
         elif new_holder == vars.deck:
-            item.gui_button.configure(command=lambda c=item: move_item(c, vars.deck, vars.active_row))
+            item.gui_button.configure(command=lambda c=item: move_item(c, vars.deck, vars.active_row),
+                                      compound=tk.NONE)
             item_index = new_holder.list.index(item)
             item.gui_button.grid(row=math.floor(item_index / 3), column=item_index % 3, padx=2, pady=2)
 
