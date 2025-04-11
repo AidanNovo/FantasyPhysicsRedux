@@ -50,10 +50,14 @@ def get_all_cards():
 
 def show_big_card(event, card):
     """Create a window displaying a larger version of a card."""
+    #TODO: For some reason this does not work with tokens.
+    global root
+
     popup = tk.Toplevel(root)
     big_image = card.large_image
     image_label = tk.Label(popup, image=big_image)
     image_label.pack()
+
 
 
 def create_item(item_name, holder):
@@ -61,7 +65,7 @@ def create_item(item_name, holder):
         print(f'Could not add item to {holder}.')
 
     else:
-        item = cards.card_factory(item_name)
+        item = cards.item_factory(item_name)
 
         base_img = Image.open(item.image_file)
         item.image = ImageTk.PhotoImage(base_img.resize((100, 140)))
@@ -117,11 +121,13 @@ def activate_cards():
     print('\nCard order:', vars.active_row.list)
 
     print('\n--------START--------')
-    print('Allocating grid power tokens...')
-    cards.allocate_power_tokens(-1, vars.active_row.list)
+    print('Granting 1 power token from the grid')
+    create_item('Power', vars.power_row)
 
     for card in vars.active_row.list:
-        card.function(vars.active_row.list, root)
+        for token in vars.power_row.list.copy():  # Use .copy() to solve index issues w/ removing tokens while looping
+            token.function(vars.active_row, vars.power_row, root)
+        card.function(vars.active_row, vars.power_row, root)
 
     print('---------END---------')
 
@@ -148,10 +154,16 @@ def update_active_row_display(repeat=True):
     if repeat:
         root.after(250, update_active_row_display)
 
+def update_power_row_display(repeat=True):
+    for token in vars.power_row.list:
+        token.gui_button.grid(row=0, column=vars.power_row.list.index(token))
+
+    if repeat:
+        root.after(250, update_power_row_display)
+
 
 def update_stat_display():
-    stat_display_label.config(text=f'SCORE: {vars.score}  |  DATA:  {vars.data}  |  '
-                                   f'POWER TOKENS: {vars.unused_power_tokens}')
+    stat_display_label.config(text=f'SCORE: {vars.score}  |  DATA:  {vars.data}')
     root.after(250, update_stat_display)
 
 
@@ -168,9 +180,13 @@ if __name__ == '__main__':
     decklist_label = ttk.Label(F_sidebar, text='DECK LIST', font='Helvetica 18 bold')
     decklist_label.grid(row=1, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E)
 
-    F_active_cards = ttk.Frame(root, height=140)
-    F_active_cards.grid(row=0, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N)
-    vars.active_row.gui_frame = F_active_cards
+    F_active_row = ttk.Frame(root, height=140)
+    F_active_row.grid(row=0, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N)
+    vars.active_row.gui_frame = F_active_row
+
+    F_power_row = ttk.Frame(root, height=140)
+    F_power_row.grid(row=1, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N)
+    vars.power_row.gui_frame = F_power_row
 
     F_deck_images = ttk.Frame(F_sidebar)
     F_deck_images.grid(row=2, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N + tk.S)
@@ -228,5 +244,8 @@ if __name__ == '__main__':
     root.after(0, update_stat_display)
     root.after(0, update_deck_display)
     root.after(0, update_active_row_display)
+    root.after(0, update_power_row_display)
+
+    # create_item('Power', vars.deck)
 
     root.mainloop()
