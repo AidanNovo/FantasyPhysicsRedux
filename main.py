@@ -82,8 +82,8 @@ def create_item(item_name, holder):
 
         if holder == vars.deck:  # Deck specific for now
             item.gui_button.configure(command=lambda c=item: move_item(c, vars.deck, vars.active_row))
-            item_index = holder.list.index(item)
-            item.gui_button.grid(row=math.floor(item_index / 3), column=item_index % 3, padx=2, pady=2)
+            # item_index = holder.list.index(item)
+            # item.gui_button.grid(row=math.floor(item_index / 3), column=item_index % 3, padx=2, pady=2)
 
 
 def move_item(item, old_holder, new_holder):
@@ -101,21 +101,13 @@ def move_item(item, old_holder, new_holder):
         if new_holder == vars.active_row:
             item.gui_button.configure(command=lambda c=item: move_item(c, vars.active_row, vars.deck),
                                       compound=tk.TOP)
-            item.gui_button.grid(row=0, column=vars.active_row.list.index(item))
 
         elif new_holder == vars.deck:
             item.gui_button.configure(command=lambda c=item: move_item(c, vars.deck, vars.active_row),
                                       compound=tk.NONE)
-            item_index = new_holder.list.index(item)
-            item.gui_button.grid(row=math.floor(item_index / 3), column=item_index % 3, padx=2, pady=2)
 
         item.gui_button.bind('<Button-2>', lambda event, c=item: show_big_card(event, c))  # r-click is Button-2 on Mac
         item.gui_button.bind('<Button-3>', lambda event, c=item: show_big_card(event, c))  # r-click is Button-3 on PC
-
-# TODO: For convenience, add a button to reset the current active row.
-# def reset():
-#     vars.active_row = []
-#     vars.deck = []
 
 def activate_cards():
     print('\nCard order:', vars.active_row.list)
@@ -137,12 +129,15 @@ def update_deck_display():
         deck_index = vars.deck.list.index(card)
         card.gui_button.grid(row=math.floor(deck_index / 3), column=deck_index % 3, padx=2, pady=2)
 
-    root.after(250, update_deck_display)
+    root.after(100, update_deck_display)
 
 
 def update_active_row_display(repeat=True):
+    # Show the max # of tokens you can have
+    active_row_label.configure(text=f'ACTIVE ROW ({len(vars.active_row.list)}/{vars.active_row.max_length})')
+
     for card in vars.active_row.list:
-        card.gui_button.grid(row=0, column=vars.active_row.list.index(card))
+        card.gui_button.grid(row=1, column=vars.active_row.list.index(card))
 
         # Update token string
         if card.power_slots != 0:
@@ -152,19 +147,23 @@ def update_active_row_display(repeat=True):
         card.gui_button.configure(text=card.status_string())
 
     if repeat:
-        root.after(250, update_active_row_display)
+        root.after(100, update_active_row_display)
 
 def update_power_row_display(repeat=True):
+    # Show the max # of tokens you can have
+    power_row_label.configure(text=f'POWER TOKENS ({len(vars.power_row.list)}/{vars.power_row.max_length})')
+
     for token in vars.power_row.list:
-        token.gui_button.grid(row=0, column=vars.power_row.list.index(token))
+        token.gui_button.grid(row=1, column=vars.power_row.list.index(token))
+
 
     if repeat:
-        root.after(250, update_power_row_display)
+        root.after(100, update_power_row_display)
 
 
 def update_stat_display():
     stat_display_label.config(text=f'SCORE: {vars.score}  |  DATA:  {vars.data}')
-    root.after(250, update_stat_display)
+    root.after(100, update_stat_display)
 
 
 if __name__ == '__main__':
@@ -173,20 +172,17 @@ if __name__ == '__main__':
     gui_theme.set_style(root)
     root.title('FantasyPhysics')
 
-
+    # Sidebar stuff
     F_sidebar = ttk.Frame(root)
     F_sidebar.grid(row=0, column=0, rowspan=2, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.N + tk.S)
 
+    # Stat display
+    stat_display_label = ttk.Label(F_sidebar, text='SCORE: 0')
+    stat_display_label.grid(row=3, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E)
+
+    # Deck list
     decklist_label = ttk.Label(F_sidebar, text='DECK LIST', font='Helvetica 18 bold')
     decklist_label.grid(row=1, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E)
-
-    F_active_row = ttk.Frame(root, height=140)
-    F_active_row.grid(row=0, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N)
-    vars.active_row.gui_frame = F_active_row
-
-    F_power_row = ttk.Frame(root, height=140)
-    F_power_row.grid(row=1, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N)
-    vars.power_row.gui_frame = F_power_row
 
     F_deck_images = ttk.Frame(F_sidebar)
     F_deck_images.grid(row=2, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N + tk.S)
@@ -198,13 +194,11 @@ if __name__ == '__main__':
     F_internal_deck_frame = ttk.Frame(C_deck_canvas)
     F_internal_deck_frame.bind("<Configure>", lambda e: C_deck_canvas.configure(scrollregion=C_deck_canvas.bbox("all")))
 
-    vars.deck.gui_frame = F_internal_deck_frame
-
-
     C_deck_canvas.create_window((0, 0), window=F_internal_deck_frame, anchor="nw")
     C_deck_canvas.pack(side=tk.LEFT)
     deck_vbar.pack(side=tk.RIGHT, fill=tk.Y)
 
+    vars.deck.gui_frame = F_internal_deck_frame
 
     def _on_mousewheel(event):
         direction = 0
@@ -217,10 +211,23 @@ if __name__ == '__main__':
 
     C_deck_canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
+    # Active row
+    F_active_row = ttk.Frame(root, height=140)
+    F_active_row.grid(row=0, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N)
+    active_row_label = ttk.Label(F_active_row, text='ACTIVE ROW')
+    active_row_label.grid(row=0, column=0, columnspan=vars.active_row.max_length, padx=5, pady=5, ipadx=1, ipady=1,
+                        sticky=tk.W + tk.S + tk.E)
+    vars.active_row.gui_frame = F_active_row
 
-    stat_display_label = ttk.Label(F_sidebar, text='SCORE: 0')
-    stat_display_label.grid(row=3, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E)
+    # Power token row
+    F_power_row = ttk.Frame(root, height=140)
+    F_power_row.grid(row=1, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N)
+    power_row_label = ttk.Label(F_power_row, text='POWER TOKENS')
+    power_row_label.grid(row=0, column=0, columnspan=vars.active_row.max_length, padx=5, pady=5, ipadx=1, ipady=1,
+                          sticky=tk.W + tk.S + tk.E)
+    vars.power_row.gui_frame = F_power_row
 
+    # Controls
     F_controls = ttk.Frame(root)
     F_controls.grid(row=1, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.E + tk.W + tk.S)
     controls_label = ttk.Label(F_controls, text='CONTROLS')
