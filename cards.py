@@ -136,30 +136,42 @@ card_dict.update({'Machine Learning': Card(
 
 
 # Detector Cards
-def f_icecube(self, rows, root):
-    """Generate data from neutrino flux."""
+def f_icecube(self, rows, root):  # Currently, this is exactly the same as f_super_kamiokande
+    """Generate data from neutrino tokens."""
     ar = rows['active']
+    pr = rows['particle']
 
     f_card_start(self, ar, root)
-    vars.data += vars.neutrino_flux
-    print(f'{ar.list.index(self)} {self.name}:\tData increased by {vars.neutrino_flux}!')
+    for particle in pr.list:
+        if particle.name == 'e- Neutrino' or particle.name == 'Muon Neutrino' or particle.name == 'Tau Neutrino':
+            vars.data += 1000
+            print(f'{ar.list.index(self)} {self.name}: Neutrino detected, data increased by 1000!')
+        else:
+            pass
     f_card_end(self, ar, root)
 card_dict.update({'IceCube': Card(
     name='IceCube', function=f_icecube, image_file='card_images/fp_icecube.png',
     item_type='detector', tags=['neutrino', 'astro'])})
 
 def f_super_kamiokande(self, rows, root):
-    """Generate data from neutrino flux, more efficiently if the neutrino oscillation card is in the active row."""
+    """Generate data from neutrino tokens."""
     ar = rows['active']
+    pr = rows['particle']
 
     f_card_start(self, ar, root)
-    if 'Neutrino Oscill.' in [card.name for card in ar.list]:
-        vars.data += vars.neutrino_flux * 1.5
-        print(f'{ar.list.index(self)} {self.name}:\tData increased by {vars.neutrino_flux * 1.5}! (More efficient due to '
-              f'neutrino oscillation card)')
-    else:
-        vars.data += vars.neutrino_flux * 0.8
-        print(f'{ar.list.index(self)} {self.name}:\tData increased by {vars.neutrino_flux * 0.8}!')
+    for particle in pr.list:
+        if particle.name == 'e- Neutrino'or particle.name == 'Muon Neutrino' or particle.name == 'Tau Neutrino':
+            vars.data += 1000
+            print(f'{ar.list.index(self)} {self.name}: Neutrino detected, data increased by 1000!')
+        else:
+            pass
+    # if 'Neutrino Oscill.' in [card.name for card in ar.list]:
+    #     vars.data += vars.neutrino_flux * 1.5
+    #     print(f'{ar.list.index(self)} {self.name}:\tData increased by {vars.neutrino_flux * 1.5}! (More efficient due to '
+    #           f'neutrino oscillation card)')
+    # else:
+    #     vars.data += vars.neutrino_flux * 0.8
+    #     print(f'{ar.list.index(self)} {self.name}:\tData increased by {vars.neutrino_flux * 0.8}!')
     f_card_end(self, ar, root)
 card_dict.update({'Super-Kamiokande': Card(
     name='Super-Kamiokande', function=f_super_kamiokande, image_file='card_images/fp_super_k.png',
@@ -187,10 +199,11 @@ card_dict.update({'Neutrino Oscillation': Card(
 # Special Cards
 def f_fission_reactor(self, rows, root):
     ar = rows['active']
+    pr = rows['particle']
 
     from main import create_item
     f_card_start(self, ar, root)
-    vars.neutrino_flux += 1000
+    create_item('e- Neutrino', pr)
     print(f'{ar.list.index(self)} {self.name}\t: Increased Neutrino Flux by 1000 (flux is now {vars.neutrino_flux}).')
 
     for _ in range(5):  # Make 5 power tokens
@@ -203,14 +216,17 @@ card_dict.update({'Fission Reactor': Card(
 
 def f_lbnf_beam(self, rows, root):
     ar = rows['active']
+    pr = rows['particle']
 
+    from main import create_item
     f_card_start(self, ar, root)
     if self.power_tokens == 0: # Card requires at least 1 token to run
         print(f'{ar.list.index(self)} {self.name}:\tUnpowered!')
     else:
-        vars.neutrino_flux += 1000 * self.power_tokens
-        print(f'{ar.list.index(self)} {self.name}\t: Increased Neutrino Flux by {1000 * self.power_tokens} '
-              f'(flux is now {vars.neutrino_flux}).')
+        for _ in range(self.power_tokens):
+            create_item('e- Neutrino', pr)
+        # vars.neutrino_flux += 1000 * self.power_tokens
+        print(f'{ar.list.index(self)} {self.name}\t: Generated an e- Neutrino.')
     f_card_end(self, ar, root)
 card_dict.update({'LBNF Beam': Card(
     name='LBNF Beam', function=f_lbnf_beam, image_file='card_images/fp_lbnf_beam.png',
@@ -219,12 +235,12 @@ card_dict.update({'LBNF Beam': Card(
 
 # Prototype Cards
 def f_neutrino_generator(self, rows, root):
-    """Increase the current neutrino flux."""
     ar = rows['active']
 
+    from main import create_item
     f_card_start(self, ar, root)
-    vars.neutrino_flux += 500
-    print(f'{ar.list.index(self)} {self.name}:\tIncreased Neutrino Flux by 500 (flux is now {vars.neutrino_flux}).')
+    create_item('e- Neutrino', vars.particle_row)
+    print(f'{ar.list.index(self)} {self.name}:\tCreated e- Neutrino token.')
     f_card_end(self, ar, root)
 card_dict.update({'Neutrino Gen': Card(
     name='Neutrino Gen', function=f_neutrino_generator, image_file='card_images/fp_neutrino_gen.png',
@@ -269,27 +285,58 @@ card_dict.update({'Re-Trigger': Card(
 
 token_dict = {}
 # Particle Tokens
+# TODO: Make neutrinos actually oscillate randomly.
+# TODO: Maybe turn the repeated neutrino oscillation code into a single function for transforming a card in place
 def f_e_neutrino_token(self, rows, root):
+    from main import initialize_item_image, initialize_item_gui_button, bind_item_instance_function
     pr = rows['particle']
-    print('oscillating to muon (visually)')
+
+    print(f'{pr.list.index(self)} {self.name} Oscillating to muon neutrino.')
+
     index = pr.list.index(self)
-    print(index)
-    self.image_file = 'token_images/fp_token_muon_neutrino.png'
-    pass
+    self = item_factory('Muon Neutrino')
+    pr.list[index] = self
+
+    # Re-initialize some stuff that would normally get initialized in the create_item function
+    initialize_item_gui_button(self, pr)
+    initialize_item_image(self)
+    bind_item_instance_function(self, pr, index)
 token_dict.update({'e- Neutrino': Token(
     name='e- Neutrino', function=f_e_neutrino_token, image_file='token_images/fp_token_e_neutrino.png',
     item_type='particle', tags=['electron, neutrino'])})
 
 def f_muon_neutrino_token(self, rows, root):
-    print('muon neutrino activated')
-    pass
+    from main import initialize_item_image, initialize_item_gui_button, bind_item_instance_function
+    pr = rows['particle']
+
+    print(f'{pr.list.index(self)} {self.name} Oscillating to tau neutrino.')
+
+    index = pr.list.index(self)
+    self = item_factory('Tau Neutrino')
+    pr.list[index] = self
+
+    # Re-initialize some stuff that would normally get initialized in the create_item function
+    initialize_item_gui_button(self, pr)
+    initialize_item_image(self)
+    bind_item_instance_function(self, pr, index)
 token_dict.update({'Muon Neutrino': Token(
     name='Muon Neutrino', function=f_muon_neutrino_token, image_file='token_images/fp_token_muon_neutrino.png',
     item_type='particle', tags=['muon, neutrino'])})
 
 def f_tau_neutrino_token(self, rows, root):
-    print('muon neutrino activated')
-    pass
+    from main import initialize_item_image, initialize_item_gui_button, bind_item_instance_function
+    pr = rows['particle']
+
+    print(f'{pr.list.index(self)} {self.name} Oscillating to electron neutrino.')
+
+    index = pr.list.index(self)
+    self = item_factory('e- Neutrino')
+    pr.list[index] = self
+
+    # Re-initialize some stuff that would normally get initialized in the create_item function
+    initialize_item_gui_button(self, pr)
+    initialize_item_image(self)
+    bind_item_instance_function(self, pr, index)
 token_dict.update({'Tau Neutrino': Token(
     name='Tau Neutrino', function=f_tau_neutrino_token, image_file='token_images/fp_token_tau_neutrino.png',
     item_type='particle', tags=['tau, neutrino'])})

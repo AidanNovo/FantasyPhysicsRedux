@@ -53,27 +53,41 @@ def show_big_card(event, card):
     image_label = tk.Label(popup, image=big_image)
     image_label.pack()
 
+def initialize_item_gui_button(item, holder):
+    """Initialize the item's gui button and bind the right-click functionality."""
+    item.gui_button = tk.Button(holder.gui_frame)
+    item.gui_button.bind('<Button-2>', lambda event, c=item: show_big_card(event, c))  # r-click is Button-2 on Mac
+    item.gui_button.bind('<Button-3>', lambda event, c=item: show_big_card(event, c))  # r-click is Button-3 on PC
 
 
-def create_item(item_name, holder):
+def initialize_item_image(item):
+    """Initialize the various images for the item."""
+    base_img = Image.open(item.image_file)
+    item.image = ImageTk.PhotoImage(base_img.resize((100, 140)))
+    item.large_image = ImageTk.PhotoImage(base_img.resize((250, 350)))
+
+    item.gui_button.configure(image=item.image)
+
+
+def bind_item_instance_function(item, holder, h_index):
+    holder.list[h_index].function = holder.list[h_index].function.__get__(holder.list[h_index],
+                                                                          type(item))  # Bind instance method
+
+def create_item(item_name, holder, h_index=-1):
     if len(holder.list) == holder.max_length:
         print(f'Could not add item to {holder}.')
 
     else:
+        # Create the item object
         item = cards.item_factory(item_name)
 
-        base_img = Image.open(item.image_file)
-        item.image = ImageTk.PhotoImage(base_img.resize((100, 140)))
-        item.large_image = ImageTk.PhotoImage(base_img.resize((250, 350)))
+        initialize_item_gui_button(item, holder)
 
-        item.gui_button = tk.Button(holder.gui_frame, image=item.image)
+        initialize_item_image(item)
 
         holder.list.append(item)
 
-        holder.list[-1].function = holder.list[-1].function.__get__(holder.list[-1], type(item))  # Bind instance method
-
-        item.gui_button.bind('<Button-2>', lambda event, c=item: show_big_card(event, c))  # r-click is Button-2 on Mac
-        item.gui_button.bind('<Button-3>', lambda event, c=item: show_big_card(event, c))  # r-click is Button-3 on PC
+        bind_item_instance_function(item, holder, h_index)
 
         if holder == vars.deck:  # Deck specific for now
             item.gui_button.configure(command=lambda c=item: move_item(c, vars.deck, vars.active_row))
@@ -274,8 +288,8 @@ if __name__ == '__main__':
     root.after(0, update_power_row_display)
 
     # create_item('Power', vars.deck)
-    create_item('e- Neutrino', vars.particle_row)
-    create_item('Muon Neutrino', vars.particle_row)
-    create_item('Tau Neutrino', vars.particle_row)
+    # create_item('e- Neutrino', vars.particle_row)
+    # create_item('Muon Neutrino', vars.particle_row)
+    # create_item('Tau Neutrino', vars.particle_row)
 
     root.mainloop()
