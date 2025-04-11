@@ -240,7 +240,7 @@ def f_neutrino_generator(self, ar, pr, root):
     """Increase the current neutrino flux."""
     f_card_start(self, ar, root)
     vars.neutrino_flux += 500
-    print(f'{ar.index(self)} {self.name}:\tIncreased Neutrino Flux by 500 (flux is now {vars.neutrino_flux}).')
+    print(f'{ar.list.index(self)} {self.name}:\tIncreased Neutrino Flux by 500 (flux is now {vars.neutrino_flux}).')
     f_card_end(self, ar, root)
 card_dict.update({'Neutrino Gen': Card(
     name='Neutrino Gen', function=f_neutrino_generator, image_file='card_images/fp_neutrino_gen.png',
@@ -251,8 +251,8 @@ def f_recompute(self, ar, pr, root):
     f_card_start(self, ar, root)
     for card in ar.list:
         if 'computer' in card.tags:
-            print(f'{ar.index(self)} {self.name}:\tRe-activating {ar.index(card)} {card.name} due to its computer tag!')
-            card.function(ar, root)
+            print(f'{ar.list.index(self)} {self.name}:\tRe-activating {ar.list.index(card)} {card.name} due to its computer tag!')
+            card.function(ar, pr, root)
     f_card_end(self, ar, root)
 card_dict.update({'ReCompute': Card(
     name='ReCompute', function=f_recompute, image_file='card_images/fp_recompute.png',
@@ -261,14 +261,13 @@ card_dict.update({'ReCompute': Card(
 def f_retrigger_left(self, ar, pr, root):
     """Re-activate the ability of the item_name to the left."""
     f_card_start(self, ar, root)
-    active_row = ar.list
-    my_index = active_row.index(self)  # The index of this retrigger card
+    my_index = ar.list.index(self)  # The index of this retrigger card
 
     if my_index == 0:
-        print(f'{ar.index(self)} {self.name}:\tNo card found to the left!')
+        print(f'{ar.list.index(self)} {self.name}:\tNo card found to the left!')
     else:
-        print(f'{ar.index(self)} {self.name}:\tRe-activating card to the left!')
-        active_row[active_row.index(self) - 1].function(active_row, root)  # I don't like passing the active row every time.
+        print(f'{ar.list.index(self)} {self.name}:\tRe-activating card to the left!')
+        ar.list[ar.list.index(self) - 1].function(ar, pr, root)  # I don't like passing the active row every time.
     f_card_end(self, ar, root)
 card_dict.update({'Re-Trigger': Card(
     name='Re-Trigger', function=f_retrigger_left, image_file='card_images/fp_retrigger.png',

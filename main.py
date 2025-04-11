@@ -50,7 +50,7 @@ def get_all_cards():
 
 def show_big_card(event, card):
     """Create a window displaying a larger version of a card."""
-    #TODO: For some reason this does not work with tokens.
+    #TODO: For some reason this sometimes does not work with tokens.
     global root
 
     popup = tk.Toplevel(root)
@@ -224,7 +224,7 @@ if __name__ == '__main__':
     F_controls = ttk.Frame(root)
     F_controls.grid(row=1, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.E + tk.W + tk.S)
     controls_label = ttk.Label(F_controls, text='CONTROLS')
-    controls_label.grid(row=0, column=0, columnspan=vars.max_active_cards, padx=5, pady=5, ipadx=1, ipady=1,
+    controls_label.grid(row=0, column=0, columnspan=vars.active_row.max_length, padx=5, pady=5, ipadx=1, ipady=1,
                         sticky=tk.W + tk.S + tk.E)
 
     booster_button = ttk.Button(F_controls, text='Open Booster', command=crack_booster_pack, takefocus=False)
