@@ -10,11 +10,6 @@ import vars
 import time
 import gui_theme
 
-
-
-
-
-
 # TODO: Implement a GUI to reorganize your active row
 # TODO: Implement a basic score attack mode (ala Balatro, Nubby, Luck be a Landlord, etc.)
 # TODO: Implement outreach scaling
@@ -110,6 +105,10 @@ def move_item(item, old_holder, new_holder):
         item.gui_button.bind('<Button-3>', lambda event, c=item: show_big_card(event, c))  # r-click is Button-3 on PC
 
 def activate_cards():
+    rows = {'active': vars.active_row,
+            'particle': vars.particle_row,
+            'power': vars.power_row,}
+
     print('\nCard order:', vars.active_row.list)
 
     print('\n--------START--------')
@@ -117,9 +116,12 @@ def activate_cards():
     create_item('Power', vars.power_row)
 
     for card in vars.active_row.list:
+        for token in vars.particle_row.list.copy():
+            token.function(rows, root)
         for token in vars.power_row.list.copy():  # Use .copy() to solve index issues w/ removing tokens while looping
-            token.function(vars.active_row, vars.power_row, root)
-        card.function(vars.active_row, vars.power_row, root)
+            token.function(rows, root)
+
+        card.function(rows, root)
 
     print('---------END---------')
 
@@ -149,6 +151,15 @@ def update_active_row_display(repeat=True):
     if repeat:
         root.after(100, update_active_row_display)
 
+
+def update_particle_row_display(repeat=True):
+    for token in vars.particle_row.list:
+        token.gui_button.grid(row=1, column=vars.particle_row.list.index(token))
+
+    if repeat:
+        root.after(100, update_particle_row_display)
+
+
 def update_power_row_display(repeat=True):
     # Show the max # of tokens you can have
     power_row_label.configure(text=f'POWER TOKENS ({len(vars.power_row.list)}/{vars.power_row.max_length})')
@@ -174,7 +185,7 @@ if __name__ == '__main__':
 
     # Sidebar stuff
     F_sidebar = ttk.Frame(root)
-    F_sidebar.grid(row=0, column=0, rowspan=2, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.N + tk.S)
+    F_sidebar.grid(row=0, column=0, rowspan=4, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.N + tk.S)
 
     # Stat display
     stat_display_label = ttk.Label(F_sidebar, text='SCORE: 0')
@@ -187,7 +198,7 @@ if __name__ == '__main__':
     F_deck_images = ttk.Frame(F_sidebar)
     F_deck_images.grid(row=2, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N + tk.S)
 
-    C_deck_canvas = tk.Canvas(F_deck_images, width=340, height=500, scrollregion=(0, 0, 0, 800), yscrollincrement=15)
+    C_deck_canvas = tk.Canvas(F_deck_images, width=340, height=580, scrollregion=(0, 0, 0, 800), yscrollincrement=15)
     deck_vbar = ttk.Scrollbar(F_deck_images, orient=tk.VERTICAL, command=C_deck_canvas.yview)
     C_deck_canvas.configure(yscrollcommand=deck_vbar.set)
 
@@ -219,9 +230,17 @@ if __name__ == '__main__':
                         sticky=tk.W + tk.S + tk.E)
     vars.active_row.gui_frame = F_active_row
 
+    # Particle token row
+    F_particle_row = ttk.Frame(root, height=140)
+    F_particle_row.grid(row=1, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N)
+    particle_row_label = ttk.Label(F_particle_row, text='PARTICLE TOKENS')
+    particle_row_label.grid(row=0, column=0, columnspan=vars.active_row.max_length, padx=5, pady=5, ipadx=1, ipady=1,
+                          sticky=tk.W + tk.S + tk.E)
+    vars.particle_row.gui_frame = F_particle_row
+
     # Power token row
     F_power_row = ttk.Frame(root, height=140)
-    F_power_row.grid(row=1, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N)
+    F_power_row.grid(row=2, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N)
     power_row_label = ttk.Label(F_power_row, text='POWER TOKENS')
     power_row_label.grid(row=0, column=0, columnspan=vars.active_row.max_length, padx=5, pady=5, ipadx=1, ipady=1,
                           sticky=tk.W + tk.S + tk.E)
@@ -229,7 +248,7 @@ if __name__ == '__main__':
 
     # Controls
     F_controls = ttk.Frame(root)
-    F_controls.grid(row=1, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.E + tk.W + tk.S)
+    F_controls.grid(row=3, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.E + tk.W + tk.S)
     controls_label = ttk.Label(F_controls, text='CONTROLS')
     controls_label.grid(row=0, column=0, columnspan=vars.active_row.max_length, padx=5, pady=5, ipadx=1, ipady=1,
                         sticky=tk.W + tk.S + tk.E)
@@ -245,14 +264,18 @@ if __name__ == '__main__':
 
     vars.do_slow_activation = tk.IntVar()
     slow_activate_checkbox = ttk.Checkbutton(F_controls, variable=vars.do_slow_activation, takefocus=False,
-                                            text= 'Press space to advance activation')
+                                            text= 'Press space to advance activation   ')
     slow_activate_checkbox.grid(row=1, column=3)
 
     root.after(0, update_stat_display)
     root.after(0, update_deck_display)
     root.after(0, update_active_row_display)
+    root.after(0, update_particle_row_display)
     root.after(0, update_power_row_display)
 
     # create_item('Power', vars.deck)
+    create_item('e- Neutrino', vars.particle_row)
+    create_item('Muon Neutrino', vars.particle_row)
+    create_item('Tau Neutrino', vars.particle_row)
 
     root.mainloop()

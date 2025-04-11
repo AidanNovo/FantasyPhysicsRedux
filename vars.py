@@ -27,6 +27,7 @@ class CardHolder:
 # Set up our cardholders, which are jsut the places that cards go
 deck = CardHolder()
 active_row = CardHolder(max_length=6)
+particle_row = CardHolder()
 power_row = CardHolder(max_length=5)
 
 
