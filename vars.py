@@ -1,19 +1,31 @@
 import tkinter as tk
+from collections import deque
 
 # To solve circular import issues, this is a module where all the floating variables live
 # There is surely a much better way to do this.
 
-# class CardHolder:
-#     def __init__(self, contents=[], max_size=999):
-#         self.contents = contents
-#         self.max_size = max_size
-
-do_slow_activation = None  # Will eventually be a tkinter IntVar
+do_slow_activation = None  # Becomes a tkinter IntVar at runtime
 
 neutrino_flux = 1000  # Should vary by week in actual version, pulled from actual data
 
 data = 0
 score = 0
+
+class StackEvent:
+    def __init__(self, origin, function, f_args, tags=None):
+        self.origin = origin
+        self.function = function
+        self.function_args = f_args
+        self.tags = tags
+
+    def execute(self):
+        self.function(self.function_args)
+
+
+class Observer:
+    def __init__(self, function):
+        self.function = function
+
 
 
 class CardHolder:
@@ -24,7 +36,7 @@ class CardHolder:
 
         self.gui_frame = gui_frame
 
-# Set up our cardholders, which are jsut the places that cards go
+# Set up our cardholders, which are just the places that cards go
 deck = CardHolder()
 active_row = CardHolder(max_length=6)
 particle_row = CardHolder()

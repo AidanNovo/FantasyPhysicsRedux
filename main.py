@@ -13,6 +13,10 @@ import gui_theme
 # TODO: Implement a GUI to reorganize your active row
 # TODO: Implement a basic score attack mode (ala Balatro, Nubby, Luck be a Landlord, etc.)
 # TODO: Implement outreach scaling
+# TODO: Fix bug where right clicking tokens sometimes crashes the program
+
+
+
 
 def crack_booster_pack(pack_size=5,
                        draw_pool=tuple(cards.card_dict.keys()),
@@ -53,6 +57,7 @@ def show_big_card(event, card):
     image_label = tk.Label(popup, image=big_image)
     image_label.pack()
 
+
 def initialize_item_gui_button(item, holder):
     """Initialize the item's gui button and bind the right-click functionality."""
     item.gui_button = tk.Button(holder.gui_frame)
@@ -72,6 +77,7 @@ def initialize_item_image(item):
 def bind_item_instance_function(item, holder, h_index):
     holder.list[h_index].function = holder.list[h_index].function.__get__(holder.list[h_index],
                                                                           type(item))  # Bind instance method
+
 
 def create_item(item_name, holder, h_index=-1):
     if len(holder.list) == holder.max_length:
@@ -119,6 +125,7 @@ def move_item(item, old_holder, new_holder):
         item.gui_button.bind('<Button-3>', lambda event, c=item: show_big_card(event, c))  # r-click is Button-3 on PC
 
 def activate_cards():
+    # rows is a dict of all item rows. Alongside other things in vars, it fully encompasses the game state (or should)
     rows = {'active': vars.active_row,
             'particle': vars.particle_row,
             'power': vars.power_row,}
@@ -138,7 +145,6 @@ def activate_cards():
         card.function(rows, root)
 
     print('---------END---------')
-
 
 def update_deck_display():
     for card in vars.deck.list:
