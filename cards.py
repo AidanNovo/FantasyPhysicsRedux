@@ -260,6 +260,7 @@ def f_recompute(self, rows, root):
 card_dict.update({'ReCompute': Card(
     name='ReCompute', function=f_recompute, image_file='card_images/fp_recompute.png',
     item_type='prototype', rarity=vars.r_uncommon)})
+# TODO: Make recompute cards work by putting another event on the stack
 
 def f_retrigger_left(self, rows, root):
     """Re-activate the ability of the item_name to the left."""
@@ -278,6 +279,7 @@ def f_retrigger_left(self, rows, root):
 card_dict.update({'Re-Trigger': Card(
     name='Re-Trigger', function=f_retrigger_left, image_file='card_images/fp_retrigger.png',
     item_type='prototype', rarity=vars.r_uncommon)})
+# TODO: Make retrigger cards work by putting another event on the stack
 
 # TODO: Consider what the point of item types is
 #  - Draw pools?

@@ -13,19 +13,34 @@ score = 0
 
 class StackEvent:
     def __init__(self, origin, function, f_args, tags=None):
+        """
+        Constructor.
+
+        Args:
+            origin: The object (usually a card/token) that the StackEven came from.
+            function: The function associated with the StackEvent. The main observer will execute this.
+            f_args: Arguments to be passed to the function.
+            tags: Currently unused.
+        """
+
         self.origin = origin
         self.function = function
-        self.function_args = f_args
+        self.f_args = f_args
         self.tags = tags
 
     def execute(self):
-        self.function(self.function_args)
+        self.function(*self.f_args)  # Remember to unpack the args
 
+stack = deque([])
 
 class Observer:
     def __init__(self, function):
         self.function = function
 
+# # I fear this all is very stupid
+# def do_card_function(stack_event):
+#     stack_event.execute()
+# main_observer = Observer(do_card_function)
 
 
 class CardHolder:

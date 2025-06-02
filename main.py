@@ -138,11 +138,26 @@ def activate_cards():
 
     for card in vars.active_row.list:
         for token in vars.particle_row.list.copy():
-            token.function(rows, root)
+            # token.function(rows, root)
+            vars.stack.append(vars.StackEvent(token, token.function, (rows, root)))
         for token in vars.power_row.list.copy():  # Use .copy() to solve index issues w/ removing tokens while looping
-            token.function(rows, root)
+            # token.function(rows, root)
+            vars.stack.append(vars.StackEvent(token, token.function, (rows, root)))
 
-        card.function(rows, root)
+        vars.stack.append(vars.StackEvent(card, card.function, (rows, root)))
+        # card.function(rows, root)
+
+        while vars.stack:  # While the stack is not empty
+            event = vars.stack.popleft()
+
+            if 'computer' in event.origin.tags:
+                print('Computer! Yay')
+                # vars.stack.appendleft(vars.StackEvent(card, card.function, (rows, root)))
+
+
+            # Base observer (debug)
+            event.execute()
+
 
     print('---------END---------')
 
@@ -198,6 +213,7 @@ def update_stat_display():
 
 
 if __name__ == '__main__':
+
     # UI STUFF BELOW HERE
     root = tk.Tk()
     gui_theme.set_style(root)
