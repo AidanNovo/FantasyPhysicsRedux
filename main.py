@@ -124,6 +124,7 @@ def move_item(item, old_holder, new_holder):
         item.gui_button.bind('<Button-2>', lambda event, c=item: show_big_card(event, c))  # r-click is Button-2 on Mac
         item.gui_button.bind('<Button-3>', lambda event, c=item: show_big_card(event, c))  # r-click is Button-3 on PC
 
+
 def activate_cards():
     # rows is a dict of all item rows. Alongside other things in vars, it fully encompasses the game state (or should)
     rows = {'active': vars.active_row,
@@ -137,21 +138,25 @@ def activate_cards():
     create_item('Power', vars.power_row)
 
     for card in vars.active_row.list:
-        for token in vars.particle_row.list.copy():
-            # token.function(rows, root)
-            vars.stack.append(vars.StackEvent(token, token.function, (rows, root)))
-        for token in vars.power_row.list.copy():  # Use .copy() to solve index issues w/ removing tokens while looping
+        vars.stack.append(vars.StackEvent(card, card.function, (rows, root)))
+
+        for token in reversed(vars.power_row.list):  # Use .copy() to solve index issues w/ removing tokens while looping
             # token.function(rows, root)
             vars.stack.append(vars.StackEvent(token, token.function, (rows, root)))
 
-        vars.stack.append(vars.StackEvent(card, card.function, (rows, root)))
+        for token in reversed(vars.particle_row.list):
+            # token.function(rows, root)
+            vars.stack.append(vars.StackEvent(token, token.function, (rows, root)))
+
+
+        # vars.stack.append(vars.StackEvent(card, card.function, (rows, root)))
         # card.function(rows, root)
 
         while vars.stack:  # While the stack is not empty
-            event = vars.stack.popleft()
+            event = vars.stack.pop()
 
             if 'computer' in event.origin.tags:
-                print('Computer! Yay')
+                pass
                 # vars.stack.appendleft(vars.StackEvent(card, card.function, (rows, root)))
 
 

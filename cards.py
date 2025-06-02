@@ -281,10 +281,6 @@ card_dict.update({'Re-Trigger': Card(
     item_type='prototype', rarity=vars.r_uncommon)})
 # TODO: Make retrigger cards work by putting another event on the stack
 
-# TODO: Consider what the point of item types is
-#  - Draw pools?
-#  - Glorified tags?
-
 token_dict = {}
 # Particle Tokens
 # TODO: Make neutrinos actually oscillate randomly.
