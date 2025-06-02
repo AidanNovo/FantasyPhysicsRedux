@@ -34,8 +34,18 @@ class StackEvent:
 stack = deque([])
 
 class Observer:
-    def __init__(self, function):
+    def __init__(self, function, f_args=None):
         self.function = function
+
+# Debug observer
+def f_computer_bonus(event):
+    global score
+    if 'computer' in event.origin.tags:
+        score += 50
+        print('yay computers (activated by computer bonus observer)')
+computer_bonus = Observer(f_computer_bonus)
+
+observers = [computer_bonus]  # List of all observers
 
 # # I fear this all is very stupid
 # def do_card_function(stack_event):

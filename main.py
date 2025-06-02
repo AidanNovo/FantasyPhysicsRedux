@@ -155,9 +155,14 @@ def activate_cards():
         while vars.stack:  # While the stack is not empty
             event = vars.stack.pop()
 
-            if 'computer' in event.origin.tags:
-                pass
-                # vars.stack.appendleft(vars.StackEvent(card, card.function, (rows, root)))
+            for observer in vars.observers:
+                observer.function(event)
+
+            # if 'computer' in event.origin.tags:
+            #     vars.score += 50
+            #     print('Increased score because of computers!')
+            #     pass
+            #     # vars.stack.appendleft(vars.StackEvent(card, card.function, (rows, root)))
 
 
             # Base observer (debug)
