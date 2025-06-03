@@ -138,36 +138,21 @@ def activate_cards():
     create_item('Power', vars.power_row)
 
     for card in vars.active_row.list:
+        # Fill up the whole stack...
         vars.stack.append(vars.StackEvent(card, card.function, (rows, root)))
 
-        for token in reversed(vars.power_row.list):  # Use .copy() to solve index issues w/ removing tokens while looping
-            # token.function(rows, root)
+        for token in reversed(vars.power_row.list):  # Reversed to fill the stack in an order intuitive to users (L->R)
             vars.stack.append(vars.StackEvent(token, token.function, (rows, root)))
 
         for token in reversed(vars.particle_row.list):
-            # token.function(rows, root)
             vars.stack.append(vars.StackEvent(token, token.function, (rows, root)))
 
-
-        # vars.stack.append(vars.StackEvent(card, card.function, (rows, root)))
-        # card.function(rows, root)
-
+        # ...then empty the whole stack
         while vars.stack:  # While the stack is not empty
             event = vars.stack.pop()
 
             for observer in vars.observers:
                 observer.function(event)
-
-            # if 'computer' in event.origin.tags:
-            #     vars.score += 50
-            #     print('Increased score because of computers!')
-            #     pass
-            #     # vars.stack.appendleft(vars.StackEvent(card, card.function, (rows, root)))
-
-
-            # Base observer (debug)
-            event.execute()
-
 
     print('---------END---------')
 
@@ -223,6 +208,8 @@ def update_stat_display():
 
 
 if __name__ == '__main__':
+    # main_observer = vars.Observer()
+    # vars.observers.append()
 
     # UI STUFF BELOW HERE
     root = tk.Tk()

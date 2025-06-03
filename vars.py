@@ -28,16 +28,23 @@ class StackEvent:
         self.f_args = f_args
         self.tags = tags
 
-    def execute(self):
-        self.function(*self.f_args)  # Remember to unpack the args
+    # def execute(self):
+    #     self.function(*self.f_args)  # Remember to unpack the args
 
 stack = deque([])
 
 class Observer:
     def __init__(self, function, f_args=None):
+        """
+        Constructor.
+
+        Args:
+            function: The function the observer will execute. Must always take the event as the first argument.
+            f_args: If the function needs any additional args, put them here. Not implemented right now.
+        """
         self.function = function
 
-# Debug observer
+# Debug observer to test passive effects
 def f_computer_bonus(event):
     global score
     if 'computer' in event.origin.tags:
@@ -45,7 +52,12 @@ def f_computer_bonus(event):
         print('yay computers (activated by computer bonus observer)')
 computer_bonus = Observer(f_computer_bonus)
 
-observers = [computer_bonus]  # List of all observers
+# Main observer
+def f_main_observer(event):
+    event.function(*event.f_args)
+main_observer = Observer(f_main_observer)
+
+observers = [computer_bonus, main_observer]  # List of all observers
 
 # # I fear this all is very stupid
 # def do_card_function(stack_event):
