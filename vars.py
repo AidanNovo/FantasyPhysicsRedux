@@ -33,7 +33,12 @@ class StackEvent:
 
 stack = deque([])
 
+observers = deque([])  # Deque that contains all the observers. Main observer goes on first, then append additional ones
+
 class Observer:
+    # Observers are objects that process StackEvents. There is one main observer that executes card/token functions
+    # and some number of additional observers that implement passive effects. Anything that needs to modify a stack
+    # event or be triggered by a stack event is handled by Observers.
     def __init__(self, function, f_args=None):
         """
         Constructor.
@@ -44,20 +49,12 @@ class Observer:
         """
         self.function = function
 
-# Debug observer to test passive effects
-def f_computer_bonus(event):
-    global score
-    if 'computer' in event.origin.tags:
-        score += 50
-        print('yay computers (activated by computer bonus observer)')
-computer_bonus = Observer(f_computer_bonus)
-
-# Main observer
+# Main observer, executes the function listed on the card/token
 def f_main_observer(event):
     event.function(*event.f_args)
 main_observer = Observer(f_main_observer)
+observers.append(main_observer)
 
-observers = [computer_bonus, main_observer]  # List of all observers
 
 # # I fear this all is very stupid
 # def do_card_function(stack_event):

@@ -50,10 +50,11 @@ def f_t_test(self, ar, pr, root):
 
 
 class Item:
-    def __init__(self, name='', image_file=None, function=f_default, item_type='', tags=(),):
+    def __init__(self, name='', image_file=None, function=f_default, prerun_function=None, item_type='', tags=()):
         self.name = name
         self.image_file = image_file
         self.function = function
+        self.prerun_function = prerun_function  # A special function that runs before normal card activation starts
         self.item_type = item_type
         self.tags = tags
 
@@ -282,6 +283,40 @@ card_dict.update({'Re-Trigger': Card(
     name='Re-Trigger', function=f_retrigger_left, image_file='card_images/fp_retrigger.png',
     item_type='prototype', rarity=vars.r_uncommon)})
 # TODO: Make retrigger cards work by putting another event on the stack
+
+def f_add_computer_bonus(self, rows, root):
+    """Add an observer that gives bonus points for every computer card activation."""
+    ar = rows['active']
+    rr = rows['power']
+
+    f_card_start(self, ar, root)
+    print(f'{ar.list.index(self)} {self.name}:\tDoing nothing! (Card has no active effect)')
+    # def f_computer_bonus_observer(event):
+    #     # global vars.score
+    #     if 'computer' in event.origin.tags:
+    #         vars.score += 100
+    #         print('Score increased by 100! (Activated by computer bonus passive)')
+    #
+    # print(f'{ar.list.index(self)} {self.name}:\tAdding passive effect: +100 points on computer card activation.')
+    # computer_bonus = vars.Observer(f_computer_bonus_observer)
+    # vars.observers.append(computer_bonus)
+    f_card_end(self, ar, root)
+def f_prerun_add_computer_bonus(self, rows, root):
+    ar = rows['active']
+
+    def f_computer_bonus_observer(event):
+        # global vars.score
+        if 'computer' in event.origin.tags:
+            vars.score += 100
+            print('Score increased by 100! (Activated by computer bonus passive)')
+
+    print(f'{ar.list.index(self)} {self.name}:\tAdding passive effect: +100 points on computer card activation.')
+    computer_bonus = vars.Observer(f_computer_bonus_observer)
+    vars.observers.append(computer_bonus)
+card_dict.update({'Add Computer Bonus': Card(
+    name='Add Computer Bonus', function=f_add_computer_bonus, prerun_function=f_prerun_add_computer_bonus,
+    image_file='card_images/fp_add_computer_bonus.png',
+    item_type='prototype', rarity=vars.r_uncommon)})
 
 token_dict = {}
 # Particle Tokens

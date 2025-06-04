@@ -75,8 +75,12 @@ def initialize_item_image(item):
 
 
 def bind_item_instance_function(item, holder, h_index):
-    holder.list[h_index].function = holder.list[h_index].function.__get__(holder.list[h_index],
-                                                                          type(item))  # Bind instance method
+    # Bind instance method
+    holder.list[h_index].function = holder.list[h_index].function.__get__(holder.list[h_index], type(item))
+
+    # Bind prerun function if needed
+    if item.prerun_function is not None:
+        holder.list[h_index].prerun_function = holder.list[h_index].prerun_function.__get__(holder.list[h_index], type(item))
 
 
 def create_item(item_name, holder, h_index=-1):
@@ -133,9 +137,18 @@ def activate_cards():
 
     print('\nCard order:', vars.active_row.list)
 
+    print('\n------PASSIVES-------')
+    # Process all prerun functions
+    # Prerun functions are not put on a stack
+    for card in vars.active_row.list:
+        if card.prerun_function is not None:
+            card.prerun_function(rows, root)
+
     print('\n--------START--------')
     print('Granting 1 power token from the grid')
     create_item('Power', vars.power_row)
+
+
 
     for card in vars.active_row.list:
         # Fill up the whole stack...
@@ -151,7 +164,7 @@ def activate_cards():
         while vars.stack:  # While the stack is not empty
             event = vars.stack.pop()
 
-            for observer in vars.observers:
+            for observer in list(vars.observers):  # Use list() to 'freeze' the deque and prevent a RuntimeError
                 observer.function(event)
 
     print('---------END---------')
