@@ -91,8 +91,11 @@ class Card(Item):
 
 
 class Token(Item):
-    def __init__(self, **kwargs):
+    def __init__(self, energy=None, half_life=None, **kwargs):
         super().__init__(**kwargs)
+        self.energy = energy  # Particle energy
+        self.half_life = half_life  # Particle half-life
+
 
 
 def item_factory(item_name):
