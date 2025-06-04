@@ -252,10 +252,10 @@ def f_recompute(self, rows, root):
     rr = rows['power']
 
     f_card_start(self, ar, root)
-    for card in ar.list:
+    for card in reversed(ar.list):  # Process in reverse so that retriggers activate left to right (remember, FILO)
         if 'computer' in card.tags:
             print(f'{ar.list.index(self)} {self.name}:\tRe-activating {ar.list.index(card)} {card.name} due to its computer tag!')
-            card.function(rows, root)
+            vars.stack.append(vars.StackEvent(card, card.function, (rows, root)))
     f_card_end(self, ar, root)
 card_dict.update({'ReCompute': Card(
     name='ReCompute', function=f_recompute, image_file='card_images/fp_recompute.png',
@@ -263,9 +263,9 @@ card_dict.update({'ReCompute': Card(
 # TODO: Make recompute cards work by putting another event on the stack
 
 def f_retrigger_left(self, rows, root):
-    """Re-activate the ability of the item_name to the left."""
+    """Re-activate the ability of the item to the left."""
     ar = rows['active']
-    rr = rows['power']
+    rr = rows['power']  # Power row is rr not pr because particle row needs to be pr
 
     f_card_start(self, ar, root)
     my_index = ar.list.index(self)  # The index of this retrigger card
@@ -274,7 +274,9 @@ def f_retrigger_left(self, rows, root):
         print(f'{ar.list.index(self)} {self.name}:\tNo card found to the left!')
     else:
         print(f'{ar.list.index(self)} {self.name}:\tRe-activating card to the left!')
-        ar.list[ar.list.index(self) - 1].function(rows, root)  # I don't like passing the active row every time.
+        card_left = ar.list[ar.list.index(self) - 1]
+        vars.stack.append(vars.StackEvent(card_left, card_left.function, (rows, root)))
+
     f_card_end(self, ar, root)
 card_dict.update({'Re-Trigger': Card(
     name='Re-Trigger', function=f_retrigger_left, image_file='card_images/fp_retrigger.png',

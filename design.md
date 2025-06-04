@@ -149,6 +149,29 @@ Passive cards could include:
 - Physics topic cards
 - Outreach modifier cards
 
+Passive cards are definitely going to grant you an observer 'token' at least behind the scenes
+Putting that into the GUI could be good for players understanding the mechanics
+- Requires additional design work
+
+Question is really _when_ you get that observer token
+- Created at start of round:
+  - Allows for us to not do the gui tokens, we just imagine the card up in the row is doing this
+  - Less hassle, feels more like a passive _on the card_
+  - More interesting card ordering interactions?
+    - Incentivizes using the passives like filler cards (passives must be ordered still)
+  - Feels a little cleaner, and I am sort of worried about the game getting overly complex
+  - I think this is what I want to do
+- Created on card activation
+  - Goes more with previous design ideas, easier to implement
+  - More interesting card ordering interactions?
+    - Incentivizes putting good passives all the way left
+
+Alternative idea: Make passive cards a special card type, all cards with passive effects go left
+- Makes deck display / pack opening messy
+- Slightly cleaner design-wise
+- Bad idea I think
+- Also, I think it is a little *too* nice to players. They should have to work with a limited number of slots
+
 
 ### Outreach scaling rework
 I don't really like the 'current' idea for outreach scaling where each card just gets
