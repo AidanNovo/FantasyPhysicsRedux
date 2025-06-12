@@ -145,7 +145,7 @@ You could possibly implement this with a big rewrite to make things event and ob
 Thinking about implementing an "all cards with the computer tag trigger twice" effect
 - Put some logic in the start function that checks if the next card is a computer card? Hard to implement
 - Have an observer object sitting around (passive card) listening for a "card triggered" event
-  - Observer card can be created by the computing center card
+  - Interpreter card can be created by the computing center card
   - Check the event for whether the card has a computer tag
   - If so, put a copy of the card trigger event (without the computer tag) onto the stack
     - This means I have to implement a stack

@@ -164,8 +164,8 @@ def activate_cards():
         while common.stack:  # While the stack is not empty
             event = common.stack.pop()
 
-            for observer in list(common.observers):  # Use list() to 'freeze' the deque and prevent a RuntimeError
-                observer.function(event)
+            for interpreter in list(common.interpreters):  # Use list() to 'freeze' the deque and prevent a RuntimeError
+                interpreter.function(event)
 
     print('---------END---------')
 
@@ -221,9 +221,6 @@ def update_stat_display():
 
 
 if __name__ == '__main__':
-    # main_observer = common.Observer()
-    # common.observers.append()
-
     # UI STUFF BELOW HERE
     root = tk.Tk()
     gui_theme.set_style(root)

@@ -277,34 +277,25 @@ card_dict.update({'Re-Trigger': Card(
     item_type='prototype', rarity=common.r_uncommon)})
 
 def f_add_computer_bonus(self, rows, root):
-    """Add an observer that gives bonus points for every computer card activation."""
+    """Add an interpreter that gives bonus points for every computer card activation."""
     ar = rows['active']
     rr = rows['power']
 
     f_card_start(self, ar, root)
     print(f'{ar.list.index(self)} {self.name}:\tDoing nothing! (Card has no active effect)')
-    # def f_computer_bonus_observer(event):
-    #     # global common.score
-    #     if 'computer' in event.origin.tags:
-    #         common.score += 100
-    #         print('Score increased by 100! (Activated by computer bonus passive)')
-    #
-    # print(f'{ar.list.index(self)} {self.name}:\tAdding passive effect: +100 points on computer card activation.')
-    # computer_bonus = common.Observer(f_computer_bonus_observer)
-    # common.observers.append(computer_bonus)
     f_card_end(self, ar, root)
 def f_prerun_add_computer_bonus(self, rows, root):
     ar = rows['active']
 
-    def f_computer_bonus_observer(event):
+    def f_computer_bonus_interpreter(event):
         # global common.score
         if 'computer' in event.origin.tags:
             common.score += 100
             print('Score increased by 100! (Activated by computer bonus passive)')
 
     print(f'{ar.list.index(self)} {self.name}:\tAdding passive effect: +100 points on computer card activation.')
-    computer_bonus = common.Observer(f_computer_bonus_observer)
-    common.observers.append(computer_bonus)
+    computer_bonus = common.Interpreter(f_computer_bonus_interpreter)
+    common.interpreters.append(computer_bonus)
 card_dict.update({'Add Computer Bonus': Card(
     name='Add Computer Bonus', function=f_add_computer_bonus, prerun_function=f_prerun_add_computer_bonus,
     image_file='card_images/fp_add_computer_bonus.png',
