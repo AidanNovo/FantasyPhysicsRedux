@@ -6,7 +6,7 @@ from PIL import Image, ImageTk
 import math
 
 import cards
-import vars
+import common
 import time
 import gui_theme
 
@@ -36,15 +36,15 @@ def crack_booster_pack(pack_size=5,
 
     for c in pulled_cards:
         print(f'You found a(n) {c} card!')
-        create_item(c, holder=vars.deck)
+        create_item(c, holder=common.deck)
 
-    print('Deck:', vars.deck.list)
+    print('Deck:', common.deck.list)
 
 
 def get_all_cards():
     """Add one copy of each card in card_dict to the deck."""
     for card_name in cards.card_dict.keys():
-        create_item(card_name, holder=vars.deck)
+        create_item(card_name, holder=common.deck)
 
 
 def show_big_card(event, card):
@@ -99,8 +99,8 @@ def create_item(item_name, holder, h_index=-1):
 
         bind_item_instance_function(item, holder, h_index)
 
-        if holder == vars.deck:  # Deck specific for now
-            item.gui_button.configure(command=lambda c=item: move_item(c, vars.deck, vars.active_row))
+        if holder == common.deck:  # Deck specific for now
+            item.gui_button.configure(command=lambda c=item: move_item(c, common.deck, common.active_row))
             # item_index = holder.list.index(item)
             # item.gui_button.grid(row=math.floor(item_index / 3), column=item_index % 3, padx=2, pady=2)
 
@@ -117,12 +117,12 @@ def move_item(item, old_holder, new_holder):
 
         item.gui_button = tk.Button(new_holder.gui_frame, image=cfg['image'][4], compound=tk.TOP)
 
-        if new_holder == vars.active_row:
-            item.gui_button.configure(command=lambda c=item: move_item(c, vars.active_row, vars.deck),
+        if new_holder == common.active_row:
+            item.gui_button.configure(command=lambda c=item: move_item(c, common.active_row, common.deck),
                                       compound=tk.TOP)
 
-        elif new_holder == vars.deck:
-            item.gui_button.configure(command=lambda c=item: move_item(c, vars.deck, vars.active_row),
+        elif new_holder == common.deck:
+            item.gui_button.configure(command=lambda c=item: move_item(c, common.deck, common.active_row),
                                       compound=tk.NONE)
 
         item.gui_button.bind('<Button-2>', lambda event, c=item: show_big_card(event, c))  # r-click is Button-2 on Mac
@@ -130,48 +130,48 @@ def move_item(item, old_holder, new_holder):
 
 
 def activate_cards():
-    # rows is a dict of all item rows. Alongside other things in vars, it fully encompasses the game state (or should)
-    rows = {'active': vars.active_row,
-            'particle': vars.particle_row,
-            'power': vars.power_row,}
+    # rows is a dict of all item rows. Alongside other things in common, it fully encompasses the game state (or should)
+    rows = {'active': common.active_row,
+            'particle': common.particle_row,
+            'power': common.power_row, }
 
-    print('\nCard order:', vars.active_row.list)
+    print('\nCard order:', common.active_row.list)
 
     print('\n------PASSIVES-------')
     # Process all prerun functions
     # Prerun functions are not put on a stack
-    for card in vars.active_row.list:
+    for card in common.active_row.list:
         if card.prerun_function is not None:
             card.prerun_function(rows, root)
 
     print('\n--------START--------')
     print('Granting 1 power token from the grid')
-    create_item('Power', vars.power_row)
+    create_item('Power', common.power_row)
 
 
 
-    for card in vars.active_row.list:
+    for card in common.active_row.list:
         # Fill up the whole stack...
-        vars.stack.append(vars.StackEvent(card, card.function, (rows, root)))
+        common.stack.append(common.StackEvent(card, card.function, (rows, root)))
 
-        for token in reversed(vars.power_row.list):  # Reversed to fill the stack in an order intuitive to users (L->R)
-            vars.stack.append(vars.StackEvent(token, token.function, (rows, root)))
+        for token in reversed(common.power_row.list):  # Reversed to fill the stack in an order intuitive to users (L->R)
+            common.stack.append(common.StackEvent(token, token.function, (rows, root)))
 
-        for token in reversed(vars.particle_row.list):
-            vars.stack.append(vars.StackEvent(token, token.function, (rows, root)))
+        for token in reversed(common.particle_row.list):
+            common.stack.append(common.StackEvent(token, token.function, (rows, root)))
 
         # ...then empty the whole stack
-        while vars.stack:  # While the stack is not empty
-            event = vars.stack.pop()
+        while common.stack:  # While the stack is not empty
+            event = common.stack.pop()
 
-            for observer in list(vars.observers):  # Use list() to 'freeze' the deque and prevent a RuntimeError
+            for observer in list(common.observers):  # Use list() to 'freeze' the deque and prevent a RuntimeError
                 observer.function(event)
 
     print('---------END---------')
 
 def update_deck_display():
-    for card in vars.deck.list:
-        deck_index = vars.deck.list.index(card)
+    for card in common.deck.list:
+        deck_index = common.deck.list.index(card)
         card.gui_button.grid(row=math.floor(deck_index / 3), column=deck_index % 3, padx=2, pady=2)
 
     root.after(100, update_deck_display)
@@ -179,10 +179,10 @@ def update_deck_display():
 
 def update_active_row_display(repeat=True):
     # Show the max # of tokens you can have
-    active_row_label.configure(text=f'ACTIVE ROW ({len(vars.active_row.list)}/{vars.active_row.max_length})')
+    active_row_label.configure(text=f'ACTIVE ROW ({len(common.active_row.list)}/{common.active_row.max_length})')
 
-    for card in vars.active_row.list:
-        card.gui_button.grid(row=1, column=vars.active_row.list.index(card))
+    for card in common.active_row.list:
+        card.gui_button.grid(row=1, column=common.active_row.list.index(card))
 
         # Update token string
         if card.power_slots != 0:
@@ -196,8 +196,8 @@ def update_active_row_display(repeat=True):
 
 
 def update_particle_row_display(repeat=True):
-    for token in vars.particle_row.list:
-        token.gui_button.grid(row=1, column=vars.particle_row.list.index(token))
+    for token in common.particle_row.list:
+        token.gui_button.grid(row=1, column=common.particle_row.list.index(token))
 
     if repeat:
         root.after(100, update_particle_row_display)
@@ -205,10 +205,10 @@ def update_particle_row_display(repeat=True):
 
 def update_power_row_display(repeat=True):
     # Show the max # of tokens you can have
-    power_row_label.configure(text=f'POWER TOKENS ({len(vars.power_row.list)}/{vars.power_row.max_length})')
+    power_row_label.configure(text=f'POWER TOKENS ({len(common.power_row.list)}/{common.power_row.max_length})')
 
-    for token in vars.power_row.list:
-        token.gui_button.grid(row=1, column=vars.power_row.list.index(token))
+    for token in common.power_row.list:
+        token.gui_button.grid(row=1, column=common.power_row.list.index(token))
 
 
     if repeat:
@@ -216,13 +216,13 @@ def update_power_row_display(repeat=True):
 
 
 def update_stat_display():
-    stat_display_label.config(text=f'SCORE: {vars.score}  |  DATA:  {vars.data}')
+    stat_display_label.config(text=f'SCORE: {common.score}  |  DATA:  {common.data}')
     root.after(100, update_stat_display)
 
 
 if __name__ == '__main__':
-    # main_observer = vars.Observer()
-    # vars.observers.append()
+    # main_observer = common.Observer()
+    # common.observers.append()
 
     # UI STUFF BELOW HERE
     root = tk.Tk()
@@ -255,7 +255,7 @@ if __name__ == '__main__':
     C_deck_canvas.pack(side=tk.LEFT)
     deck_vbar.pack(side=tk.RIGHT, fill=tk.Y)
 
-    vars.deck.gui_frame = F_internal_deck_frame
+    common.deck.gui_frame = F_internal_deck_frame
 
     def _on_mousewheel(event):
         direction = 0
@@ -272,31 +272,31 @@ if __name__ == '__main__':
     F_active_row = ttk.Frame(root, height=140)
     F_active_row.grid(row=0, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N)
     active_row_label = ttk.Label(F_active_row, text='ACTIVE ROW')
-    active_row_label.grid(row=0, column=0, columnspan=vars.active_row.max_length, padx=5, pady=5, ipadx=1, ipady=1,
-                        sticky=tk.W + tk.S + tk.E)
-    vars.active_row.gui_frame = F_active_row
+    active_row_label.grid(row=0, column=0, columnspan=common.active_row.max_length, padx=5, pady=5, ipadx=1, ipady=1,
+                          sticky=tk.W + tk.S + tk.E)
+    common.active_row.gui_frame = F_active_row
 
     # Particle token row
     F_particle_row = ttk.Frame(root, height=140)
     F_particle_row.grid(row=1, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N)
     particle_row_label = ttk.Label(F_particle_row, text='PARTICLE TOKENS')
-    particle_row_label.grid(row=0, column=0, columnspan=vars.active_row.max_length, padx=5, pady=5, ipadx=1, ipady=1,
+    particle_row_label.grid(row=0, column=0, columnspan=common.active_row.max_length, padx=5, pady=5, ipadx=1, ipady=1,
                           sticky=tk.W + tk.S + tk.E)
-    vars.particle_row.gui_frame = F_particle_row
+    common.particle_row.gui_frame = F_particle_row
 
     # Power token row
     F_power_row = ttk.Frame(root, height=140)
     F_power_row.grid(row=2, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N)
     power_row_label = ttk.Label(F_power_row, text='POWER TOKENS')
-    power_row_label.grid(row=0, column=0, columnspan=vars.active_row.max_length, padx=5, pady=5, ipadx=1, ipady=1,
-                          sticky=tk.W + tk.S + tk.E)
-    vars.power_row.gui_frame = F_power_row
+    power_row_label.grid(row=0, column=0, columnspan=common.active_row.max_length, padx=5, pady=5, ipadx=1, ipady=1,
+                         sticky=tk.W + tk.S + tk.E)
+    common.power_row.gui_frame = F_power_row
 
     # Controls
     F_controls = ttk.Frame(root)
     F_controls.grid(row=3, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.E + tk.W + tk.S)
     controls_label = ttk.Label(F_controls, text='CONTROLS')
-    controls_label.grid(row=0, column=0, columnspan=vars.active_row.max_length, padx=5, pady=5, ipadx=1, ipady=1,
+    controls_label.grid(row=0, column=0, columnspan=common.active_row.max_length, padx=5, pady=5, ipadx=1, ipady=1,
                         sticky=tk.W + tk.S + tk.E)
 
     booster_button = ttk.Button(F_controls, text='Open Booster', command=crack_booster_pack, takefocus=False)
@@ -308,8 +308,8 @@ if __name__ == '__main__':
     card_sampler_button = ttk.Button(F_controls, text='Get 1 of Each Card', command=get_all_cards, takefocus=False)
     card_sampler_button.grid(row=1, column=2)
 
-    vars.do_slow_activation = tk.IntVar()
-    slow_activate_checkbox = ttk.Checkbutton(F_controls, variable=vars.do_slow_activation, takefocus=False,
+    common.do_slow_activation = tk.IntVar()
+    slow_activate_checkbox = ttk.Checkbutton(F_controls, variable=common.do_slow_activation, takefocus=False,
                                             text= 'Press space to advance activation   ')
     slow_activate_checkbox.grid(row=1, column=3)
 
@@ -319,9 +319,9 @@ if __name__ == '__main__':
     root.after(0, update_particle_row_display)
     root.after(0, update_power_row_display)
 
-    # create_item('Power', vars.deck)
-    # create_item('e- Neutrino', vars.particle_row)
-    # create_item('Muon Neutrino', vars.particle_row)
-    # create_item('Tau Neutrino', vars.particle_row)
+    # create_item('Power', common.deck)
+    # create_item('e- Neutrino', common.particle_row)
+    # create_item('Muon Neutrino', common.particle_row)
+    # create_item('Tau Neutrino', common.particle_row)
 
     root.mainloop()

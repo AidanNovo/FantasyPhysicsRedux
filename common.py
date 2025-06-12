@@ -4,10 +4,10 @@ from collections import deque
 # This is the module where all the variables, classes, etc. that need to be shared across modules live.
 # This is primarily for organizational reasons, though it also solves a few issues with circular imports.
 
+
+# MISCELLANEOUS VARIABLES
 do_slow_activation = None  # Becomes a tkinter IntVar at runtime
-
-neutrino_flux = 1000  # Should vary by week in actual version, pulled from actual data
-
+neutrino_flux = 1000  # Should vary by week in actual version, pulled from actual data. Somewhat de
 data = 0
 score = 0
 
@@ -54,12 +54,6 @@ def f_main_observer(event):
     event.function(*event.f_args)
 main_observer = Observer(f_main_observer)
 observers.append(main_observer)
-
-
-# # I fear this all is very stupid
-# def do_card_function(stack_event):
-#     stack_event.execute()
-# main_observer = Observer(do_card_function)
 
 
 class CardHolder:

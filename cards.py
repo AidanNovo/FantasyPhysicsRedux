@@ -1,4 +1,4 @@
-import vars
+import common
 import tkinter as tk
 from copy import deepcopy
 # from main import create_item
@@ -35,7 +35,7 @@ def f_card_end(self, ar, root):
             root.update_idletasks()
             pass
 
-    if vars.do_slow_activation.get():
+    if common.do_slow_activation.get():
         wait_for_spacebar()
     else:
         time.sleep(1)
@@ -64,7 +64,7 @@ class Item:
 
 class Card(Item):
     """The general class used for each card in the game."""
-    def __init__(self, rarity=vars.r_common, param=0.0, power_slots=0, power_tokens=0, **kwargs):
+    def __init__(self, rarity=common.r_common, param=0.0, power_slots=0, power_tokens=0, **kwargs):
         super().__init__(**kwargs)
         self.rarity = rarity  # Coefficient to weight draw rarity. Higher number = more common card.
         self.param = param
@@ -123,15 +123,15 @@ def f_machine_learning(self, rows, root):
         print(f'{ar.list.index(self)} {self.name}:\tUnpowered!')
     else:
         # Increase score
-        score_increase = vars.data * self.param
-        vars.score += score_increase
+        score_increase = common.data * self.param
+        common.score += score_increase
 
         for card in ar.list:
             if 'computer' in card.tags:  # Perma-increase multiplier by the number of computer cards in your row
                 self.param += 0.1
             self.param = round(self.param, 2)
 
-        print(f'{ar.list.index(self)} {self.name}:\tGenerated {score_increase} score from {vars.data} data! '
+        print(f'{ar.list.index(self)} {self.name}:\tGenerated {score_increase} score from {common.data} data! '
               f'ML multiplier increased to {self.param}.')
     f_card_end(self, ar, root)
 card_dict.update({'Machine Learning': Card(
@@ -148,7 +148,7 @@ def f_icecube(self, rows, root):  # Currently, this is exactly the same as f_sup
     f_card_start(self, ar, root)
     for particle in pr.list:
         if particle.name == 'e- Neutrino' or particle.name == 'Muon Neutrino' or particle.name == 'Tau Neutrino':
-            vars.data += 1000
+            common.data += 1000
             print(f'{ar.list.index(self)} {self.name}: Neutrino detected, data increased by 1000!')
         else:
             pass
@@ -165,17 +165,17 @@ def f_super_kamiokande(self, rows, root):
     f_card_start(self, ar, root)
     for particle in pr.list:
         if particle.name == 'e- Neutrino'or particle.name == 'Muon Neutrino' or particle.name == 'Tau Neutrino':
-            vars.data += 1000
+            common.data += 1000
             print(f'{ar.list.index(self)} {self.name}: Neutrino detected, data increased by 1000!')
         else:
             pass
     # if 'Neutrino Oscill.' in [card.name for card in ar.list]:
-    #     vars.data += vars.neutrino_flux * 1.5
-    #     print(f'{ar.list.index(self)} {self.name}:\tData increased by {vars.neutrino_flux * 1.5}! (More efficient due to '
+    #     common.data += common.neutrino_flux * 1.5
+    #     print(f'{ar.list.index(self)} {self.name}:\tData increased by {common.neutrino_flux * 1.5}! (More efficient due to '
     #           f'neutrino oscillation card)')
     # else:
-    #     vars.data += vars.neutrino_flux * 0.8
-    #     print(f'{ar.list.index(self)} {self.name}:\tData increased by {vars.neutrino_flux * 0.8}!')
+    #     common.data += common.neutrino_flux * 0.8
+    #     print(f'{ar.list.index(self)} {self.name}:\tData increased by {common.neutrino_flux * 0.8}!')
     f_card_end(self, ar, root)
 card_dict.update({'Super-Kamiokande': Card(
     name='Super-Kamiokande', function=f_super_kamiokande, image_file='card_images/fp_super_k.png',
@@ -190,13 +190,13 @@ def f_neutrino_oscillation(self, rows, root):
     print(f'{ar.list.index(self)} {self.name}\t: Multiplying score for each [neutrino] card...')
     for card in ar.list:
         if 'neutrino' in card.tags:
-            vars.score = vars.score * 1.5
+            common.score = common.score * 1.5
             print(f'{ar.list.index(self)} {self.name}\t: Multiplied score by 1.5 due to {ar.list.index(card)}'
-                  f'{card.name}`s [neutrino] tag! Score is now {vars.score}!')
+                  f'{card.name}`s [neutrino] tag! Score is now {common.score}!')
     f_card_end(self, ar, root)
 card_dict.update({'Neutrino Oscillation': Card(
     name='Neutrino Oscillation', function=f_neutrino_oscillation, image_file='card_images/fp_neutrino_oscillation.png',
-    item_type='physics', tags=['neutrino'], rarity=vars.r_rare)})
+    item_type='physics', tags=['neutrino'], rarity=common.r_rare)})
 
 # Special Cards
 def f_fission_reactor(self, rows, root):
@@ -206,15 +206,16 @@ def f_fission_reactor(self, rows, root):
     from main import create_item
     f_card_start(self, ar, root)
     create_item('e- Neutrino', pr)
-    print(f'{ar.list.index(self)} {self.name}\t: Increased Neutrino Flux by 1000 (flux is now {vars.neutrino_flux}).')
+    print(f'{ar.list.index(self)} {self.name}\t: Increased Neutrino Flux by 1000 (flux is now {common.neutrino_flux}).')
+    # TODO: Fix this message, then remove the neutrino flux variable from common.
 
     for _ in range(5):  # Make 5 power tokens
-        create_item('Power', vars.power_row)
+        create_item('Power', common.power_row)
 
     f_card_end(self, ar, root)
 card_dict.update({'Fission Reactor': Card(
     name='Fission Reactor', function=f_fission_reactor, image_file='card_images/fp_fission_reactor.png',
-    item_type='special', tags=['reactor', 'neutrino'], rarity=vars.r_uncommon)})
+    item_type='special', tags=['reactor', 'neutrino'], rarity=common.r_uncommon)})
 
 def f_lbnf_beam(self, rows, root):
     ar = rows['active']
@@ -227,7 +228,7 @@ def f_lbnf_beam(self, rows, root):
     else:
         for _ in range(self.power_tokens):
             create_item('e- Neutrino', pr)
-        # vars.neutrino_flux += 1000 * self.power_tokens
+        # common.neutrino_flux += 1000 * self.power_tokens
         print(f'{ar.list.index(self)} {self.name}\t: Generated an e- Neutrino.')
     f_card_end(self, ar, root)
 card_dict.update({'LBNF Beam': Card(
@@ -241,12 +242,12 @@ def f_neutrino_generator(self, rows, root):
 
     from main import create_item
     f_card_start(self, ar, root)
-    create_item('e- Neutrino', vars.particle_row)
+    create_item('e- Neutrino', common.particle_row)
     print(f'{ar.list.index(self)} {self.name}:\tCreated e- Neutrino token.')
     f_card_end(self, ar, root)
 card_dict.update({'Neutrino Gen': Card(
     name='Neutrino Gen', function=f_neutrino_generator, image_file='card_images/fp_neutrino_gen.png',
-    item_type='prototype', tags=['neutrino'], rarity=vars.r_uncommon)})
+    item_type='prototype', tags=['neutrino'], rarity=common.r_uncommon)})
 
 def f_recompute(self, rows, root):
     """Re-activate all cards with the 'computer' tag."""
@@ -257,11 +258,11 @@ def f_recompute(self, rows, root):
     for card in reversed(ar.list):  # Process in reverse so that retriggers activate left to right (remember, FILO)
         if 'computer' in card.tags:
             print(f'{ar.list.index(self)} {self.name}:\tRe-activating {ar.list.index(card)} {card.name} due to its computer tag!')
-            vars.stack.append(vars.StackEvent(card, card.function, (rows, root)))
+            common.stack.append(common.StackEvent(card, card.function, (rows, root)))
     f_card_end(self, ar, root)
 card_dict.update({'ReCompute': Card(
     name='ReCompute', function=f_recompute, image_file='card_images/fp_recompute.png',
-    item_type='prototype', rarity=vars.r_uncommon)})
+    item_type='prototype', rarity=common.r_uncommon)})
 
 def f_retrigger_left(self, rows, root):
     """Re-activate the ability of the item to the left."""
@@ -276,12 +277,12 @@ def f_retrigger_left(self, rows, root):
     else:
         print(f'{ar.list.index(self)} {self.name}:\tRe-activating card to the left!')
         card_left = ar.list[ar.list.index(self) - 1]
-        vars.stack.append(vars.StackEvent(card_left, card_left.function, (rows, root)))
+        common.stack.append(common.StackEvent(card_left, card_left.function, (rows, root)))
 
     f_card_end(self, ar, root)
 card_dict.update({'Re-Trigger': Card(
     name='Re-Trigger', function=f_retrigger_left, image_file='card_images/fp_retrigger.png',
-    item_type='prototype', rarity=vars.r_uncommon)})
+    item_type='prototype', rarity=common.r_uncommon)})
 
 def f_add_computer_bonus(self, rows, root):
     """Add an observer that gives bonus points for every computer card activation."""
@@ -291,31 +292,31 @@ def f_add_computer_bonus(self, rows, root):
     f_card_start(self, ar, root)
     print(f'{ar.list.index(self)} {self.name}:\tDoing nothing! (Card has no active effect)')
     # def f_computer_bonus_observer(event):
-    #     # global vars.score
+    #     # global common.score
     #     if 'computer' in event.origin.tags:
-    #         vars.score += 100
+    #         common.score += 100
     #         print('Score increased by 100! (Activated by computer bonus passive)')
     #
     # print(f'{ar.list.index(self)} {self.name}:\tAdding passive effect: +100 points on computer card activation.')
-    # computer_bonus = vars.Observer(f_computer_bonus_observer)
-    # vars.observers.append(computer_bonus)
+    # computer_bonus = common.Observer(f_computer_bonus_observer)
+    # common.observers.append(computer_bonus)
     f_card_end(self, ar, root)
 def f_prerun_add_computer_bonus(self, rows, root):
     ar = rows['active']
 
     def f_computer_bonus_observer(event):
-        # global vars.score
+        # global common.score
         if 'computer' in event.origin.tags:
-            vars.score += 100
+            common.score += 100
             print('Score increased by 100! (Activated by computer bonus passive)')
 
     print(f'{ar.list.index(self)} {self.name}:\tAdding passive effect: +100 points on computer card activation.')
-    computer_bonus = vars.Observer(f_computer_bonus_observer)
-    vars.observers.append(computer_bonus)
+    computer_bonus = common.Observer(f_computer_bonus_observer)
+    common.observers.append(computer_bonus)
 card_dict.update({'Add Computer Bonus': Card(
     name='Add Computer Bonus', function=f_add_computer_bonus, prerun_function=f_prerun_add_computer_bonus,
     image_file='card_images/fp_add_computer_bonus.png',
-    item_type='prototype', rarity=vars.r_uncommon)})
+    item_type='prototype', rarity=common.r_uncommon)})
 
 token_dict = {}
 # Particle Tokens
