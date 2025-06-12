@@ -14,6 +14,7 @@ import gui_theme
 # TODO: Implement a basic score attack mode (ala Balatro, Nubby, Luck be a Landlord, etc.)
 # TODO: Implement outreach scaling
 # TODO: Fix bug where right clicking tokens sometimes crashes the program
+# TODO: Organize these modules better
 
 
 

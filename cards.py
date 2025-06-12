@@ -104,7 +104,7 @@ def item_factory(item_name):
     global card_dict
     global token_dict
 
-    try:
+    try:  # Note: This requires that we never have a card and token with the same internal name
         return deepcopy(card_dict[item_name])
     except KeyError:
         return deepcopy(token_dict[item_name])
@@ -194,11 +194,9 @@ def f_neutrino_oscillation(self, rows, root):
             print(f'{ar.list.index(self)} {self.name}\t: Multiplied score by 1.5 due to {ar.list.index(card)}'
                   f'{card.name}`s [neutrino] tag! Score is now {vars.score}!')
     f_card_end(self, ar, root)
-    # TODO: As mentioned on the card, come up with a cooler name for this
 card_dict.update({'Neutrino Oscillation': Card(
     name='Neutrino Oscillation', function=f_neutrino_oscillation, image_file='card_images/fp_neutrino_oscillation.png',
     item_type='physics', tags=['neutrino'], rarity=vars.r_rare)})
-
 
 # Special Cards
 def f_fission_reactor(self, rows, root):
@@ -264,7 +262,6 @@ def f_recompute(self, rows, root):
 card_dict.update({'ReCompute': Card(
     name='ReCompute', function=f_recompute, image_file='card_images/fp_recompute.png',
     item_type='prototype', rarity=vars.r_uncommon)})
-# TODO: Make recompute cards work by putting another event on the stack
 
 def f_retrigger_left(self, rows, root):
     """Re-activate the ability of the item to the left."""
@@ -285,7 +282,6 @@ def f_retrigger_left(self, rows, root):
 card_dict.update({'Re-Trigger': Card(
     name='Re-Trigger', function=f_retrigger_left, image_file='card_images/fp_retrigger.png',
     item_type='prototype', rarity=vars.r_uncommon)})
-# TODO: Make retrigger cards work by putting another event on the stack
 
 def f_add_computer_bonus(self, rows, root):
     """Add an observer that gives bonus points for every computer card activation."""

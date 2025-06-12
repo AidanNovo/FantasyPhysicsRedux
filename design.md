@@ -74,13 +74,11 @@ When activating cards, you go down the row in the order of card_holder activatio
   - So, something like:
     - Neutrinos with flavors not previously detected generate 2x data
       - This also requires a neutrino token rework where the oscillation chance is random (is random good?)
-      - Note: this will be difficult to implement in the current code framework. Passive effects are not well-supported
     - When a neutrino is re-detected with a different flavor, it generates 2x data
-      - This will also be very hard to implement in the current framework
   - 2x score if you have at least 2 \[detector] cards
-    - A bit blunt and basic, but easy to implement
+    - A bit blunt and basic
   - Multiply score by (1.5 * \[number of spaces between your two furthest detector cards])
-    - A little more interesting, also easy to implement
+    - A little more interesting
 - **Sterile Neutrino Search (topic)**
 - **Neutrino Mass Measurement (topic)**
 - **Computing Center (special)**
@@ -115,6 +113,13 @@ When activating cards, you go down the row in the order of card_holder activatio
       - That said, this is still a _pretty_ good implementation.
   - If we go with the 'noise is low-value data tokens' approach, background modeling could have the effect of
   removing your X lowest-value data tokens
+- **Shower reconstruction (analysis)**
+  - Good for particles that decay? (or physics areas involving decays?)
+  - I may be wrong here, also shower reconstruction is sort of an application of analysis while machine learning is a
+  method of analysis?
+- **Proton-Proton Collider (special?)**
+  - I'm a little shaky on the physics, but basically a card that lets you shoot particles at each other
+  - This is maybe more in the realm of beam physics
 - **Accelerator Ring (special)**
   - Like they have at CERN!
   - Increase the energy of any particles generated
@@ -234,3 +239,12 @@ Basic score attack mode should just be like:
 - Beat X score
 - If you do so, you get to pick a pack to open
 - Continue for as long as you can
+
+## Module Organization Design
+We need:
+- A module to hold all the card definitions + functions
+- A module to hold all the token definitions + functions
+- A module to do all the GUI stuff (ideally as separate as possible)
+- A module to hold the main game logic loop
+- A module to hold all the shared classes and variables
+- A file (or files) to hold all the images

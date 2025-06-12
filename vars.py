@@ -1,8 +1,8 @@
 import tkinter as tk
 from collections import deque
 
-# To solve circular import issues, this is a module where all the floating variables live
-# There is surely a much better way to do this.
+# This is the module where all the variables, classes, etc. that need to be shared across modules live.
+# This is primarily for organizational reasons, though it also solves a few issues with circular imports.
 
 do_slow_activation = None  # Becomes a tkinter IntVar at runtime
 
