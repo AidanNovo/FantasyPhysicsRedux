@@ -7,7 +7,6 @@ from collections import deque
 
 # MISCELLANEOUS VARIABLES
 do_slow_activation = None  # Becomes a tkinter IntVar at runtime
-neutrino_flux = 1000  # Should vary by week in actual version, pulled from actual data. Somewhat de
 data = 0
 score = 0
 

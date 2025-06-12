@@ -169,13 +169,6 @@ def f_super_kamiokande(self, rows, root):
             print(f'{ar.list.index(self)} {self.name}: Neutrino detected, data increased by 1000!')
         else:
             pass
-    # if 'Neutrino Oscill.' in [card.name for card in ar.list]:
-    #     common.data += common.neutrino_flux * 1.5
-    #     print(f'{ar.list.index(self)} {self.name}:\tData increased by {common.neutrino_flux * 1.5}! (More efficient due to '
-    #           f'neutrino oscillation card)')
-    # else:
-    #     common.data += common.neutrino_flux * 0.8
-    #     print(f'{ar.list.index(self)} {self.name}:\tData increased by {common.neutrino_flux * 0.8}!')
     f_card_end(self, ar, root)
 card_dict.update({'Super-Kamiokande': Card(
     name='Super-Kamiokande', function=f_super_kamiokande, image_file='card_images/fp_super_k.png',
@@ -206,7 +199,7 @@ def f_fission_reactor(self, rows, root):
     from main import create_item
     f_card_start(self, ar, root)
     create_item('e- Neutrino', pr)
-    print(f'{ar.list.index(self)} {self.name}\t: Increased Neutrino Flux by 1000 (flux is now {common.neutrino_flux}).')
+    print(f'{ar.list.index(self)} {self.name}\t: Created an e- Neutrino token!')
     # TODO: Fix this message, then remove the neutrino flux variable from common.
 
     for _ in range(5):  # Make 5 power tokens
@@ -228,7 +221,6 @@ def f_lbnf_beam(self, rows, root):
     else:
         for _ in range(self.power_tokens):
             create_item('e- Neutrino', pr)
-        # common.neutrino_flux += 1000 * self.power_tokens
         print(f'{ar.list.index(self)} {self.name}\t: Generated an e- Neutrino.')
     f_card_end(self, ar, root)
 card_dict.update({'LBNF Beam': Card(
