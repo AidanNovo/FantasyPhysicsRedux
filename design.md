@@ -264,7 +264,7 @@ So, the structure will be:
   - All card definitions
   - All token definitions
 - gui.py
-- logic.py
+- main.py
 - shared.py
   - card dict
   - token dict

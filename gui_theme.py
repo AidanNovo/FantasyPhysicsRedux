@@ -2,7 +2,6 @@ import ttkthemes
 
 # Module exists for organizational reasons.
 # Serves only to house a function that takes the gui root and sets the style.
-# It is sort of stupid that we have to do it this way, but such is tkinter
 
 # TODO: Make it so that we do not inherit the mac dark theme. Makes the UI look ugly.
 def set_style(root):

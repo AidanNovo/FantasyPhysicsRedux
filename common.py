@@ -4,6 +4,9 @@ from collections import deque
 # This is the module where all the variables, classes, etc. that need to be shared across modules live.
 # This is primarily for organizational reasons, though it also solves a few issues with circular imports.
 
+# MISCELLANEOUS FUNCTIONS
+
+
 # MISCELLANEOUS VARIABLES
 do_slow_activation = None  # Becomes a tkinter IntVar at runtime
 data = 0
