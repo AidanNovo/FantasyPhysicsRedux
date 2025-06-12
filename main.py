@@ -18,7 +18,6 @@ import gui_theme
 
 
 
-
 def crack_booster_pack(pack_size=5,
                        draw_pool=tuple(cards.card_dict.keys()),
                        draw_weights=tuple(int(cards.card_dict[c].rarity) for c in cards.card_dict.keys())):

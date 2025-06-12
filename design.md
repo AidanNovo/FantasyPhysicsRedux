@@ -240,11 +240,38 @@ Basic score attack mode should just be like:
 - If you do so, you get to pick a pack to open
 - Continue for as long as you can
 
+Currently, this game has a fundamental issue, which is that in e.g. Balatro all jokers start out 'viable.'
+At the start of the game, taking _any_ joker will improve your run and make you more effective. Same in nubby,
+cloverpit, etc. As you go further and develop your build, some jokers stop being viable because they do not
+synergize with the rest of the build. The issue is that we are not like this right now. A particle source is
+useless unless you have a detector, a detector is useless unless you have analysis, etc.
+
+Possible solution is to give you a shop before the first round where you have a little startup grant. Also,
+making more cards that are broadly useful outside of select synergies is good.
+
 ## Module Organization Design
 We need:
 - A module to hold all the card definitions + functions
 - A module to hold all the token definitions + functions
+- A module to hold all the observer definitions + functions
 - A module to do all the GUI stuff (ideally as separate as possible)
 - A module to hold the main game logic loop
 - A module to hold all the shared classes and variables
 - A file (or files) to hold all the images
+
+So, the structure will be:
+- cards.py
+  - All card definitions
+  - All token definitions
+- gui.py
+- logic.py
+- shared.py
+  - card dict
+  - token dict
+  - observer dict?
+  - event stack
+  - item class (rename to gamepiece?)
+    - card class
+    - token class
+      - particle class?
+  - observer class (maybe a subclass of item) (maybe rename to interpreter)
