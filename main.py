@@ -47,10 +47,7 @@ def get_all_cards():
 
 def show_big_card(event, card):
     """Create a window displaying a larger version of a card."""
-    #TODO: For some reason this sometimes does not work with tokens.
-    global root
-
-    popup = tk.Toplevel(root)
+    popup = tk.Toplevel(common.root)
     big_image = card.large_image
     image_label = tk.Label(popup, image=big_image)
     image_label.pack()

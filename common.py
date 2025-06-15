@@ -8,6 +8,7 @@ from collections import deque
 
 
 # MISCELLANEOUS VARIABLES
+root = tk.Tk()  # Define the main tkinter root here for better sharing
 do_slow_activation = None  # Becomes a tkinter IntVar at runtime
 data = 0
 score = 0

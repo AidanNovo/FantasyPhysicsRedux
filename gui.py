@@ -65,7 +65,7 @@ def update_stat_display():
 
 if __name__ == '__main__':
     # UI STUFF BELOW HERE
-    root = tk.Tk()
+    from common import root
     gui_theme.set_style(root)
     root.title('FantasyPhysics')
 
