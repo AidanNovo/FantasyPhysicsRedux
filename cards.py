@@ -4,6 +4,19 @@ from copy import deepcopy
 # from main import create_item
 import time
 
+def pretty_print(self, holder, message):
+    """Print the card's activation message with some standardized formatting and spacing."""
+    target_length = 20  # The number of characters that will appear to the left of the message
+    header_length = len(f'{holder.list.index(self)} {self.name}:')
+    delta = target_length - header_length
+
+    if delta > 0:
+        spacer = ' ' * delta
+    else:
+        spacer = ' '
+
+    print(f'{holder.list.index(self)} {self.name}:{spacer}{message}')
+
 # f stands for function
 def f_default():
     """Default function as a fallback."""
@@ -47,6 +60,8 @@ def f_card_end(self, ar, root):
 
 def f_t_test(self, ar, pr, root):
     print('token activated')
+
+
 
 
 class Item:
@@ -110,9 +125,11 @@ def item_factory(item_name):
         return deepcopy(token_dict[item_name])
 
 
+
 # Huge master dict of all the cards and their effects.
 card_dict = {}
 
+# CARD DEFINITIONS GO BELOW HERE
 # Analysis Cards
 def f_machine_learning(self, rows, root):
     """Generate score from data based on the card's current multiplier, then increase the multiplier."""
@@ -120,7 +137,7 @@ def f_machine_learning(self, rows, root):
 
     f_card_start(self, ar, root)
     if self.power_tokens == 0: # Card requires 1 token to run
-        print(f'{ar.list.index(self)} {self.name}:\tUnpowered!')
+        pretty_print(self, ar, 'Unpowered')
     else:
         # Increase score
         score_increase = common.data * self.param
@@ -131,8 +148,9 @@ def f_machine_learning(self, rows, root):
                 self.param += 0.1
             self.param = round(self.param, 2)
 
-        print(f'{ar.list.index(self)} {self.name}:\tGenerated {score_increase} score from {common.data} data! '
-              f'ML multiplier increased to {self.param}.')
+        pretty_print(self, ar, f'Generated {score_increase} score from {common.data} data! '
+                               f'ML multiplier increased to {self.param}.')
+
     f_card_end(self, ar, root)
 card_dict.update({'Machine Learning': Card(
     name='Machine Learning', function=f_machine_learning, image_file='card_images/fp_machine_learning.png',
@@ -149,7 +167,7 @@ def f_icecube(self, rows, root):  # Currently, this is exactly the same as f_sup
     for particle in pr.list:
         if particle.name == 'e- Neutrino' or particle.name == 'Muon Neutrino' or particle.name == 'Tau Neutrino':
             common.data += 1000
-            print(f'{ar.list.index(self)} {self.name}: Neutrino detected, data increased by 1000!')
+            pretty_print(self, ar, 'Neutrino detected, data increased by 1000!')
         else:
             pass
     f_card_end(self, ar, root)
@@ -166,7 +184,7 @@ def f_super_kamiokande(self, rows, root):
     for particle in pr.list:
         if particle.name == 'e- Neutrino'or particle.name == 'Muon Neutrino' or particle.name == 'Tau Neutrino':
             common.data += 1000
-            print(f'{ar.list.index(self)} {self.name}: Neutrino detected, data increased by 1000!')
+            pretty_print(self, ar, 'Neutrino detected, data increased by 1000!')
         else:
             pass
     f_card_end(self, ar, root)
@@ -180,12 +198,12 @@ def f_neutrino_oscillation(self, rows, root):
     ar = rows['active']
 
     f_card_start(self, ar, root)
-    print(f'{ar.list.index(self)} {self.name}\t: Multiplying score for each [neutrino] card...')
+    pretty_print(self, ar, 'Multiplying score for each [neutrino] card...')
     for card in ar.list:
         if 'neutrino' in card.tags:
             common.score = common.score * 1.5
-            print(f'{ar.list.index(self)} {self.name}\t: Multiplied score by 1.5 due to {ar.list.index(card)}'
-                  f'{card.name}`s [neutrino] tag! Score is now {common.score}!')
+            pretty_print(self, ar, f'Multiplied score by 1.5 due to {ar.list.index(card)} '
+                                   f'{card.name}`s [neutrino] tag! Score is now {common.score}!')
     f_card_end(self, ar, root)
 card_dict.update({'Neutrino Oscillation': Card(
     name='Neutrino Oscillation', function=f_neutrino_oscillation, image_file='card_images/fp_neutrino_oscillation.png',
@@ -199,8 +217,7 @@ def f_fission_reactor(self, rows, root):
     from main import create_item
     f_card_start(self, ar, root)
     create_item('e- Neutrino', pr)
-    print(f'{ar.list.index(self)} {self.name}\t: Created an e- Neutrino token!')
-    # TODO: Fix this message, then remove the neutrino flux variable from common.
+    pretty_print(self, ar, 'Created an e- Neutrino token!')
 
     for _ in range(5):  # Make 5 power tokens
         create_item('Power', common.power_row)
@@ -217,11 +234,11 @@ def f_lbnf_beam(self, rows, root):
     from main import create_item
     f_card_start(self, ar, root)
     if self.power_tokens == 0: # Card requires at least 1 token to run
-        print(f'{ar.list.index(self)} {self.name}:\tUnpowered!')
+        pretty_print(self, ar, 'Unpowered!')
     else:
         for _ in range(self.power_tokens):
             create_item('e- Neutrino', pr)
-        print(f'{ar.list.index(self)} {self.name}\t: Generated an e- Neutrino.')
+        pretty_print(self, ar, 'Generated an e- Neutrino.')
     f_card_end(self, ar, root)
 card_dict.update({'LBNF Beam': Card(
     name='LBNF Beam', function=f_lbnf_beam, image_file='card_images/fp_lbnf_beam.png',
@@ -235,7 +252,7 @@ def f_neutrino_generator(self, rows, root):
     from main import create_item
     f_card_start(self, ar, root)
     create_item('e- Neutrino', common.particle_row)
-    print(f'{ar.list.index(self)} {self.name}:\tCreated e- Neutrino token.')
+    pretty_print(self, ar, 'Created an e- Neutrino token!')
     f_card_end(self, ar, root)
 card_dict.update({'Neutrino Gen': Card(
     name='Neutrino Gen', function=f_neutrino_generator, image_file='card_images/fp_neutrino_gen.png',
@@ -249,7 +266,7 @@ def f_recompute(self, rows, root):
     f_card_start(self, ar, root)
     for card in reversed(ar.list):  # Process in reverse so that retriggers activate left to right (remember, FILO)
         if 'computer' in card.tags:
-            print(f'{ar.list.index(self)} {self.name}:\tRe-activating {ar.list.index(card)} {card.name} due to its computer tag!')
+            pretty_print(self, ar, f'Re-activating {ar.list.index(card)} {card.name} due to its computer tag!')
             common.stack.append(common.StackEvent(card, card.function, (rows, root)))
     f_card_end(self, ar, root)
 card_dict.update({'ReCompute': Card(
@@ -265,9 +282,9 @@ def f_retrigger_left(self, rows, root):
     my_index = ar.list.index(self)  # The index of this retrigger card
 
     if my_index == 0:
-        print(f'{ar.list.index(self)} {self.name}:\tNo card found to the left!')
+        pretty_print(self, ar, 'No card found to the left!')
     else:
-        print(f'{ar.list.index(self)} {self.name}:\tRe-activating card to the left!')
+        pretty_print(self, ar, 'Re-activating card to the left!')
         card_left = ar.list[ar.list.index(self) - 1]
         common.stack.append(common.StackEvent(card_left, card_left.function, (rows, root)))
 
@@ -282,7 +299,7 @@ def f_add_computer_bonus(self, rows, root):
     rr = rows['power']
 
     f_card_start(self, ar, root)
-    print(f'{ar.list.index(self)} {self.name}:\tDoing nothing! (Card has no active effect)')
+    pretty_print(self, ar, 'Doing nothing! (Card has no active effect)')
     f_card_end(self, ar, root)
 def f_prerun_add_computer_bonus(self, rows, root):
     ar = rows['active']
@@ -293,7 +310,7 @@ def f_prerun_add_computer_bonus(self, rows, root):
             common.score += 100
             print('Score increased by 100! (Activated by computer bonus passive)')
 
-    print(f'{ar.list.index(self)} {self.name}:\tAdding passive effect: +100 points on computer card activation.')
+    pretty_print(self, ar, 'Adding passive effect: +100 points on computer card activation.')
     computer_bonus = common.Interpreter(f_computer_bonus_interpreter)
     common.interpreters.append(computer_bonus)
 card_dict.update({'Add Computer Bonus': Card(
@@ -309,7 +326,7 @@ def f_e_neutrino_token(self, rows, root):
     from main import initialize_item_image, initialize_item_gui_button, bind_item_instance_function
     pr = rows['particle']
 
-    print(f'{pr.list.index(self)} {self.name} Oscillating to muon neutrino.')
+    pretty_print(self, pr, 'Oscillating to muon neutrino.')
 
     index = pr.list.index(self)
     self = item_factory('Muon Neutrino')
@@ -327,7 +344,7 @@ def f_muon_neutrino_token(self, rows, root):
     from main import initialize_item_image, initialize_item_gui_button, bind_item_instance_function
     pr = rows['particle']
 
-    print(f'{pr.list.index(self)} {self.name} Oscillating to tau neutrino.')
+    pretty_print(self, pr, 'Oscillating to tau neutrino.')
 
     index = pr.list.index(self)
     self = item_factory('Tau Neutrino')
@@ -345,7 +362,7 @@ def f_tau_neutrino_token(self, rows, root):
     from main import initialize_item_image, initialize_item_gui_button, bind_item_instance_function
     pr = rows['particle']
 
-    print(f'{pr.list.index(self)} {self.name} Oscillating to electron neutrino.')
+    pretty_print(self, pr, 'Oscillating to electron neutrino.')
 
     index = pr.list.index(self)
     self = item_factory('e- Neutrino')

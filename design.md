@@ -265,7 +265,7 @@ So, the structure will be:
   - All token definitions
 - gui.py
 - main.py
-- shared.py
+- common.py
   - card dict
   - token dict
   - observer dict?
