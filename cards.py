@@ -1,70 +1,16 @@
-import common
 import tkinter as tk
 from copy import deepcopy
-# from main import create_item
 import time
 
-def pretty_print(self, holder, message):
-    """Print the card's activation message with some standardized formatting and spacing."""
-    target_length = 20  # The number of characters that will appear to the left of the message
-    header_length = len(f'{holder.list.index(self)} {self.name}:')
-    delta = target_length - header_length
-
-    if delta > 0:
-        spacer = ' ' * delta
-    else:
-        spacer = ' '
-
-    print(f'{holder.list.index(self)} {self.name}:{spacer}{message}')
-
-# f stands for function
-def f_default():
-    """Default function as a fallback."""
-    raise Exception('Card/token activated with undefined function')
-
-def f_card_start(self, ar, root):
-    """Perform functions universal to all cards at activation start."""
-    self.activity_string = 'ACTIVE'
-    ar.active_index = ar.list.index(self)
-    # print('ai', ar.active_index)
-    self.gui_button.configure(text=self.status_string(), compound=tk.TOP)
-    root.update()
-    pass
-
-def f_card_end(self, ar, root):
-    """Perform functions universal to all cards at activation end."""
-
-    def wait_for_spacebar():
-        spacebar_pressed = False
-
-        def _on_spacebar(event):
-            nonlocal spacebar_pressed
-            spacebar_pressed = True
-
-        root.bind("<space>", _on_spacebar)
-
-        while not spacebar_pressed:
-            root.update()
-            root.update_idletasks()
-            pass
-
-    if common.do_slow_activation.get():
-        wait_for_spacebar()
-    else:
-        time.sleep(1)
-
-    self.activity_string = '--'
-    self.gui_button.configure(text=self.status_string(), compound=tk.TOP)
-    root.update()
-    pass
-
-def f_t_test(self, ar, pr, root):
-    print('token activated')
-
-
+import common
 
 
 class Item:
+    # f stands for function
+    def f_default(self):
+        """Default function as a fallback."""
+        raise Exception('Card/token activated with default function.')
+
     def __init__(self, name='', image_file=None, function=f_default, prerun_function=None, item_type='', tags=()):
         self.name = name
         self.image_file = image_file
@@ -112,6 +58,59 @@ class Token(Item):
         self.half_life = half_life  # Particle half-life
 
 
+def pretty_print(self, holder, message):
+    """Print the card's activation message with some standardized formatting and spacing."""
+    target_length = 20  # The number of characters that will appear to the left of the message
+    header_length = len(f'{holder.list.index(self)} {self.name}:')
+    delta = target_length - header_length
+
+    if delta > 0:
+        spacer = ' ' * delta
+    else:
+        spacer = ' '
+
+    print(f'{holder.list.index(self)} {self.name}:{spacer}{message}')
+
+
+def f_card_start(self, ar, root):
+    """Perform functions universal to all cards at activation start."""
+    self.activity_string = 'ACTIVE'
+    ar.active_index = ar.list.index(self)
+    # print('ai', ar.active_index)
+    self.gui_button.configure(text=self.status_string(), compound=tk.TOP)
+    root.update()
+    pass
+
+
+def f_card_end(self, ar, root):
+    """Perform functions universal to all cards at activation end."""
+
+    def wait_for_spacebar():
+        spacebar_pressed = False
+
+        def _on_spacebar(event):
+            nonlocal spacebar_pressed
+            spacebar_pressed = True
+
+        root.bind("<space>", _on_spacebar)
+
+        while not spacebar_pressed:
+            root.update()
+            root.update_idletasks()
+            pass
+
+    if common.do_slow_activation.get():
+        wait_for_spacebar()
+    else:
+        time.sleep(1)
+
+    self.activity_string = '--'
+    self.gui_button.configure(text=self.status_string(), compound=tk.TOP)
+    root.update()
+    pass
+
+# def f_t_test(self, ar, pr, root):
+#     print('token activated')
 
 def item_factory(item_name):
     """Return a deepcopy of an item from card_dict/token_dict.
@@ -132,8 +131,7 @@ def item_factory(item_name):
         return deepcopy(token_dict[item_name])
 
 
-# Huge master dict of all the cards and their effects.
-card_dict = {}
+card_dict = {}  # Huge master dict of all the cards and their effects.
 
 # CARD DEFINITIONS GO BELOW HERE
 # Analysis Cards
