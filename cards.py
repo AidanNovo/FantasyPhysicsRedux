@@ -250,14 +250,9 @@ def f_add_computer_bonus(self, rows, root):
 def f_prerun_add_computer_bonus(self, rows, root):
     ar = rows['active']
 
-    def f_computer_bonus_interpreter(event):
-        if 'computer' in event.origin.tags:
-            common.score += 100
-            print('Score increased by 100! (Activated by computer bonus passive)')
-
+    from main import create_item
+    create_item('Computer Bonus Interpreter', common.interpreters)
     pretty_print(self, ar, 'Adding passive effect: +100 points on computer card activation.')
-    computer_bonus = common.Interpreter(f_computer_bonus_interpreter)
-    common.interpreters.append(computer_bonus)
 common.card_dict.update({'Add Computer Bonus': Card(
     name='Add Computer Bonus', function=f_add_computer_bonus, prerun_function=f_prerun_add_computer_bonus,
     image_file='card_images/fp_add_computer_bonus.png',

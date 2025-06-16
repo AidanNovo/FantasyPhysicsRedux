@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 
 import cards
 import tokens
+import interpreters
 import common
 
 # This module exists to contain the main functions related to the game's logic.
@@ -113,7 +114,7 @@ def create_item(item_name, holder, h_index=-1):
 
     else:
         # Create the item object
-        item = cards.item_factory(item_name)
+        item = common.item_factory(item_name)
 
         initialize_item_gui_button(item, holder)
 
@@ -213,7 +214,7 @@ def activate_cards(root):
             event = common.stack.pop()
 
             # Use list() to 'freeze' the interpreters deque and prevent a RuntimeError.
-            for interpreter in list(common.interpreters):
+            for interpreter in common.interpreters.list:
                 interpreter.function(event)
 
     print('---------END---------')

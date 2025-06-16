@@ -10,7 +10,7 @@ class Item:
     # f stands for function
     def f_default(self):
         """Default function as a fallback."""
-        raise Exception('Card/token activated with default function.')
+        raise Exception('Card/token/interpreter activated with default function.')
 
     def __init__(self, name='', image_file=None, function=f_default, prerun_function=None, item_type='', tags=()):
         self.name = name
@@ -55,7 +55,10 @@ def item_factory(item_name):
     try:  # Note: This requires that we never have a card and token with the same internal name
         return deepcopy(card_dict[item_name])
     except KeyError:
-        return deepcopy(token_dict[item_name])
+        try:
+            return deepcopy(token_dict[item_name])
+        except KeyError:
+            return deepcopy(interpreter_dict[item_name])
 
 
 # MISCELLANEOUS VARIABLES
@@ -63,6 +66,7 @@ root = tk.Tk()  # Define the main tkinter root here for better sharing
 
 card_dict = {}  # Huge master dict of all the cards and their effects
 token_dict = {}  # Huge master dict of all the tokens and their effects
+interpreter_dict = {}  # Huge master dict of all the interpreters and their effects
 
 do_slow_activation = None  # Becomes a tkinter IntVar at runtime
 data = 0
@@ -91,6 +95,12 @@ deck = CardHolder()
 active_row = CardHolder(max_length=6)
 particle_row = CardHolder()
 power_row = CardHolder(max_length=5)
+interpreters = CardHolder()
+
+# Add the main interpreter to the interpreter list
+from main import create_item
+create_item('Main Interpreter', interpreters)
+
 
 # EVENT STACK STUFF
 class StackEvent:
@@ -112,31 +122,3 @@ class StackEvent:
         self.tags = tags
 
 stack = deque([])  # Deque that contains all the StackEvents
-
-# INTERPRETER STUFF
-class Interpreter:
-    # Interpreters are objects that process StackEvents. There is one main interpreter that executes card/token
-    # functions and some number of additional interpreters that implement passive effects. Anything that needs to modify
-    # a stack event or be triggered by a stack event is handled by Interpreters.
-    def __init__(self, function, f_args=None):
-        """
-        Constructor.
-
-        Args:
-            function: The function the interpreter will execute. Must always take the event as the first argument.
-            f_args: If the function needs any additional args, put them here. Not implemented right now.
-        """
-        self.function = function
-
-# Deque that contains the interpreters. StackEvents are processed by each interpreter, starting with the top (most
-# recently appended) and continuing down the deque until it hits the main interpreter that executes the StackEvent's
-# function. This is always the final interpreter.
-# Thus, the main interpreter must go on first. Append additional ones afterwards.
-interpreters = deque([])
-
-# Main interpreter, executes the function listed on the card/token
-def f_main_interpreter(event):
-    event.function(*event.f_args)
-main_interpreter = Interpreter(f_main_interpreter)
-
-interpreters.append(main_interpreter)
