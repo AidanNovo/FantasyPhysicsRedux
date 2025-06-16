@@ -1,27 +1,9 @@
 import tkinter as tk
-from copy import deepcopy
 import time
 
 import common
-
-
-class Item:
-    # f stands for function
-    def f_default(self):
-        """Default function as a fallback."""
-        raise Exception('Card/token activated with default function.')
-
-    def __init__(self, name='', image_file=None, function=f_default, prerun_function=None, item_type='', tags=()):
-        self.name = name
-        self.image_file = image_file
-        self.function = function
-        self.prerun_function = prerun_function  # A special function that runs before normal card activation starts
-        self.item_type = item_type
-        self.tags = tags
-
-    def __repr__(self):
-        return self.name
-
+# from common import Item, card_dict, pretty_print, item_factory
+from common import Item, pretty_print, item_factory
 
 class Card(Item):
     """The general class used for each card in the game."""
@@ -49,27 +31,6 @@ class Card(Item):
                          f'{self.activity_string}')
 
         return status_string
-
-
-class Token(Item):
-    def __init__(self, energy=None, half_life=None, **kwargs):
-        super().__init__(**kwargs)
-        self.energy = energy  # Particle energy
-        self.half_life = half_life  # Particle half-life
-
-
-def pretty_print(self, holder, message):
-    """Print the card's activation message with some standardized formatting and spacing."""
-    target_length = 20  # The number of characters that will appear to the left of the message
-    header_length = len(f'{holder.list.index(self)} {self.name}:')
-    delta = target_length - header_length
-
-    if delta > 0:
-        spacer = ' ' * delta
-    else:
-        spacer = ' '
-
-    print(f'{holder.list.index(self)} {self.name}:{spacer}{message}')
 
 
 def f_card_start(self, ar, root):
@@ -112,26 +73,7 @@ def f_card_end(self, ar, root):
 # def f_t_test(self, ar, pr, root):
 #     print('token activated')
 
-def item_factory(item_name):
-    """Return a deepcopy of an item from card_dict/token_dict.
 
-    Args:
-        item_name: The desired item's key in card_dict/token_dict.
-
-    Returns:
-        A deepcopy of the item associated with the given key.
-    """
-
-    global card_dict
-    global token_dict
-
-    try:  # Note: This requires that we never have a card and token with the same internal name
-        return deepcopy(card_dict[item_name])
-    except KeyError:
-        return deepcopy(token_dict[item_name])
-
-
-card_dict = {}  # Huge master dict of all the cards and their effects.
 
 # CARD DEFINITIONS GO BELOW HERE
 # Analysis Cards
@@ -156,7 +98,7 @@ def f_machine_learning(self, rows, root):
                                f'ML multiplier increased to {self.param}.')
 
     f_card_end(self, ar, root)
-card_dict.update({'Machine Learning': Card(
+common.card_dict.update({'Machine Learning': Card(
     name='Machine Learning', function=f_machine_learning, image_file='card_images/fp_machine_learning.png',
     item_type='analysis', tags=['computer'], param=0.8, power_slots=1)})
 
@@ -175,7 +117,7 @@ def f_icecube(self, rows, root):  # Currently, this is exactly the same as f_sup
         else:
             pass
     f_card_end(self, ar, root)
-card_dict.update({'IceCube': Card(
+common.card_dict.update({'IceCube': Card(
     name='IceCube', function=f_icecube, image_file='card_images/fp_icecube.png',
     item_type='detector', tags=['neutrino', 'astro'])})
 
@@ -192,7 +134,7 @@ def f_super_kamiokande(self, rows, root):
         else:
             pass
     f_card_end(self, ar, root)
-card_dict.update({'Super-Kamiokande': Card(
+common.card_dict.update({'Super-Kamiokande': Card(
     name='Super-Kamiokande', function=f_super_kamiokande, image_file='card_images/fp_super_k.png',
     item_type='detector', tags=['neutrino', 'astro'])})
 
@@ -209,7 +151,7 @@ def f_neutrino_oscillation(self, rows, root):
             pretty_print(self, ar, f'Multiplied score by 1.5 due to {ar.list.index(card)} '
                                    f'{card.name}`s [neutrino] tag! Score is now {common.score}!')
     f_card_end(self, ar, root)
-card_dict.update({'Neutrino Oscillation': Card(
+common.card_dict.update({'Neutrino Oscillation': Card(
     name='Neutrino Oscillation', function=f_neutrino_oscillation, image_file='card_images/fp_neutrino_oscillation.png',
     item_type='physics', tags=['neutrino'], rarity=common.r_rare)})
 
@@ -227,7 +169,7 @@ def f_fission_reactor(self, rows, root):
         create_item('Power', common.power_row)
 
     f_card_end(self, ar, root)
-card_dict.update({'Fission Reactor': Card(
+common.card_dict.update({'Fission Reactor': Card(
     name='Fission Reactor', function=f_fission_reactor, image_file='card_images/fp_fission_reactor.png',
     item_type='special', tags=['reactor', 'neutrino'], rarity=common.r_uncommon)})
 
@@ -244,7 +186,7 @@ def f_lbnf_beam(self, rows, root):
             create_item('e- Neutrino', pr)
         pretty_print(self, ar, 'Generated an e- Neutrino.')
     f_card_end(self, ar, root)
-card_dict.update({'LBNF Beam': Card(
+common.card_dict.update({'LBNF Beam': Card(
     name='LBNF Beam', function=f_lbnf_beam, image_file='card_images/fp_lbnf_beam.png',
     item_type='special', tags=['beam', 'neutrino'], power_slots=3)})
 
@@ -258,7 +200,7 @@ def f_neutrino_generator(self, rows, root):
     create_item('e- Neutrino', common.particle_row)
     pretty_print(self, ar, 'Created an e- Neutrino token!')
     f_card_end(self, ar, root)
-card_dict.update({'Neutrino Gen': Card(
+common.card_dict.update({'Neutrino Gen': Card(
     name='Neutrino Gen', function=f_neutrino_generator, image_file='card_images/fp_neutrino_gen.png',
     item_type='prototype', tags=['neutrino'], rarity=common.r_uncommon)})
 
@@ -273,7 +215,7 @@ def f_recompute(self, rows, root):
             pretty_print(self, ar, f'Re-activating {ar.list.index(card)} {card.name} due to its computer tag!')
             common.stack.append(common.StackEvent(card, card.function, (rows, root)))
     f_card_end(self, ar, root)
-card_dict.update({'ReCompute': Card(
+common.card_dict.update({'ReCompute': Card(
     name='ReCompute', function=f_recompute, image_file='card_images/fp_recompute.png',
     item_type='prototype', rarity=common.r_uncommon)})
 
@@ -293,7 +235,7 @@ def f_retrigger_left(self, rows, root):
         common.stack.append(common.StackEvent(card_left, card_left.function, (rows, root)))
 
     f_card_end(self, ar, root)
-card_dict.update({'Re-Trigger': Card(
+common.card_dict.update({'Re-Trigger': Card(
     name='Re-Trigger', function=f_retrigger_left, image_file='card_images/fp_retrigger.png',
     item_type='prototype', rarity=common.r_uncommon)})
 
@@ -309,7 +251,6 @@ def f_prerun_add_computer_bonus(self, rows, root):
     ar = rows['active']
 
     def f_computer_bonus_interpreter(event):
-        # global common.score
         if 'computer' in event.origin.tags:
             common.score += 100
             print('Score increased by 100! (Activated by computer bonus passive)')
@@ -317,82 +258,8 @@ def f_prerun_add_computer_bonus(self, rows, root):
     pretty_print(self, ar, 'Adding passive effect: +100 points on computer card activation.')
     computer_bonus = common.Interpreter(f_computer_bonus_interpreter)
     common.interpreters.append(computer_bonus)
-card_dict.update({'Add Computer Bonus': Card(
+common.card_dict.update({'Add Computer Bonus': Card(
     name='Add Computer Bonus', function=f_add_computer_bonus, prerun_function=f_prerun_add_computer_bonus,
     image_file='card_images/fp_add_computer_bonus.png',
     item_type='prototype', rarity=common.r_uncommon)})
 
-token_dict = {}
-# Particle Tokens
-# TODO: Make neutrinos actually oscillate randomly.
-# TODO: Maybe turn the repeated neutrino oscillation code into a single function for transforming a card in place
-def f_e_neutrino_token(self, rows, root):
-    from main import initialize_item_image, initialize_item_gui_button, bind_item_instance_function
-    pr = rows['particle']
-
-    pretty_print(self, pr, 'Oscillating to muon neutrino.')
-
-    index = pr.list.index(self)
-    self = item_factory('Muon Neutrino')
-    pr.list[index] = self
-
-    # Re-initialize some stuff that would normally get initialized in the create_item function
-    initialize_item_gui_button(self, pr)
-    initialize_item_image(self)
-    bind_item_instance_function(self, pr, index)
-token_dict.update({'e- Neutrino': Token(
-    name='e- Neutrino', function=f_e_neutrino_token, image_file='token_images/fp_token_e_neutrino.png',
-    item_type='particle', tags=['electron, neutrino'])})
-
-def f_muon_neutrino_token(self, rows, root):
-    from main import initialize_item_image, initialize_item_gui_button, bind_item_instance_function
-    pr = rows['particle']
-
-    pretty_print(self, pr, 'Oscillating to tau neutrino.')
-
-    index = pr.list.index(self)
-    self = item_factory('Tau Neutrino')
-    pr.list[index] = self
-
-    # Re-initialize some stuff that would normally get initialized in the create_item function
-    initialize_item_gui_button(self, pr)
-    initialize_item_image(self)
-    bind_item_instance_function(self, pr, index)
-token_dict.update({'Muon Neutrino': Token(
-    name='Muon Neutrino', function=f_muon_neutrino_token, image_file='token_images/fp_token_muon_neutrino.png',
-    item_type='particle', tags=['muon, neutrino'])})
-
-def f_tau_neutrino_token(self, rows, root):
-    from main import initialize_item_image, initialize_item_gui_button, bind_item_instance_function
-    pr = rows['particle']
-
-    pretty_print(self, pr, 'Oscillating to electron neutrino.')
-
-    index = pr.list.index(self)
-    self = item_factory('e- Neutrino')
-    pr.list[index] = self
-
-    # Re-initialize some stuff that would normally get initialized in the create_item function
-    initialize_item_gui_button(self, pr)
-    initialize_item_image(self)
-    bind_item_instance_function(self, pr, index)
-token_dict.update({'Tau Neutrino': Token(
-    name='Tau Neutrino', function=f_tau_neutrino_token, image_file='token_images/fp_token_tau_neutrino.png',
-    item_type='particle', tags=['tau, neutrino'])})
-
-
-# Resource Tokens
-def f_power_token(self, rows, root):
-    ar = rows['active']
-    rr = rows['power']
-
-    for card in ar.list[ar.active_index + 1:]:
-        if card.power_slots - card.power_tokens > 0:
-            card.power_tokens += 1
-            self.gui_button.destroy()
-            rr.list.pop(rr.list.index(self))
-            break
-    # f_card_end(self, ar, root)
-token_dict.update({'Power': Token(
-    name='Power', function=f_power_token, image_file='token_images/fp_token_power.png',
-    item_type='resource')})

@@ -3,10 +3,10 @@ import tkinter as tk
 from PIL import Image, ImageTk
 
 import cards
+import tokens
 import common
 
-# This module exists to contain the main functions related to the game's logic. Things from gui.py will be calling these
-# functions, in theory.
+# This module exists to contain the main functions related to the game's logic.
 
 # TODO: Implement a GUI to reorganize your active row
 # TODO: Implement a basic score attack mode (ala Balatro, Nubby, Luck be a Landlord, etc.)
@@ -16,8 +16,8 @@ import common
 
 
 def crack_booster_pack(pack_size=5,
-                       draw_pool=tuple(cards.card_dict.keys()),
-                       draw_weights=tuple(int(cards.card_dict[c].rarity) for c in cards.card_dict.keys())):
+                       draw_pool=tuple(common.card_dict.keys()),
+                       draw_weights=tuple(int(common.card_dict[c].rarity) for c in common.card_dict.keys())):
     """Add n randomly chosen cards to the deck, weighted by rarity, with replacement.
 
     Args:
@@ -39,7 +39,7 @@ def crack_booster_pack(pack_size=5,
 
 def get_all_cards():
     """Add one copy of each card in card_dict to the deck."""
-    for card_name in cards.card_dict.keys():
+    for card_name in common.card_dict.keys():
         create_item(card_name, holder=common.deck)
 
 

@@ -1,14 +1,69 @@
 import tkinter as tk
 from collections import deque
+from copy import deepcopy
 
 # This is the module where all the variables, classes, etc. that need to be shared across modules live.
 # This is primarily for organizational reasons, though it also solves a few issues with circular imports.
 
+# MISCELLANEOUS CLASSES
+class Item:
+    # f stands for function
+    def f_default(self):
+        """Default function as a fallback."""
+        raise Exception('Card/token activated with default function.')
+
+    def __init__(self, name='', image_file=None, function=f_default, prerun_function=None, item_type='', tags=()):
+        self.name = name
+        self.image_file = image_file
+        self.function = function
+        self.prerun_function = prerun_function  # A special function that runs before normal card activation starts
+        self.item_type = item_type
+        self.tags = tags
+
+    def __repr__(self):
+        return self.name
+
+
 # MISCELLANEOUS FUNCTIONS
+def pretty_print(self, holder, message):
+    """Print an item's activation message with some standardized formatting and spacing."""
+    target_length = 20  # The number of characters that will appear to the left of the message
+    header_length = len(f'{holder.list.index(self)} {self.name}:')
+    delta = target_length - header_length
+
+    if delta > 0:
+        spacer = ' ' * delta
+    else:
+        spacer = ' '
+
+    print(f'{holder.list.index(self)} {self.name}:{spacer}{message}')
+
+
+def item_factory(item_name):
+    """Return a deepcopy of an item from card_dict/token_dict.
+
+    Args:
+        item_name: The desired item's key in card_dict/token_dict.
+
+    Returns:
+        A deepcopy of the item associated with the given key.
+    """
+
+    global card_dict
+    global token_dict
+
+    try:  # Note: This requires that we never have a card and token with the same internal name
+        return deepcopy(card_dict[item_name])
+    except KeyError:
+        return deepcopy(token_dict[item_name])
 
 
 # MISCELLANEOUS VARIABLES
 root = tk.Tk()  # Define the main tkinter root here for better sharing
+
+card_dict = {}  # Huge master dict of all the cards and their effects
+token_dict = {}  # Huge master dict of all the tokens and their effects
+
 do_slow_activation = None  # Becomes a tkinter IntVar at runtime
 data = 0
 score = 0
@@ -76,7 +131,7 @@ class Interpreter:
 # Deque that contains the interpreters. StackEvents are processed by each interpreter, starting with the top (most
 # recently appended) and continuing down the deque until it hits the main interpreter that executes the StackEvent's
 # function. This is always the final interpreter.
-# Thus, main interpreter must go on first. Append additional ones afterwards.
+# Thus, the main interpreter must go on first. Append additional ones afterwards.
 interpreters = deque([])
 
 # Main interpreter, executes the function listed on the card/token
