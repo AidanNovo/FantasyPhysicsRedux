@@ -13,6 +13,7 @@ import gui_theme
 
 
 def update_deck_display():
+    """Update the deck display to reflect the current deck state."""
     for card in common.deck.list:
         deck_index = common.deck.list.index(card)
         card.gui_button.grid(row=math.floor(deck_index / 3), column=deck_index % 3, padx=2, pady=2)
@@ -21,6 +22,7 @@ def update_deck_display():
 
 
 def update_active_row_display(repeat=True):
+    """Update the active row display to reflect the current active row state."""
     # Show the max # of tokens you can have
     active_row_label.configure(text=f'ACTIVE ROW ({len(common.active_row.list)}/{common.active_row.max_length})')
 
@@ -39,6 +41,7 @@ def update_active_row_display(repeat=True):
 
 
 def update_particle_row_display(repeat=True):
+    """Update the particle row display to reflect the current particle row state."""
     for token in common.particle_row.list:
         token.gui_button.grid(row=1, column=common.particle_row.list.index(token))
 
@@ -47,6 +50,7 @@ def update_particle_row_display(repeat=True):
 
 
 def update_power_row_display(repeat=True):
+    """Update the power row display to reflect the current power row state."""
     # Show the max # of tokens you can have
     power_row_label.configure(text=f'POWER TOKENS ({len(common.power_row.list)}/{common.power_row.max_length})')
 
@@ -59,6 +63,7 @@ def update_power_row_display(repeat=True):
 
 
 def update_stat_display():
+    """Update the stat display to reflect the current game state."""
     stat_display_label.config(text=f'SCORE: {common.score}  |  DATA:  {common.data}')
     root.after(100, update_stat_display)
 

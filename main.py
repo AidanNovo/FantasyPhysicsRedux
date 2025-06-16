@@ -11,7 +11,6 @@ import common
 # TODO: Implement a GUI to reorganize your active row
 # TODO: Implement a basic score attack mode (ala Balatro, Nubby, Luck be a Landlord, etc.)
 # TODO: Implement outreach scaling
-# TODO: Fix bug where right clicking tokens sometimes crashes the program
 # TODO: Organize these modules better
 # TODO: Look into moving some of these functions into common.py or gui.py
 
@@ -19,13 +18,12 @@ import common
 def crack_booster_pack(pack_size=5,
                        draw_pool=tuple(cards.card_dict.keys()),
                        draw_weights=tuple(int(cards.card_dict[c].rarity) for c in cards.card_dict.keys())):
-    """
-    Add n randomly-chosen cards to the deck, weighted by rarity, with replacement.
+    """Add n randomly chosen cards to the deck, weighted by rarity, with replacement.
 
     Args:
-        pack_size: The number of cards to draw and add to deck.
-        draw_pool: A tuple of cards.card_dict keys comprising the pool to pick cards from.
-        draw_weights: The weights to draw cards with. Must be same size as draw_pool.
+        pack_size: The number of cards to draw and add to the deck.
+        draw_pool: A tuple of cards.card_dict keys comprising the pool to pick cards from. Defaults to all cards.
+        draw_weights: The weights to draw cards with. Must be the same size as draw_pool.
     """
 
     print('Opening a booster pack...')
@@ -45,19 +43,31 @@ def get_all_cards():
         create_item(card_name, holder=common.deck)
 
 
-def show_big_card(event, card):
-    """Create a window displaying a larger version of a card."""
+def show_big_item(event, item):
+    """Create a window displaying a larger version of an item.
+
+    Args:
+        event: The mouse-click event passed to this function by tkinter.
+        item: The card/token/etc object to be displayed.
+    """
+
     popup = tk.Toplevel(common.root)
-    big_image = card.large_image
+    big_image = item.large_image
     image_label = tk.Label(popup, image=big_image)
     image_label.pack()
 
 
 def initialize_item_gui_button(item, holder):
-    """Initialize the item's gui button and bind the right-click functionality."""
+    """Initialize an item's gui button and bind the right-click functionality.
+
+    Args:
+        item: The item being initialized.
+        holder: The CardHolder which the item is being initialized into.
+    """
+
     item.gui_button = tk.Button(holder.gui_frame)
-    item.gui_button.bind('<Button-2>', lambda event, c=item: show_big_card(event, c))  # r-click is Button-2 on Mac
-    item.gui_button.bind('<Button-3>', lambda event, c=item: show_big_card(event, c))  # r-click is Button-3 on PC
+    item.gui_button.bind('<Button-2>', lambda event, c=item: show_big_item(event, c))  # r-click is Button-2 on Mac
+    item.gui_button.bind('<Button-3>', lambda event, c=item: show_big_item(event, c))  # r-click is Button-3 on PC
 
 
 def initialize_item_image(item):
@@ -70,15 +80,34 @@ def initialize_item_image(item):
 
 
 def bind_item_instance_function(item, holder, h_index):
-    # Bind instance method
+    """Bind an item's main and prerun functions to the specific instance being initialized.
+
+    Note that this function must be called *after* the item is appended into its CardHolder.
+
+    Args:
+        item: The item being initialized.
+        holder: The CardHolder which the item is being initialized into.
+        h_index: The item's index in its CardHolder.
+    """
+    # To be honest, I do not fully understand this code, but it is very important.
+
+    # Bind the instance method
     holder.list[h_index].function = holder.list[h_index].function.__get__(holder.list[h_index], type(item))
 
-    # Bind prerun function if needed
+    # Bind the prerun function method (if needed)
     if item.prerun_function is not None:
         holder.list[h_index].prerun_function = holder.list[h_index].prerun_function.__get__(holder.list[h_index], type(item))
 
 
 def create_item(item_name, holder, h_index=-1):
+    """Create an item, append it to its holder, and bind the item's function to the instance created.
+
+    Args:
+        item_name: The name of the item to be created. Must be a key in cards.card_dict or cards.token_dict.
+        holder: The CardHolder which the item is being initialized into.
+        h_index: The item's index in its CardHolder. Defaults to -1, which is the end of the list.
+    """
+
     if len(holder.list) == holder.max_length:
         print(f'Could not add item to {holder}.')
 
@@ -94,13 +123,20 @@ def create_item(item_name, holder, h_index=-1):
 
         bind_item_instance_function(item, holder, h_index)
 
-        if holder == common.deck:  # Deck specific for now
+        # If the item is being initialized into the deck, bind the move_item function to the item's gui button.
+        if holder == common.deck:
             item.gui_button.configure(command=lambda c=item: move_item(c, common.deck, common.active_row))
-            # item_index = holder.list.index(item)
-            # item.gui_button.grid(row=math.floor(item_index / 3), column=item_index % 3, padx=2, pady=2)
 
 
 def move_item(item, old_holder, new_holder):
+    """Move an item from one CardHolder to another.
+
+    Args:
+        item: The item to be moved.
+        old_holder: The CardHolder which the item is being moved from.
+        new_holder: The CardHolder which the item is being moved to.
+    """
+
     if len(new_holder.list) == new_holder.max_length:
         print(f'Could not add item to {new_holder}.')
     else:
@@ -120,23 +156,30 @@ def move_item(item, old_holder, new_holder):
             item.gui_button.configure(command=lambda c=item: move_item(c, common.deck, common.active_row),
                                       compound=tk.NONE)
 
-        item.gui_button.bind('<Button-2>', lambda event, c=item: show_big_card(event, c))  # r-click is Button-2 on Mac
-        item.gui_button.bind('<Button-3>', lambda event, c=item: show_big_card(event, c))  # r-click is Button-3 on PC
+        item.gui_button.bind('<Button-2>', lambda event, c=item: show_big_item(event, c))  # r-click is Button-2 on Mac
+        item.gui_button.bind('<Button-3>', lambda event, c=item: show_big_item(event, c))  # r-click is Button-3 on PC
 
 
 def activate_cards(root):
-    # Note: We pass root (the tkinter root) as an argument just so that f_card_start and f_card_end can update the
-    # text display on card tokens.
-    # Rows is a dict of all item rows. Alongside other things in common, it fully encompasses the game state (or should)
+    """Activate all cards in the active row.
+
+    This is the function that contains the main game logic. Note that we pass root (the tkinter root) as an argument
+    just so that f_card_start and f_card_end can update the text display on card tokens.
+
+    Args:
+        root: The tkinter root.
+    """
+
+    # Rows is a dict of all item rows.
     rows = {'active': common.active_row,
             'particle': common.particle_row,
             'power': common.power_row, }
 
-    print('\nCard order:', common.active_row.list)
+    print('\nCard order:', common.active_row.list)  # For debugging purposes
 
     print('\n------PASSIVES-------')
-    # Process all prerun functions
-    # Prerun functions are not put on a stack
+    # Process all prerun functions. Note that they are not put on a stack
+    # TODO: Handle prerun functions with a stack.
     for card in common.active_row.list:
         if card.prerun_function is not None:
             card.prerun_function(rows, root)
@@ -146,9 +189,17 @@ def activate_cards(root):
     create_item('Power', common.power_row)
 
 
+    # We handle activating card and token abilities with a stack.
+    #
+    # The current card's activation and all token activations are placed into the stack, then we pop them off the top
+    # until the stack is empty. When an activation is popped off the stack, it is passed to each Interpreter in
+    # common.interpreters (in order), which do various things depending on the activation's attributes. The last
+    # Interpreter executes the function associated with the StackEvent.
+    #
+    # Then, we go on to the next card and repeat.
 
     for card in common.active_row.list:
-        # Fill up the whole stack...
+        # Fill up the stack...
         common.stack.append(common.StackEvent(card, card.function, (rows, root)))
 
         for token in reversed(common.power_row.list):  # Reversed to fill the stack in a user-intuitive order (L->R)
@@ -157,11 +208,12 @@ def activate_cards(root):
         for token in reversed(common.particle_row.list):
             common.stack.append(common.StackEvent(token, token.function, (rows, root)))
 
-        # ...then empty the whole stack
+        # ...then empty the stack.
         while common.stack:  # While the stack is not empty
             event = common.stack.pop()
 
-            for interpreter in list(common.interpreters):  # Use list() to 'freeze' the deque and prevent a RuntimeError
+            # Use list() to 'freeze' the interpreters deque and prevent a RuntimeError.
+            for interpreter in list(common.interpreters):
                 interpreter.function(event)
 
     print('---------END---------')

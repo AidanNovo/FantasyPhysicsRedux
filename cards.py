@@ -114,7 +114,14 @@ class Token(Item):
 
 
 def item_factory(item_name):
-    """Factory method."""
+    """Return a deepcopy of an item from card_dict/token_dict.
+
+    Args:
+        item_name: The desired item's key in card_dict/token_dict.
+
+    Returns:
+        A deepcopy of the item associated with the given key.
+    """
 
     global card_dict
     global token_dict
@@ -123,7 +130,6 @@ def item_factory(item_name):
         return deepcopy(card_dict[item_name])
     except KeyError:
         return deepcopy(token_dict[item_name])
-
 
 
 # Huge master dict of all the cards and their effects.
