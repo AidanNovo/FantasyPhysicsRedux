@@ -275,3 +275,26 @@ So, the structure will be:
     - token class
       - particle class?
   - observer class (maybe a subclass of item) (maybe rename to interpreter)
+
+## Game Loop Brainstorming
+
+Engine:
+Generate particles
+Detector attempts to analyze all particles present. Detectors may run into issues:
+- Bandwidth/Uptime -- too many particles to detect them all
+- Energy issues -- particle may be too high energy to be stopped? Depends on detector I think
+Detector then generates a stack of data tokens
+Analysis cards will then refine that data token stack
+- "Upgrade" the value of the data (reconstruction?)
+- ""
+
+And then ONLY your topic cards can generate score from the data
+- Alternative idea: make there be some generic way to evaluate the value of the data, so you always get some score from data. But then, the topic cards give you some bonuses and 'direction' for your build
+
+
+I want there to be a basic game loop where you have rounds with "shops" in between
+- Maybe each game loop is a "year" 
+  - Though keep in mind that theming the rounds adds in another layer of constraint. You start to need to worry about whether a year is a realistic time frame for things
+
+Side idea:
+- Figure out what the mechanics of a token stack are
