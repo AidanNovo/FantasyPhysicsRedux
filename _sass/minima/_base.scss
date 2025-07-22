@@ -476,6 +476,7 @@ table {
 
 .bg {
   /* The image used */
+  //background-image: url("{{ 'images/bground.png' | relative_url }}");
   background-image: url('images/bground.png');
   //background-image: url('http://127.0.0.1:4000/assets/images/bground.png');
 
