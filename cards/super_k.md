@@ -30,5 +30,5 @@ Super K is looking for neutrinos from a mix of sources. Many of them come from d
 produce a large number of neutrinos when they explode. Because neutrinos so rarely interact, they can travel incredibly 
 far distances, carrying information about far-off astrophysical phenomena. This makes them very interesting to study.
 
-### Want to learn more? Check out their website!
-[https://www-sk.icrr.u-tokyo.ac.jp/en/]
+### Want to learn more?
+Check out the experiment's [official page](https://www-sk.icrr.u-tokyo.ac.jp/en/)!

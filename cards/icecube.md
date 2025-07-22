@@ -31,5 +31,5 @@ While neutrinos' properties make them hard to detect, this also means they can t
 our own Sun produces solar neutrinos which can travel all the way to Earth undisturbed. Other stars also produce 
 neutrinos, especially when they go supernova. IceCube's size allows it to detect these high-energy neutrinos.
 
-### Want to learn more? Check out their website!
-https://icecube.wisc.edu/
+### Want to learn more?
+Check out the experiment's [official page](https://icecube.wisc.edu/)!

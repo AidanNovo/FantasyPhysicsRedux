@@ -37,6 +37,7 @@
 .site-nav {
   float: right;
   line-height: $base-line-height * $base-font-size * 2.25;
+  z-index: 2;
 
   .nav-trigger {
       display: none;
@@ -96,6 +97,7 @@
     input:checked ~ .trigger {
       display: block;
       padding-bottom: 5px;
+      border: red;
     }
 
     .page-link {
@@ -318,9 +320,12 @@
     }
     .left-column {
         order: 1;
+        padding-top: 1.5rem;
     }
     .right-column {
         position: relative; /* Remove sticky on small screens if stacked */
         //order: -1;
+        border-bottom: 2px solid $grey-color-light;
+        padding-bottom: 2.0rem;
     }
 }
