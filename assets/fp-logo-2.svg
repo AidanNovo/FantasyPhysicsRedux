@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" >
+	<title>Fantasy Physics Logo Design</title>
+	<style>
+		tspan { white-space:pre }
+		.s0 { fill: #ffffff }
+		.s1 { fill: none;stroke: #ffffff; stroke-miterlimit:100; stroke-width: 15 }
+		.s2 { fill: none;stroke: #c5c5c5; stroke-miterlimit:100; stroke-width: 15 }
+	</style>
+	<g id="img">
+		<path id="Nucleus" transform="scale(0.07)" fill-rule="evenodd" class="s0" d="m249.5 267c-9.7 0-17.5-7.8-17.5-17.5 0-9.7 7.8-17.5 17.5-17.5 9.7 0 17.5 7.8 17.5 17.5 0 9.7-7.8 17.5-17.5 17.5z"/>
+		<path id="F tilted" transform="scale(0.07)" fill-rule="evenodd" class="s1" d="m295 177c0 0 0-7.1 0-32 0-24.9-19.9-45-45-45-25.1 0-45 20-45 45 0 25 0 99 0 129 0 40-14.6 45.5-38 54-23.4 8.5-49.5-3.5-58-27-8.5-23.5 3.4-48.9 27-57 23.6-8.1 155-57 155-57"/>
+		<path id="Ring" transform="scale(0.07)" fill-rule="evenodd" class="s2" d="m294 226l67.8 47.4c20.4 14.2 25.3 42.3 11.1 62.6-14.3 20.4-42.3 25.3-62.7 11.1l-172-120.5c-20.4-14.2-25.3-42.3-11.1-62.6 14.3-20.4 42.3-25.3 62.7-11.1l67.2 47.1"/>
+		<path id="Ring copy" transform="scale(0.07)" fill-rule="evenodd" class="s2" d="m294 226l67.8 47.4c20.4 14.2 25.3 42.3 11.1 62.6-14.3 20.4-42.3 25.3-62.7 11.1l-172-120.5c-20.4-14.2-25.3-42.3-11.1-62.6 14.3-20.4 42.3-25.3 62.7-11.1l67.2 47.1"/>
+		<path id="P tilted" transform="scale(0.07)" fill-rule="evenodd" class="s1" d="m295 281c0 0 45.5-16.5 69-25 23.5-8.5 35.4-33.5 27-57-8.4-23.5-34.5-35.5-58-27-23.5 8.5-38 14-38 14 0 0 0 144 0 169 0 25-20 44.9-45 45-25 0.1-45-20.1-45-45 0-12.3 0-16.8 0-16.8"/>
+		<path id="P end vector" transform="scale(0.07)" class="s0" d="m197.5 339v-2.6c0 0 7.1-4 15-13.7v16.3z"/>
+	</g>
+</svg>
