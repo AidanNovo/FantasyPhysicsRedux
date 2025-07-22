@@ -1,0 +1,27 @@
+---
+layout: default
+---
+<article class="post">
+
+    <div class="container-wrapper">
+        <!-- Left Column: Scrollable Markdown Content -->
+        <div class="left-column">
+            <!-- Post Header -->
+            <header class="post-header">
+            <h1 class="post-title">{{ page.title | escape }}</h1>
+            </header>
+
+            <div class="post-content">
+                {{ content }}
+            </div>
+        </div>
+
+        <!-- Right Column: Fixed Image -->
+        <div class="right-column">
+            <!-- Use page.image_url for the image source -->
+            <img src="{{ page.image_url | default: 'https://placehold.co/1200x800/A78BFA/FFFFFF?text=Placeholder+Image' }}"
+                 alt="{{ page.image_alt | default: 'Descriptive Image' }}">
+        </div>
+    </div>
+
+</article>
