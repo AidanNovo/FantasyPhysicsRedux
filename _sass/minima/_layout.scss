@@ -308,13 +308,19 @@
 @media (max-width: 768px) {
     .container-wrapper {
         flex-direction: column; /* Stack columns vertically on small screens */
+        height: 100%; /* As much space as is needed */
     }
     .left-column, .right-column {
         width: 100%; /* Full width for both columns */
         height: auto; /* Auto height for content */
         min-height: 50vh; /* Ensure some height for both */
+        padding: 0.5rem;
+    }
+    .left-column {
+        order: 1;
     }
     .right-column {
         position: relative; /* Remove sticky on small screens if stacked */
+        //order: -1;
     }
 }
