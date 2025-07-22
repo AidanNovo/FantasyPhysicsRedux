@@ -23,6 +23,8 @@ rarely, can interact and create a shower of charged particles. These particles c
 (which travels more slowly in water), creating Cherenkov radiation. Think of it like a sonic boom but with light! These 
 flashes of light are seen by the photomultiplier tubes, signaling the possible presence of a neutrino! 
 
+Interested in Cherenkov radiation? Check out the [Icecube]({{ 'cards/icecube' | relative_url}}) experiment!
+
 ### What is it looking for?
 
 Super K is looking for neutrinos from a mix of sources. Many of them come from deep space! For example, supernovae 

@@ -3,26 +3,14 @@
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
 layout: home
+title: Home Page
 ---
 
-Testing testing testing 1 2 3 blah blah blah
+---
+# Welcome!
 
-Testing testing testing 1 2 3 blah blah blah
+Hello, person looking at the beta version of this site! This is currently very much a work-in-progress, so all there is
+to see at the moment is the [card info pages]({{ 'cards' | relative_url}}). You can also poke around the rest of the site to look at what I have done,
+if you so wish.
 
-Testing testing testing 1 2 3 blah blah blah
-
-Testing testing testing 1 2 3 blah blah blah
-
-Testing testing testing 1 2 3 blah blah blah
-
-Testing testing testing 1 2 3 blah blah blah
-
-Testing testing testing 1 2 3 blah blah blah
-
-Testing testing testing 1 2 3 blah blah blah
-
-Testing testing testing 1 2 3 blah blah blah
-
-Testing testing testing 1 2 3 blah blah blah
-
-Testing testing testing 1 2 3 blah blah blah
+---

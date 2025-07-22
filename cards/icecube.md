@@ -24,7 +24,7 @@ barrier makes a sonic boom. This light, called Cherenkov radiation, is what the 
 DOMs send this data to the IceCube Lab, where it can be analyzed by scientists to learn more about the neutrino that
 produced it.
 
-Interested in Cherenkov radiation? Check out the [Super-Kamiokande](dead_link_for_now) experiment!
+Interested in Cherenkov radiation? Check out the [Super-Kamiokande]({{ 'cards/super_k' | relative_url}}) experiment!
 
 ### What is it looking for?
 While neutrinos' properties make them hard to detect, this also means they can travel very long distances. For example, 
