@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: default_no_footer
 ---
 <article class="post">
 
@@ -14,6 +14,8 @@ layout: default
             <div class="post-content">
                 {{ content }}
             </div>
+
+            {%- include footer.html -%}
         </div>
 
         <!-- Right Column: Fixed Image -->
