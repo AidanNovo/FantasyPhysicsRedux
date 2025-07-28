@@ -21,7 +21,7 @@
 title: Fantasy Physics
 email: aidannovo@ku.edu
 description: >- # this means to ignore newlines until "baseurl:"
-  Fantasy Physics was developed at the University of Kansas's Department of Physics and Astronomy.
+  Fantasy Physics was developed at the University of Kansas's Department of Physics & Astronomy.
 baseurl: "/FantasyPhysicsRedux" # the subpath of your site, e.g. /blog
 url: "https://aidannovo.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 #twitter_username: jekyllrb
