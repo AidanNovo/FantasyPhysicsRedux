@@ -1,8 +1,8 @@
 ---
 layout: two_column
-title: IceCube
+title: IceCube2
 image_url: https://raw.githubusercontent.com/AidanNovo/FantasyPhysicsRedux/refs/heads/main/card_images/fp_icecube.png
-image_alt: The card for the IceCube Detector
+image_alt: 2 The card for the IceCube Detector 
 card_page: true
 ---
 ## **DETECTOR // Neutrino, Astro** 

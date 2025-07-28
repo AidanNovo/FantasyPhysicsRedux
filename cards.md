@@ -16,3 +16,43 @@ Look into the ways that some themes do those portfolio pages!
 * [Super-Kamiokande]({{ 'cards/super_k' | relative_url}})
 
 Also, ideally this whole thing would be automatically-populated, which will surely be easy to do.
+
+Auto-populated list of card pages with links. (Works by including card_page: true in frontmatter)
+
+[//]: # (<ul>)
+
+[//]: # ({%- for page in site.pages -%})
+
+[//]: # (    {%- if page.card_page == true -%}  )
+
+[//]: # (        <li>)
+
+[//]: # (            <a href="{{ page.url }}"> {{ page.title }}</a>)
+
+[//]: # (            <img src="{{ page.image_url }}" alt="image">)
+
+[//]: # (        </li> )
+
+[//]: # (    {%- endif -%}  )
+
+[//]: # ({%- endfor -%})
+
+[//]: # (</ul>)
+
+<div class="card-directory-col-wrapper">
+{%- for page in site.pages -%}
+    {%- if page.card_page == true -%}  
+        <a class="card-directory-img" href="{{ page.url }}">
+        <img
+             src="{{ page.image_url | default: 'https://placehold.co/1200x800/A78BFA/FFFFFF?text=Placeholder+Image' }}"
+             alt="{{ page.image_alt | default: 'Descriptive Image' }}">
+        </a>
+    {%- endif -%}  
+{%- endfor -%}
+</div>
+
+[//]: # (<img src="{{ page.image_url | default: 'https://placehold.co/1200x800/A78BFA/FFFFFF?text=Placeholder+Image' }}")
+
+[//]: # (                 alt="{{ page.image_alt | default: 'Descriptive Image' }}">)
+
+More contents

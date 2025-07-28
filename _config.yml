@@ -32,6 +32,14 @@ header_pages:
   - download.md
   - glossary.md
 
+defaults:
+  -
+    scope:
+      path: "" # an empty string here means all files in the project
+      type: "pages"
+    values:
+      card_page: "false" # mark pages as non-card by default
+
 # Build settings
 theme: minima
 plugins:

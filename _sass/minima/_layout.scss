@@ -114,7 +114,7 @@
 
 
 
-/**
+/*
  * Site footer
  */
 .site-footer {
@@ -184,7 +184,7 @@
 
 
 
-/**
+/*
  * Page content
  */
 .page-content {
@@ -266,11 +266,11 @@
   }
 }
 
-/**
+/*
  * Card Pages
  */
 
-.container-wrapper {
+.card-page-col-wrapper {
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -308,7 +308,7 @@
 
 /* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
-    .container-wrapper {
+    .card-page-col-wrapper {
         flex-direction: column; /* Stack columns vertically on small screens */
         height: 100%; /* As much space as is needed */
     }
@@ -328,4 +328,30 @@
         border-bottom: 2px solid $grey-color-light;
         padding-bottom: 2.0rem;
     }
+}
+
+/*
+ * Card Directory Page Style
+ */
+
+.card-directory-col-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    //width: 100%;
+    //height: 100%;
+    //overflow: hidden;
+    //margin-top: $spacing-unit * 1.865; // Add margin to account for header
+}
+
+.card-directory-img {
+    //width: calc(100% / 4);
+    min-width: 250px;
+    max-width: 500px;
+    //width: 350px;
+    flex: 0 1 min(calc(100% / 3), 500px);
+    //flex: auto;
+    box-sizing: border-box;
+    padding: 1.5rem;
+    border: 1px solid $grey-color-light; // debug
 }

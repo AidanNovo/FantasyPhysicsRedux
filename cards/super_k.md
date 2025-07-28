@@ -3,6 +3,7 @@ layout: two_column
 title: Super-Kamiokande
 image_url: https://raw.githubusercontent.com/AidanNovo/FantasyPhysicsRedux/refs/heads/main/card_images/fp_super_k.png
 image_alt: The card for the Super-Kamiokande Detector
+card_page: true # Make it appear in the card page listing
 ---
 ## **DETECTOR // Neutrino, Astro** 
 ### _Common_
