@@ -42,7 +42,7 @@ Auto-populated list of card pages with links. (Works by including card_page: tru
 <div class="card-directory-col-wrapper">
 {%- for page in site.pages -%}
     {%- if page.card_page == true -%}  
-        <a class="card-directory-img" href="{{ page.url }}">
+        <a class="card-directory-img" href="{{ page.url | relative_url}}">
         <img
              src="{{ page.image_url | default: 'https://placehold.co/1200x800/A78BFA/FFFFFF?text=Placeholder+Image' }}"
              alt="{{ page.image_alt | default: 'Descriptive Image' }}">
