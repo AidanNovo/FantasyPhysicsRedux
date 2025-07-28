@@ -119,6 +119,7 @@
  */
 .site-footer {
   border-top: 1px solid $grey-color-light;
+  background-color: rgba(0, 0, 0, 0.4);
   padding: $spacing-unit 0;
 }
 
@@ -353,5 +354,5 @@
     //flex: auto;
     box-sizing: border-box;
     padding: 1.5rem;
-    border: 1px solid $grey-color-light; // debug
+    //border: 1px solid $grey-color-light; // debug
 }

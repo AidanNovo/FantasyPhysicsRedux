@@ -15,7 +15,10 @@ layout: default_no_footer
                 {{ content }}
             </div>
 
-            {%- include footer.html -%}
+            <!-- Hacky workaround to make the footer have borders on all sides when displaying on a card page -->
+            <div style="border: 1px solid">
+                {%- include footer.html -%}
+            </div>
         </div>
 
         <!-- Right Column: Fixed Image -->
