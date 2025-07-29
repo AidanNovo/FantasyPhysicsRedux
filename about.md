@@ -18,6 +18,8 @@ serve as a launchpad for interested students to learn more.
 Originally conceived in 2018 by Professor Christopher Rogan, the project was revived in 2024 under a new design vision 
 proposed by Aidan Novo.
 
+---
+
 ## **The Creators**
 
 ### _Dr. Christopher Rogan_
