@@ -424,6 +424,7 @@ table {
   /* The image used */
   background-image: url('images/space_bg.png');
 
+
   /* Full height */
   height: 100%;
 
@@ -437,4 +438,39 @@ table {
 hr {
   border: none;
   border-top: 2px solid $grey-color-light;
+  margin: 20px 0;
+}
+
+html {
+  background-color: #000000;
+}
+
+.terminal {
+    padding: 20px;
+    border: 2px solid $grey-color-light;
+    border-top: 40px solid $grey-color-light;
+    background-color: rgba(0, 0, 0, 0.4);
+    position: relative;
+    //flex-basis: content;
+    width: fit-content;
+    border-radius: 10px;
+    //width: 100%;
+}
+
+.terminal::before {
+  //color: #2c0049;
+  //content: 'user@fantasy-physics';
+  content: '';
+  font-family: monospace;
+  animation: none;
+  //animation-play-state: paused;
+  position: absolute;
+  //vertical-align: middle;
+  flex-shrink: 0;
+  top: -29px;
+  left: 9px;
+  width: 20px;
+  height: 20px;
+  background-color: $brand-color; /* Red "close" button */
+  border-radius: 50%;
 }

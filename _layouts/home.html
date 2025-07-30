@@ -1,34 +1,84 @@
----
-layout: default
----
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
 
-<div class="home">
-  {%- if page.title -%}
-    <h1 class="page-heading">{{ page.title }}</h1>
-  {%- endif -%}
+  {%- include head.html -%}
 
-  {{ content }}
+  <body class="crt bg">
 
-  {%- if site.posts.size > 0 -%}
-    <h2 class="post-list-heading">{{ page.list_title | default: "Posts" }}</h2>
-    <ul class="post-list">
-      {%- for post in site.posts -%}
-      <li>
-        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-        <span class="post-meta">{{ post.date | date: date_format }}</span>
-        <h3>
-          <a class="post-link" href="{{ post.url | relative_url }}">
-            {{ post.title | escape }}
-          </a>
-        </h3>
-        {%- if site.show_excerpts -%}
-          {{ post.excerpt }}
-        {%- endif -%}
-      </li>
-      {%- endfor -%}
-    </ul>
+    {%- include header.html -%}
 
-    <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>
-  {%- endif -%}
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="home">
+<!--          {%- if page.title -%}-->
+<!--            <h1 class="page-heading">{{ page.title }}</h1>-->
+<!--          {%- endif -%}-->
+            <div class="home-top-wrapper">
+              <div class="homepage-title-wrapper">
+              <img src="{{ '/assets/fp_logo.svg' | relative_url }}" alt="logo" class="homepage-site-icon">
+              <h1 class="homepage-site-title">
+                Fantasy Physics
+              </h1>
 
-</div>
+              </div>
+                <div style="text-align: center; margin-top: -20px; font-size: 1.2em">
+                    <i>Collect Cards | Find Synergies | Learn HEP </i>
+                </div>
+
+
+
+    <!--                    <div class="trigger">-->
+    <!--          {%- for path in page_paths -%}-->
+    <!--            {%- assign my_page = site.pages | where: "path", path | first -%}-->
+    <!--            {%- if my_page.title -%}-->
+    <!--            <a class="page-link" href="{{ my_page.url | relative_url }}">{{ my_page.title | escape }}</a>-->
+    <!--            {%- endif -%}-->
+    <!--          {%- endfor -%}-->
+    <!--        </div>-->
+              <div class="terminal homepage-nav-wrapper">
+                  <a class="homepage-nav-link" href="{{ 'cards/' | relative_url }}">[ SEE THE CARDS ]</a>
+                  or
+                  <a class="homepage-nav-link" href="{{ 'cards/' | relative_url }}">[ PLAY THE DEMO ]</a>
+<!--              {%- for path in site.header_pages -%}-->
+<!--                {%- assign my_page = site.pages | where: "path", path | first -%}-->
+<!--                {%- if my_page.title -%}-->
+<!--                <a class="homepage-nav-link" href="{{ my_page.url | relative_url }}">{{ my_page.title | escape }}</a>-->
+<!--                {%- endif -%}-->
+<!--              {%- endfor -%}-->
+              </div>
+          </div>
+
+          {{ content }}
+
+<!--          {%- if site.posts.size > 0 -%}-->
+<!--            <h2 class="post-list-heading">{{ page.list_title | default: "Posts" }}</h2>-->
+<!--            <ul class="post-list">-->
+<!--              {%- for post in site.posts -%}-->
+<!--              <li>-->
+<!--                {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}-->
+<!--                <span class="post-meta">{{ post.date | date: date_format }}</span>-->
+<!--                <h3>-->
+<!--                  <a class="post-link" href="{{ post.url | relative_url }}">-->
+<!--                    {{ post.title | escape }}-->
+<!--                  </a>-->
+<!--                </h3>-->
+<!--                {%- if site.show_excerpts -%}-->
+<!--                  {{ post.excerpt }}-->
+<!--                {%- endif -%}-->
+<!--              </li>-->
+<!--              {%- endfor -%}-->
+<!--            </ul>-->
+
+<!--            <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>-->
+<!--          {%- endif -%}-->
+
+        </div>
+      </div>
+    </main>
+
+  {%- include footer.html -%}
+
+  </body>
+
+</html>
+

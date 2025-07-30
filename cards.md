@@ -4,6 +4,7 @@ title: Cards
 permalink: /cards/
 ---
 
+[//]: # (<span class="terminal">)
 This is where all the cards go.
 I am imagining a bunch of floating card images that you can click on
 in order to go to the cards' pages.
@@ -19,6 +20,8 @@ Also, ideally this whole thing would be automatically-populated, which will sure
 
 Auto-populated list of card pages with links. (Works by including card_page: true in frontmatter)
 
+[//]: # (</span>)
+
 ---
 
 <div class="card-directory-col-wrapper">
@@ -26,7 +29,7 @@ Auto-populated list of card pages with links. (Works by including card_page: tru
     {%- if page.card_page == true -%}  
         <a class="card-directory-img" href="{{ page.url | relative_url}}">
         <img
-             src="{{ page.image_url | default: 'https://placehold.co/1200x800/A78BFA/FFFFFF?text=Placeholder+Image' }}"
+             src="{{ page.image_url | default: 'https://placehold.co/500x700/A78BFA/FFFFFF?text=Placeholder+Image' }}"
              alt="{{ page.image_alt | default: 'Descriptive Image' }}">
         </a>
     {%- endif -%}  

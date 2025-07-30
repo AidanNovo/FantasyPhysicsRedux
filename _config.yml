@@ -27,10 +27,11 @@ url: "https://aidannovo.github.io" # the base hostname & protocol for your site,
 #twitter_username: jekyllrb
 github_username: AidanNovo
 header_pages:
-  - about.md
   - cards.md
   - download.md
   - glossary.md
+  - blog.md
+  - about.md
 
 defaults:
   -

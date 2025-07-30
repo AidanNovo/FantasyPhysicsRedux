@@ -26,7 +26,7 @@
   }
 }
 
-.site-icon {
+.nav-site-icon {
     width: 40px;
     height: 40px;
     display: inline-block;
@@ -282,18 +282,19 @@
 .left-column {
     overflow-y: auto; /* Make the left column scrollable */
     height: 100%; // Will inherit height from container-wrapper
-    width: 60%;
+    width: 100%;
     /* Add padding to prevent text from touching edges */
-    padding-right: 1.5rem;
+    padding-right: 2rem;
     box-sizing: border-box;
 }
 .right-column {
     position: sticky; /* Sticky position for the image */
     right: 0;
     top: 0; /* Stick to the top of its container */
+    flex-shrink: 0.8;
     height: 100%; // Subtract header height
     //height: 100vh; /* Take full viewport height */
-    width: 40%;
+    width: 60%;
     display: flex; /* Use flexbox to center the image */
     align-items: center; /* Center vertically */
     justify-content: center; /* Center horizontally */
@@ -356,3 +357,91 @@
     padding: 1.5rem;
     //border: 1px solid $grey-color-light; // debug
 }
+
+/*
+ * Home Page Style
+ */
+.home-top-wrapper {
+  margin: 100px auto;
+}
+
+
+.homepage-title-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    margin: 40px auto;
+    //height: 100vh;
+}
+
+.homepage-site-title {
+  @include relative-font-size(4);
+  //color: $text-color;
+  font-weight: 500;
+  line-height: $base-line-height * $base-font-size * 2.25;
+  letter-spacing: -1px;
+  margin-bottom: 0;
+  flex-shrink: 1;
+
+  &,
+  &:visited {
+    color: $text-color;
+  }
+}
+
+.homepage-site-icon {
+    width: 80px;
+    height: 80px;
+    display: inline-block;
+    //flex-shrink: 0;
+    padding-right: 10px;
+    vertical-align: middle;
+}
+
+.homepage-nav-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 80%;
+    margin: 20px auto;
+}
+
+.homepage-nav-link {
+    @include relative-font-size(1.5);
+    font-family: monospace;
+    color: $text-color;
+    text-decoration: none;
+    font-weight: 500;
+    //font-size: 1.25rem;
+    //width: 300px;
+    text-align: center;
+    //padding: 1.5rem 2.5rem;
+    margin: 1rem 1rem;
+    //border-radius: 40px;
+    //background-color: rgba(0, 0, 0, 0.4);
+
+    //&:hover {
+    //  background-color: rgba(0, 0, 0, 0.6);
+    //}
+
+    &:visited {
+      color: $text-color;
+    }
+}
+
+@media (max-width: 755px) {
+  .homepage-site-title {
+    max-width: min-content;
+  }
+
+  .homepage-site-icon {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+

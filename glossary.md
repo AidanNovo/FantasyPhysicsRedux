@@ -4,9 +4,13 @@ title: Glossary
 permalink: /glossary/
 ---
 
+[//]: # (<div class="terminal">)
+[//]: # (<markdown>)
 ### Cherenkov Radiation
 A flash of light that happens as a result of a particle traveling faster than the speed of light through a given medium. This is very similar to a sonic boom. The speed of light is different based on what it is traveling through, for example light travels slower in water than in air. This is why experiments like Icecube and Super Kamiokande use water or ice.
 
+[//]: # (</markdown>)
+[//]: # (</div>)
 ---
 
 ### Lepton

@@ -7,10 +7,9 @@ title: Home Page
 ---
 
 ---
+
 # Welcome!
 
-Hello, person looking at the beta version of this site! This is currently very much a work-in-progress, so all there is
-to see at the moment is the [card info pages]({{ 'cards' | relative_url}}). You can also poke around the rest of the site to look at what I have done,
-if you so wish.
-
----
+Hello, person looking at the beta version of this site! This is still quite a work-in-progress, especially the mobile
+version of the site. But there is plenty to take a look at! Poke around and explore! (This blurb is probably the next
+bit to go)
