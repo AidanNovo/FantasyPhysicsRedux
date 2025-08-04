@@ -5,6 +5,7 @@ image_url: https://raw.githubusercontent.com/AidanNovo/FantasyPhysicsRedux/refs/
 image_alt: The card for the IceCube Detector
 card_page: true
 ---
+
 ## **DETECTOR // Neutrino, Astro** 
 ### _Common_
 

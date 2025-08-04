@@ -1,0 +1,24 @@
+<!-- Parameters -->
+<!--      image: link to headshot picture-->
+<!--       name: name to display at top of bio-->
+<!--      email: email to display under name-->
+<!--    content: contents of bio-->
+
+<div class="about-bio-wrapper">
+    <div class="about-bio-left-col">
+        <img class="about-bio-image" src="{{ include.image }}">
+<!--        You could possibly include some email/github page/other links in here to display under the portrait-->
+<!--        <a class="u-email" href="mailto:{{ include.email }}">{{ include.email }}</a>-->
+    </div>
+
+    <div>
+
+    <h3 style="margin-bottom: 0;"> {{ include.name }} </h3>
+    <a class="u-email" href="mailto:{{ include.email }}">{{ include.email }}</a>
+    <br><br>
+
+    {{ include.content }}
+
+    </div>
+
+</div>

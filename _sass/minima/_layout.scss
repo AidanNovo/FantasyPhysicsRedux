@@ -444,4 +444,40 @@
   }
 }
 
+/*
+ * About Page Styles
+ */
+
+.about-bio-wrapper {
+  display: flex;
+  flex-direction: row;
+  background-color: rgba(0,0,0,0.4);
+  border: 2px solid $grey-color-light;
+  margin-bottom: 2em;
+  padding: 1em ;
+}
+
+.about-bio-left-col {
+  margin-right: 1em;
+  flex: 0 0 auto;
+  width: 200px;
+}
+
+.about-bio-image {
+  //min-width: 200px;
+  //height: 200px;
+
+}
+
+@media (max-width: 450px) {
+  .about-bio-wrapper {
+    flex-direction: column;
+  }
+
+  .about-bio-left-col {
+    width: 100%;
+    margin-bottom: 1em;
+  }
+}
+
 
