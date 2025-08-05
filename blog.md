@@ -4,8 +4,6 @@ title: Blog
 permalink: /blog/
 ---
 
-Here is the content of the blog page!
-
 {% if site.posts.size > 0 %}
 
   <h2 class="post-list-heading">{{ page.list_title | default: "Posts" }}</h2>

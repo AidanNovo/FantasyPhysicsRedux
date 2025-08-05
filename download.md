@@ -4,6 +4,5 @@ title: Download
 permalink: /download/
 ---
 
-One day this will be the place people can come to in order to download a demo of the game.
-
-Perhaps it should be custom-formatted with HTML, rather than just a markdown page.
+Fantasy Physics is currently in its demo phase, meaning there is no full game to play yet. However, there is a demo 
+designed to show off how different cards interact together 

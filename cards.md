@@ -1,28 +1,19 @@
 ---
-layout: page
-title: Cards
+layout: cards
+title: Browse the Cards
 permalink: /cards/
 ---
 
-[//]: # (<span class="terminal">)
-This is where all the cards go.
-I am imagining a bunch of floating card images that you can click on
-in order to go to the cards' pages.
+<div style="display: flex; flex-direction: row; justify-content: center">
 
-This also should maybe not be a markdown formatted page.
-Look into the ways that some themes do those portfolio pages!
+<hr style="flex: 1 1 auto; margin-right: 5px">
 
-**Card Page Directory (temporary)**
-* [IceCube]({{ 'cards/icecube' | relative_url}})
-* [Super-Kamiokande]({{ 'cards/super_k' | relative_url}})
+<h3 style="text-align: center"><i> click a card to visit its page and learn more </i></h3>
+<hr style="flex: 1 1 auto; margin-left: 5px">
 
-Also, ideally this whole thing would be automatically-populated, which will surely be easy to do.
+</div>
 
-Auto-populated list of card pages with links. (Works by including card_page: true in frontmatter)
-
-[//]: # (</span>)
-
----
+[//]: # (---)
 
 <div class="card-directory-col-wrapper">
 {%- for page in site.pages -%}
