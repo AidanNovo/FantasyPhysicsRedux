@@ -67,12 +67,14 @@ revival in 2024.
 
 {% include about-bio.html 
 name="Paige Trevarrow" 
-email="placeholder@ku.edu"
+email="ptrevarrow@ku.edu"
 image="https://placehold.co/500x500"
 content=
 "
-Paige Trevarrow is a ...
+Paige Trevarrow is a 3rd-year graduate student at the University of Kansas. She is a member of Dr. Maria Brigida Brunetti's
+research group and works with the DUNE collaboration. She is also serving as an officer of the Graduate Student Organization
+in the physics department at KU. 
 <br><br>
-(The rest of the Paige blurb goes here. Should probably have her write it.)
+She has served as... (still working on the wording here)
 "
 %}
