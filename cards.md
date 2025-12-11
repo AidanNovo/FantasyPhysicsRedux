@@ -53,15 +53,6 @@ permalink: /cards/
     {%- endif -%}  
 {%- endfor -%}
 {%- for page in site.pages -%}
-    {%- if page.card_page == true and page.card_type == "token" -%}  
-        <a class="card-directory-img" href="{{ page.url | relative_url}}">
-        <img
-             src="{{ page.image_url | default: 'https://placehold.co/500x700/A78BFA/FFFFFF?text=Placeholder+Image' }}"
-             alt="{{ page.image_alt | default: 'Descriptive Image' }}">
-        </a>
-    {%- endif -%}  
-{%- endfor -%}
-{%- for page in site.pages -%}
     {%- if page.card_page == true and page.card_type == "placeholder" -%}  
         <a class="card-directory-img" href="{{ page.url | relative_url}}">
         <img
@@ -71,3 +62,23 @@ permalink: /cards/
     {%- endif -%}  
 {%- endfor -%}
 </div>
+
+<div style="display: flex; flex-direction: row; justify-content: center">
+
+<hr style="flex: 1 1 auto; margin-right: 5px; margin-left: 5px">
+
+</div>
+
+
+<div class="card-directory-col-wrapper">
+{%- for page in site.pages -%}
+    {%- if page.card_page == true and page.card_type == "token" -%}  
+        <a class="card-directory-img" href="{{ page.url | relative_url}}">
+        <img
+             src="{{ page.image_url | default: 'https://placehold.co/500x700/A78BFA/FFFFFF?text=Placeholder+Image' }}"
+             alt="{{ page.image_alt | default: 'Descriptive Image' }}">
+        </a>
+    {%- endif -%}  
+{%- endfor -%}
+</div>
+
