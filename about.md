@@ -18,8 +18,8 @@ represented by a [collectable card]({{ 'cards/' | relative_url}}). This website 
 card alongside more detailed descriptions of the physics at play, as well as helpful links to experiment homepages to 
 serve as a launchpad for interested students to learn more.
 
-Originally conceived in 2018 by Professor Christopher Rogan, the project was revived in 2024 under a new design vision 
-proposed by Aidan Novo.
+Originally conceived in 2018 by Professor Christopher Rogan, the project evolved into its current form in 2024 under a 
+new design vision proposed by Aidan Novo.
 
 ---
 
@@ -36,8 +36,8 @@ Dr. Christopher Rogan is an Associate Professor at the University of Kansas's De
 his research focusing on Experimental High Energy. He received his AB from the Department of Physics at Princeton 
 University and both his Masters of Science and Ph.D degrees from the California Institute of Technology.
 <br><br>
-Dr. Rogan conceived of the original version of the Fantasy Physics project in 2018 and has served as the primary physics 
-consultant advisor since the project was revived in 2024.
+Working with students, Dr. Rogan conceived of the original version of the Fantasy Physics project in 2018 and has served
+as the primary physics consultant and advisor up through its most recent evolution in 2024.
 "
 %}
 
