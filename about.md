@@ -25,34 +25,42 @@ proposed by Aidan Novo.
 
 ## **The Creators**
 
+{% capture rogan_portrait %} {{ '/assets/images/rogan_about_portrait.png' | absolute_url }} {% endcapture %}
 {% include about-bio.html 
 name="Dr. Christopher Rogan" 
-email="placeholder@ku.edu"
-image="https://physics.ku.edu/sites/physics/files/styles/portrait_col_xl_6/public/images/2021/Faculty/Faculty%20Headshots/Rogan%2C%20Chris%20WEB.jpg?h=de7b58d5&itok=Ds9YXiUy"
+email="crogan@ku.edu"
+image=rogan_portrait
 content=
 "
-Dr. Rogan's blurb goes here. Can probably at least base it off of the description from the old fantasy physics site.
+Dr. Christopher Rogan is an Associate Professor at the University of Kansas's Department of Physics and Astronomy, with 
+his research focusing on Experimental High Energy. He received his AB from the Department of Physics at Princeton 
+University and both his Masters of Science and Ph.D degrees from the California Institute of Technology.
+<br><br>
+Dr. Rogan conceived of the original version of the Fantasy Physics project in 2018 and has served as the primary physics 
+consultant advisor since the project was revived in 2024.
 "
 %}
 
-
-
-
+{% capture brunetti_portrait %} {{ '/assets/images/brunetti_about_portrait.png' | absolute_url }} {% endcapture %}
 {% include about-bio.html 
 name="Dr. Maria Brunetti" 
-email="placeholder@ku.edu"
-image="https://placehold.co/500x500"
+email="mbbrunetti@ku.edu"
+image=brunetti_portrait
 content=
 "
-Should Dr. Brunetti have a blurb? Talk to Dr. Rogan about this.
+Dr. Maria Brunetti has been an Assistant Professor at the University of Kansas's Department of Physics and Astronomy
+since 2024, with her research focused on Experimental Neutrino Physics. She received her BS and MS from the
+Università degli Studi di Napoli Federico II in Italy before completing her Ph.D at the University of Birmingham.
+<br><br>
+Dr. Brunetti has served as a neutrino physics advisor since 2024.
 "
 %}
 
-
+{% capture aidan_portrait %} {{ '/assets/images/aidan_about_portrait.png' | absolute_url }} {% endcapture %}
 {% include about-bio.html 
 name="Aidan Novo" 
 email="aidannovo@ku.edu"
-image="https://placehold.co/500x500"
+image=aidan_portrait
 content=
 "
 Aidan is a 5th-year undergraduate student at the University of Kansas, dual-majoring in Physics and Classics. 
@@ -65,16 +73,17 @@ revival in 2024.
 "
 %}
 
+{% capture paige_portrait %} {{ '/assets/images/paige_about_portrait.png' | absolute_url }} {% endcapture %}
 {% include about-bio.html 
 name="Paige Trevarrow" 
 email="ptrevarrow@ku.edu"
-image="https://placehold.co/500x500"
+image=paige_portrait
 content=
 "
 Paige Trevarrow is a 3rd-year graduate student at the University of Kansas. She is a member of Dr. Maria Brigida Brunetti's
 research group and works with the DUNE collaboration. She is also serving as an officer of the Graduate Student Organization
 in the physics department at KU. 
 <br><br>
-She has served as... (still working on the wording here)
+She has served as a neutrino physics consultant, game designer, and card writer since she joined the project in 2025.
 "
 %}
