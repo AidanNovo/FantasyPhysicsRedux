@@ -1,4 +1,5 @@
-import tkinter as tk
+# import tkinter as tk
+import customtkinter as ctk
 from collections import deque
 from copy import deepcopy
 
@@ -15,6 +16,7 @@ class Item:
     def __init__(self, name='', image_file=None, function=f_default, prerun_function=None, item_type='', tags=()):
         self.name = name
         self.image_file = image_file
+        self.image = None
         self.function = function
         self.prerun_function = prerun_function  # A special function that runs before normal card activation starts
         self.item_type = item_type
@@ -60,17 +62,19 @@ def item_factory(item_name):
         except KeyError:
             return deepcopy(interpreter_dict[item_name])
 
-
-# MISCELLANEOUS VARIABLES
-root = tk.Tk()  # Define the main tkinter root here for better sharing
+# root = ctk.CTk()  # Define the main tkinter root here for better sharing
+root_instance = None
 
 card_dict = {}  # Huge master dict of all the cards and their effects
 token_dict = {}  # Huge master dict of all the tokens and their effects
 interpreter_dict = {}  # Huge master dict of all the interpreters and their effects
 
-do_slow_activation = None  # Becomes a tkinter IntVar at runtime
+do_slow_activation = None # Becomes a tkinter BooleanVar at runtime
 data = 0
 score = 0
+
+tcolor_dark_purple = '#14182b'
+tcolor_light_grey = '#e8e8e8'
 
 # CARD RARITY COEFFICIENTS
 # These are used when opening booster packs to weight the card draw.
@@ -99,7 +103,7 @@ interpreters = CardHolder()
 
 # Add the main interpreter to the interpreter list
 from main import create_item
-create_item('Main Interpreter', interpreters)
+# create_item('Main Interpreter', interpreters)
 
 
 # EVENT STACK STUFF

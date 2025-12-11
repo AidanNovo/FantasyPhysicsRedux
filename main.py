@@ -1,5 +1,6 @@
 import random
 import tkinter as tk
+import customtkinter as ctk
 from PIL import Image, ImageTk
 
 import cards
@@ -51,11 +52,10 @@ def show_big_item(event, item):
         event: The mouse-click event passed to this function by tkinter.
         item: The card/token/etc object to be displayed.
     """
-
-    popup = tk.Toplevel(common.root)
-    big_image = item.large_image
-    image_label = tk.Label(popup, image=big_image)
-    image_label.pack()
+    # pass
+    from new_gui import get_root, BigItemDisplay
+    root = get_root()
+    root.popup = BigItemDisplay(root, item=item)
 
 
 def initialize_item_gui_button(item, holder):
@@ -66,7 +66,12 @@ def initialize_item_gui_button(item, holder):
         holder: The CardHolder which the item is being initialized into.
     """
 
-    item.gui_button = tk.Button(holder.gui_frame)
+    # We have to load in a placeholder image here to avoid a bug where images wouldn't appear
+    # Maybe connected to the garbage collector??
+    placeholder_image = ctk.CTkImage(Image.open('card_images/fp_placeholder.png'), size=(100, 140))
+
+    item.gui_button = ctk.CTkButton(holder.gui_frame, image=placeholder_image, text='',
+                                    border_width=0, fg_color='transparent', border_spacing=2, width=0)
     item.gui_button.bind('<Button-2>', lambda event, c=item: show_big_item(event, c))  # r-click is Button-2 on Mac
     item.gui_button.bind('<Button-3>', lambda event, c=item: show_big_item(event, c))  # r-click is Button-3 on PC
 
@@ -74,8 +79,8 @@ def initialize_item_gui_button(item, holder):
 def initialize_item_image(item):
     """Initialize the various images for the item."""
     base_img = Image.open(item.image_file)
-    item.image = ImageTk.PhotoImage(base_img.resize((100, 140)))
-    item.large_image = ImageTk.PhotoImage(base_img.resize((250, 350)))
+    item.image = ctk.CTkImage(base_img, size=(100, 140))
+    item.large_image = ctk.CTkImage(base_img, size=(250, 350))
 
     item.gui_button.configure(image=item.image)
 
@@ -141,21 +146,35 @@ def move_item(item, old_holder, new_holder):
     if len(new_holder.list) == new_holder.max_length:
         print(f'Could not add item to {new_holder}.')
     else:
-        cfg = item.gui_button.config()
         item.gui_button.destroy()
 
         old_index = old_holder.list.index(item)
         new_holder.list.append(old_holder.list.pop(old_index))
 
-        item.gui_button = tk.Button(new_holder.gui_frame, image=cfg['image'][4], compound=tk.TOP)
+        item.gui_button = ctk.CTkButton(new_holder.gui_frame,
+                                        width=item.gui_button.cget('width'),
+                                        height=item.gui_button.cget('height'),
+                                        corner_radius=item.gui_button.cget('corner_radius'),
+                                        border_width=item.gui_button.cget('border_width'),
+                                        border_spacing=item.gui_button.cget('border_spacing'),
+                                        fg_color=item.gui_button.cget('fg_color'),
+                                        hover_color=item.gui_button.cget('hover_color'),
+                                        border_color=item.gui_button.cget('border_color'),
+                                        text_color=item.gui_button.cget('text_color'),
+                                        text_color_disabled=item.gui_button.cget('text_color_disabled'),
+                                        text=item.gui_button.cget('text'),
+                                        font=item.gui_button.cget('font'),
+                                        hover=item.gui_button.cget('hover'),
+                                        image=item.gui_button.cget('image'),
+                                        compound=item.gui_button.cget('compound'))
 
         if new_holder == common.active_row:
             item.gui_button.configure(command=lambda c=item: move_item(c, common.active_row, common.deck),
-                                      compound=tk.TOP)
+                                      compound='top')
 
         elif new_holder == common.deck:
             item.gui_button.configure(command=lambda c=item: move_item(c, common.deck, common.active_row),
-                                      compound=tk.NONE)
+                                      compound='none', text='')
 
         item.gui_button.bind('<Button-2>', lambda event, c=item: show_big_item(event, c))  # r-click is Button-2 on Mac
         item.gui_button.bind('<Button-3>', lambda event, c=item: show_big_item(event, c))  # r-click is Button-3 on PC

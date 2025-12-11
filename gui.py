@@ -1,5 +1,7 @@
 import tkinter as tk
-from tkinter import ttk
+# from tkinter import ttk
+import customtkinter as ctk
+from PIL import Image, ImageTk
 import math
 
 import common
@@ -64,41 +66,49 @@ def update_power_row_display(repeat=True):
 
 def update_stat_display():
     """Update the stat display to reflect the current game state."""
-    stat_display_label.config(text=f'SCORE: {common.score}  |  DATA:  {common.data}')
+    stat_display_label.configure(text=f'SCORE: {common.score}  |  DATA:  {common.data}')
     root.after(100, update_stat_display)
 
 
 if __name__ == '__main__':
     # UI STUFF BELOW HERE
     from common import root
-    gui_theme.set_style(root)
+
+    # gui_theme.set_style(root)
+
     root.title('FantasyPhysics')
 
+    # Not done
+    base_bg_img = Image.open('misc_images/space_bg_app.png')
+    background_image = ctk.CTkImage(base_bg_img)
+    bg_image_label = ctk.CTkLabel(root, image=background_image)
+    # bg_image_label = ctk.C
+    bg_image_label.place(x=-1, y=-1, relwidth=1.1, relheight=1.1)
+
     # Sidebar stuff
-    F_sidebar = ttk.Frame(root)
-    F_sidebar.grid(row=0, column=0, rowspan=4, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.N + tk.S)
+    F_sidebar = ctk.CTkFrame(root)
+    F_sidebar.grid(row=0, column=0, rowspan=4, padx=5, pady=5, sticky=tk.N + tk.S)
 
     # Stat display
-    stat_display_label = ttk.Label(F_sidebar, text='SCORE: 0')
-    stat_display_label.grid(row=3, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E)
+    stat_display_label = ctk.CTkLabel(F_sidebar, text='SCORE: 0')
+    stat_display_label.grid(row=3, column=0, padx=0, pady=0, ipadx=10, ipady=5, sticky=tk.W + tk.E)
 
     # Deck list
-    decklist_label = ttk.Label(F_sidebar, text='DECK LIST', font='Helvetica 18 bold')
-    decklist_label.grid(row=1, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E)
+    decklist_label = ctk.CTkLabel(F_sidebar, text='DECK LIST')
+    decklist_label.grid(row=1, column=0, padx=0, pady=0, ipadx=10, ipady=5, sticky=tk.W + tk.E)
 
-    F_deck_images = ttk.Frame(F_sidebar)
-    F_deck_images.grid(row=2, column=0, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N + tk.S)
+    F_deck_images = ctk.CTkFrame(F_sidebar)
+    F_deck_images.grid(row=2, column=0, padx=5, pady=5, ipadx=0, ipady=0, sticky=tk.W + tk.E + tk.N + tk.S)
 
-    C_deck_canvas = tk.Canvas(F_deck_images, width=340, height=580, scrollregion=(0, 0, 0, 800), yscrollincrement=15)
-    deck_vbar = ttk.Scrollbar(F_deck_images, orient=tk.VERTICAL, command=C_deck_canvas.yview)
-    C_deck_canvas.configure(yscrollcommand=deck_vbar.set)
+    C_deck_canvas = tk.Canvas(F_deck_images, width=340, height=580, scrollregion=(0, 0, 0, 800), yscrollincrement=15,
+                              background='#14182b')
 
-    F_internal_deck_frame = ttk.Frame(C_deck_canvas)
+    F_internal_deck_frame = ctk.CTkFrame(C_deck_canvas)
     F_internal_deck_frame.bind("<Configure>", lambda e: C_deck_canvas.configure(scrollregion=C_deck_canvas.bbox("all")))
 
-    C_deck_canvas.create_window((0, 0), window=F_internal_deck_frame, anchor="nw")
+    C_deck_canvas.create_window((0, 0), window=F_internal_deck_frame, anchor="nw", )
     C_deck_canvas.pack(side=tk.LEFT)
-    deck_vbar.pack(side=tk.RIGHT, fill=tk.Y)
+    # deck_vbar.pack(side=tk.RIGHT, fill=tk.Y)
 
     common.deck.gui_frame = F_internal_deck_frame
 
@@ -114,50 +124,50 @@ if __name__ == '__main__':
     C_deck_canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
     # Active row
-    F_active_row = ttk.Frame(root, height=140)
+    F_active_row = ctk.CTkFrame(root, height=140)
     F_active_row.grid(row=0, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N)
-    active_row_label = ttk.Label(F_active_row, text='ACTIVE ROW')
+    active_row_label = ctk.CTkLabel(F_active_row, text='ACTIVE ROW')
     active_row_label.grid(row=0, column=0, columnspan=common.active_row.max_length, padx=5, pady=5, ipadx=1, ipady=1,
                           sticky=tk.W + tk.S + tk.E)
     common.active_row.gui_frame = F_active_row
 
     # Particle token row
-    F_particle_row = ttk.Frame(root, height=140)
+    F_particle_row = ctk.CTkFrame(root, height=140)
     F_particle_row.grid(row=1, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N)
-    particle_row_label = ttk.Label(F_particle_row, text='PARTICLE TOKENS')
+    particle_row_label = ctk.CTkLabel(F_particle_row, text='PARTICLE TOKENS')
     particle_row_label.grid(row=0, column=0, columnspan=common.active_row.max_length, padx=5, pady=5, ipadx=1, ipady=1,
                           sticky=tk.W + tk.S + tk.E)
     common.particle_row.gui_frame = F_particle_row
 
     # Power token row
-    F_power_row = ttk.Frame(root, height=140)
+    F_power_row = ctk.CTkFrame(root, height=140)
     F_power_row.grid(row=2, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.W + tk.E + tk.N)
-    power_row_label = ttk.Label(F_power_row, text='POWER TOKENS')
+    power_row_label = ctk.CTkLabel(F_power_row, text='POWER TOKENS')
     power_row_label.grid(row=0, column=0, columnspan=common.active_row.max_length, padx=5, pady=5, ipadx=1, ipady=1,
                          sticky=tk.W + tk.S + tk.E)
     common.power_row.gui_frame = F_power_row
 
     # Controls
-    F_controls = ttk.Frame(root)
+    F_controls = ctk.CTkFrame(root)
     F_controls.grid(row=3, column=1, padx=5, pady=5, ipadx=1, ipady=1, sticky=tk.E + tk.W + tk.S)
-    controls_label = ttk.Label(F_controls, text='CONTROLS')
+    controls_label = ctk.CTkLabel(F_controls, text='CONTROLS')
     controls_label.grid(row=0, column=0, columnspan=common.active_row.max_length, padx=5, pady=5, ipadx=1, ipady=1,
                         sticky=tk.W + tk.S + tk.E)
 
     from main import crack_booster_pack
-    booster_button = ttk.Button(F_controls, text='Open Booster', command=crack_booster_pack, takefocus=False)
+    booster_button = ctk.CTkButton(F_controls, text='Open Booster', command=crack_booster_pack)
     booster_button.grid(row=1, column=0)
 
     from main import activate_cards
-    activate_cards_button = ttk.Button(F_controls, text='Activate Cards', command=lambda: activate_cards(root), takefocus=False)
+    activate_cards_button = ctk.CTkButton(F_controls, text='Activate Cards', command=lambda: activate_cards(root))
     activate_cards_button.grid(row=1, column=1)
 
     from main import get_all_cards
-    card_sampler_button = ttk.Button(F_controls, text='Get 1 of Each Card', command=get_all_cards, takefocus=False)
+    card_sampler_button = ctk.CTkButton(F_controls, text='Get 1 of Each Card', command=get_all_cards)
     card_sampler_button.grid(row=1, column=2)
 
     common.do_slow_activation = tk.IntVar()
-    slow_activate_checkbox = ttk.Checkbutton(F_controls, variable=common.do_slow_activation, takefocus=False,
+    slow_activate_checkbox = ctk.CTkCheckBox(F_controls, variable=common.do_slow_activation,
                                             text= 'Press space to advance activation   ')
     slow_activate_checkbox.grid(row=1, column=3)
 

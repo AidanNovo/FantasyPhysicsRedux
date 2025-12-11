@@ -19,6 +19,12 @@ Incorporate particle energies somehow?
 - Make particle beams scale energy based on power?
 - Really this is kind of poking at a deeper idea, which is the idea of having qualities/attributes to the things you generate
 
+Token collimation
+- Neutrino tokens have a "lifetime" just like unstable particles
+- But, they are flavored as disappearing by being uncollimated i.e. going somewhere else
+- Neutrino tokens from certain beam sources start with more lifetime because they are more collimated
+  - e.g. LBNF = high lifetime, sun = low lifetime.
+
 ### Idea: Token Expansion
 - Second row of cards (or tokens or coins or whatever we want to call them)
 - This second row are the particles and data and such that our experiment is generating
