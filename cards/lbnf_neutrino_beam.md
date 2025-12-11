@@ -4,6 +4,7 @@ title: LBNF Neutrino Beam
 image_url: https://raw.githubusercontent.com/AidanNovo/FantasyPhysicsRedux/refs/heads/main/card_images/fp_lbnf_beam.png
 image_alt: The card for the LBNF Neutrino Beam 
 card_page: true
+card_type: special
 ---
 ## **SPECIAL // Neutrino, Beam** ​
 ### _Common_
