@@ -10,8 +10,11 @@ card_type: detector # One of: detector, analysis, special, physics, or placehold
 ## **DETECTOR // Neutrino** 
 ### _Uncommon_
 
-Blurb 1
-
+The IceCube Neutrino Observatory is a real-life neutrino detector experiment located in Antarctica.
+IceCube is made up of a collection of strings deployed into deep holes (up to 2.4 kilometers, taller than 7 Eiffel towers) 
+drilled in the Antarctic ice. On each string are a series of detectors known as digital optical modules, or DOMs, which
+watch for the flashes of light sometimes produced when neutrinos pass through the ice. Altogether, IceCube is made up of
+5,160 DOMs, all waiting to detect an incoming neutrino.
 ### How does it work?
 Blurb 2
 

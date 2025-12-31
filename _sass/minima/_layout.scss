@@ -162,6 +162,7 @@
   width:         calc(45% - (#{$spacing-unit} / 2));
 }
 
+
 @include media-query($on-laptop) {
   .footer-col-1,
   .footer-col-2 {
@@ -183,7 +184,20 @@
   }
 }
 
+/* Make the footer render with the description on its own line specifically when we are on a card page */
+/* Do not touch unless you know what you're doing */
+.card-page-col-wrapper:has(.footer-col-wrapper) {
+  .footer-col-1,
+  .footer-col-2 {
+    width: -webkit-calc(50% - (#{$spacing-unit} / 2));
+    width:         calc(50% - (#{$spacing-unit} / 2));
+  }
 
+  .footer-col-3 {
+    width: -webkit-calc(100% - (#{$spacing-unit} / 2));
+    width:         calc(100% - (#{$spacing-unit} / 2));
+  }
+}
 
 /*
  * Page content
@@ -504,5 +518,6 @@
     margin-bottom: 1em;
   }
 }
+
 
 

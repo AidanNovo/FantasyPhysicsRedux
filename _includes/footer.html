@@ -26,7 +26,11 @@
       </div>
 
       <div class="footer-col footer-col-3">
-        <p>{{- site.description | escape -}}</p>
+        <div style="display:flex; flex-direction: row; flex-wrap: wrap; align-items: center;">
+        <img src={{'assets/images/nsf_logo_smaller.png'|absolute_url}} alt="NSF Logo" height="100px">
+        <img src={{'assets/images/jayhawk_smaller.png'|absolute_url}} alt="KU Jayhawk Logo" height="85px">
+        <p style="margin: 5px; flex:1">{{- site.description | escape -}}</p>
+        </div>
 
 <!--        <a href="{{ '/about/' | relative_url}}">More about the project</a>-->
       </div>
