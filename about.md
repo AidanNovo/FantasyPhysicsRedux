@@ -25,7 +25,7 @@ new design vision proposed by Aidan Novo.
 
 ## **The Creators**
 
-{% capture rogan_portrait %} {{ '/assets/images/rogan_about_portrait.png' | absolute_url }} {% endcapture %}
+{% capture rogan_portrait %} {{ 'FantasyPhysicsRedux/assets/images/rogan_about_portrait.png' | absolute_url }} {% endcapture %}
 {% include about-bio.html 
 name="Dr. Christopher Rogan" 
 email="crogan@ku.edu"
@@ -41,7 +41,7 @@ as the primary physics consultant and advisor up through its most recent evoluti
 "
 %}
 
-{% capture brunetti_portrait %} {{ '/assets/images/brunetti_about_portrait.png' | absolute_url }} {% endcapture %}
+{% capture brunetti_portrait %} {{ 'FantasyPhysicsRedux/assets/images/brunetti_about_portrait.png' | absolute_url }} {% endcapture %}
 {% include about-bio.html 
 name="Dr. Maria Brunetti" 
 email="mbbrunetti@ku.edu"
@@ -56,7 +56,7 @@ Dr. Brunetti has served as a neutrino physics advisor since 2024.
 "
 %}
 
-{% capture aidan_portrait %} {{ '/assets/images/aidan_about_portrait.png' | absolute_url }} {% endcapture %}
+{% capture aidan_portrait %} {{ 'FantasyPhysicsRedux/assets/images/aidan_about_portrait.png' | absolute_url }} {% endcapture %}
 {% include about-bio.html 
 name="Aidan Novo" 
 email="aidannovo@ku.edu"
@@ -73,7 +73,7 @@ revival in 2024.
 "
 %}
 
-{% capture paige_portrait %} {{ '/assets/images/paige_about_portrait.png' | absolute_url }} {% endcapture %}
+{% capture paige_portrait %} {{ 'FantasyPhysicsRedux/assets/images/paige_about_portrait.png' | absolute_url }} {% endcapture %}
 {% include about-bio.html 
 name="Paige Trevarrow" 
 email="ptrevarrow@ku.edu"
