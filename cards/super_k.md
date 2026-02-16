@@ -18,10 +18,10 @@ flashes of light occasionally produced when neutrinos pass through the water.
 An important fact about Super K is that the detector is far underground. The Earth itself acts as a filter, stopping
 other particles but letting neutrinos, which only rarely interact with their surroundings, pass through to the detector.
 
-However, while this makes neutrinos easy to filter for, it also makes them hard to detect. Rather than observing them 
+However, while this property makes neutrinos easy to filter for, it also makes them hard to detect. Rather than observing them 
 directly, we have to watch for the aftermath of their interactions. When a neutrino enters the Super-K water tank, it
-(rarely) can interact and create a shower of charged particles. These particles can travel faster than the speed of light
-(which travels more slowly in water), creating Cherenkov radiation. Think of it like a sonic boom but with light! These 
+(rarely) can interact and create a shower of charged particles. These particles can travel through water faster than 
+light (which travels more slowly in water), creating Cherenkov radiation. Think of it like a sonic boom but with light! These 
 flashes of light are seen by the photomultiplier tubes, signaling the possible presence of a neutrino! 
 
 Interested in Cherenkov radiation? Check out the [IceCube]({{ 'cards/icecube' | relative_url}}) experiment!

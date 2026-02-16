@@ -1,8 +1,8 @@
 ---
 layout: two_column
-title: Dune Far Detector
+title: DUNE Far Detector
 image_url: https://raw.githubusercontent.com/AidanNovo/FantasyPhysicsRedux/refs/heads/main/card_images/fp_dune_far_detector.png
-image_alt: The card for the Dune Far Detector
+image_alt: The card for the DUNE Far Detector
 card_page: true # Make it appear in the card page listing
 card_type: detector # One of: detector, analysis, special, physics, or placeholder (add more in cards.md)
 ---

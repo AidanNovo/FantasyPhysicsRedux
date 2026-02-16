@@ -13,13 +13,14 @@ This is why experiments like IceCube and Super Kamiokande use water or ice, so t
 
 <div class="terminal" markdown="1">
 ### Lepton
-A lepton is a type of particle. You’ve most likely heard of the most famous lepton, the electron. Along with electrons, there are two other types of charged leptons called muons and taus. Each of these have a corresponding neutrino, which is neutrally charged, giving us a total of six leptons. Leptons combine to form different particles 
+A lepton is a type of particle. You’ve most likely heard of the most famous lepton, the electron. Along with electrons, there are two other types of charged leptons called muons and taus. Each of these have a corresponding neutrino, which is neutrally charged, giving us a total of six leptons. 
 </div><br>
 
 
 <div class="terminal" markdown="1">
 ### Neutrino
-This particle is a special type of lepton. Unlike the other leptons, neutrinos carry no charge and have very little mass. This makes them extremely hard to detect, even though there are a lot of them in the universe. Neutrinos have many interesting properties, which we want to study more closely.
+This particle is a special type of lepton. Unlike the other leptons, neutrinos carry no charge and have very little mass. This makes them extremely hard to detect, even though there are an incredible number of them in the universe. Neutrinos have many interesting properties, which we want to study more closely, such
+as their ability to oscillate between flavors.
 
 Also see:
 * [Neutrino Flavors]({{ 'glossary/#neutrino-flavors' | relative_url}})

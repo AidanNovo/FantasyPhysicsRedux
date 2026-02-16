@@ -7,7 +7,6 @@ card_page: true
 card_type: analysis
 ---
 
-
 ## **ANALYSIS // Computer** 
 ### _Common_
 

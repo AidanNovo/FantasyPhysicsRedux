@@ -20,4 +20,4 @@ Blurb 3
 
 ### Want to learn more? 
 
-External LIimk
+External Link
