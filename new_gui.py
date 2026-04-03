@@ -77,13 +77,13 @@ class Root(ctk.CTk):
         self.configure(padx=40, pady=40)
 
         self.title('FantasyPhysics')
-        self.geometry('1000x600')
+        self.geometry('1400x800')
         self.grid_columnconfigure(0, minsize=400)
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
         self.Sidebar = SideBarFrame(self)
-        self.Sidebar.grid(column=0, row=0, rowspan=2, sticky='nswe', padx=(0, 5))
+        self.Sidebar.grid(column=0, row=0, rowspan=2, sticky='nswe', padx=(0, 15))
 
         self.CardRows = CardRowsFrame(self)
         self.CardRows.grid(column=1, row=0, sticky='nswe')
@@ -161,22 +161,38 @@ class ControlPanelFrame(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
 
+        from main import get_all_cards
+        self.get_all_cards_button = ctk.CTkButton(self, text='Get 1 of Each Card', command=get_all_cards)
+        self.get_all_cards_button.grid(column=0, row=1, padx=5, pady=5)
+
+        from main import crack_starter_pack
+        self.crack_starter_button = ctk.CTkButton(self, text='Crack Starter', command=crack_starter_pack)
+        self.crack_starter_button.grid(column=1, row=1, padx=5, pady=5)
+
         from main import crack_booster_pack
-        self.crack_booster_button = ctk.CTkButton(self, text='Crack Booster', command=crack_booster_pack)
-        self.crack_booster_button.grid(column=0, row=0, padx=5, pady=5)
+        self.rand_booster_button = ctk.CTkButton(self, text='Crack Random Booster (3)', command=lambda: crack_booster_pack(pack_size=3))
+        self.rand_booster_button.grid(column=2, row=1, padx=5, pady=5)
+
+        # TODO: Make these booster pools dynamically populate via card type
+        self.analysis_booster_button = (
+            ctk.CTkButton(self, text='Crack Analysis Booster (1)', command=lambda: crack_booster_pack(pack_size=1, draw_pool=('Shower Reconstruction', 'Machine Learning'), draw_weights=(1,1))))
+        self.analysis_booster_button.grid(column=3, row=1, padx=5, pady=5)
+
+        self.special_booster_button = (
+            ctk.CTkButton(self, text='Crack Special Booster (1)', command=lambda: crack_booster_pack(pack_size=1, draw_pool=('Fission Reactor', 'LBNF Beam'), draw_weights=(1,1))))
+        self.special_booster_button.grid(column=4, row=1, padx=5, pady=5)
+
 
         from main import activate_cards
         self.activate_cards_button = ctk.CTkButton(self, text='Activate Cards', command=lambda: activate_cards(root))
-        self.activate_cards_button.grid(column=1, row=0, padx=5, pady=5)
+        self.activate_cards_button.grid(column=0, row=0, padx=5, pady=5)
 
-        from main import get_all_cards
-        self.get_all_cards_button = ctk.CTkButton(self, text='Get 1 of Each Card', command=get_all_cards)
-        self.get_all_cards_button.grid(column=2, row=0, padx=5, pady=5)
+
 
         common.do_slow_activation = ctk.BooleanVar()  # Have to do this here
         slow_activate_checkbox = ctk.CTkCheckBox(self, variable=common.do_slow_activation,
                                                  text='Press space to advance activation')
-        slow_activate_checkbox.grid(column=3, row=0, padx=5, pady=5)
+        slow_activate_checkbox.grid( column=1, row=0, padx=5, pady=5, columnspan=2, sticky='w')
 
 class BigItemDisplay(ctk.CTkToplevel):
     def __init__(self, master, item):

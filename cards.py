@@ -1,5 +1,6 @@
 import tkinter as tk
 import time
+import math
 
 import common
 # from common import Item, card_dict, pretty_print, item_factory
@@ -102,8 +103,71 @@ common.card_dict.update({'Machine Learning': Card(
     name='Machine Learning', function=f_machine_learning, image_file='card_images/fp_machine_learning.png',
     item_type='analysis', tags=['computer'], param=0.8, power_slots=1)})
 
+def f_shower_reconstruction(self, rows, root):
+    """Generate score equal to current data, if powered."""
+    # TODO: Implement secondary particle bonus once we have secondary particles
+    ar = rows['active']
+
+    f_card_start(self, ar, root)
+    if self.power_tokens == 0: # Card requires 1 token to run
+        pretty_print(self, ar, 'Unpowered')
+    else:
+        # Increase score
+        common.score += common.data
+
+        pretty_print(self, ar, f'Generated {common.data} score from {common.data} data!')
+    f_card_end(self, ar, root)
+common.card_dict.update({'Shower Reconstruction': Card(
+    name='Machine Learning', function=f_shower_reconstruction, image_file='card_images/fp_shower_reconstruction.png',
+    item_type='analysis', tags=['computer'], power_slots=1)})
+
 
 # Detector Cards
+def f_dune_far_detector(self, rows, root):  # Currently, this is exactly the same as f_super_kamiokande
+    """Generate data from neutrino tokens, extra if a DUNE Near Detector activated earlier in the row."""
+    # TODO: Consider that right now it is literally never optimal to run a near/far pair if you could have 2 fars
+    ar = rows['active']
+    pr = rows['particle']
+
+    f_card_start(self, ar, root)
+    flavors = []
+    for particle in pr.list:
+        if particle.name == 'e- Neutrino' or particle.name == 'Muon Neutrino' or particle.name == 'Tau Neutrino':
+            if flavors.count(particle.name) == 0:
+                flavors.append(particle.name)
+            common.data += 1000
+            pretty_print(self, ar, 'Neutrino detected, data increased by 1000!')
+        else:
+            pass
+
+    my_index = ar.list.index(self)
+    for card in ar.list[:my_index]:
+        if card.name == 'DUNE Near Detector':
+            common.data += 500 * len(flavors)
+            pretty_print(self, ar, f'DUNE Near Detector activated before this card, data increased by {500 * len(flavors)}! (Flavor count: {len(flavors)})')
+    f_card_end(self, ar, root)
+common.card_dict.update({'DUNE Far Detector': Card(
+    name='DUNE Far Detector', function=f_dune_far_detector, image_file='card_images/fp_dune_far_detector.png',
+    item_type='detector', tags=['neutrino'])})
+
+def f_dune_near_detector(self, rows, root):  # Currently, this is exactly the same as f_super_kamiokande
+    """Generate data from neutrino tokens."""
+    ar = rows['active']
+    pr = rows['particle']
+
+    f_card_start(self, ar, root)
+    for particle in pr.list:
+        if particle.name == 'e- Neutrino' or particle.name == 'Muon Neutrino' or particle.name == 'Tau Neutrino':
+            common.data += 1500
+            pretty_print(self, ar, 'Neutrino detected, data increased by 1500!')
+        else:
+            pass
+    f_card_end(self, ar, root)
+common.card_dict.update({'DUNE Near Detector': Card(
+    name='DUNE Near Detector', function=f_dune_near_detector, image_file='card_images/fp_dune_near_detector.png',
+    item_type='detector', tags=['neutrino'])})
+
+
 def f_icecube(self, rows, root):  # Currently, this is exactly the same as f_super_kamiokande
     """Generate data from neutrino tokens."""
     ar = rows['active']
@@ -190,6 +254,30 @@ common.card_dict.update({'LBNF Beam': Card(
     name='LBNF Beam', function=f_lbnf_beam, image_file='card_images/fp_lbnf_beam.png',
     item_type='special', tags=['beam', 'neutrino'], power_slots=3)})
 
+def f_tier_2_computing_center(self, rows, root):
+    pass
+    # TODO: Update card to say "retrigger 1 time per 2 power tokens on this card"
+    # TODO: Address issue with powered cards with passive effects
+#     ar = rows['active']
+#     rr = rows['power']
+#
+#     f_card_start(self, ar, root)
+#     pretty_print(self, ar, 'Doing nothing! (Card has no active effect)')
+#     f_card_end(self, ar, root)
+#
+# def f_prerun_add_computer_bonus(self, rows, root):
+#     """Add an interpreter that gives bonus points for every computer card activation."""
+#     ar = rows['active']
+#
+#     from main import create_item
+#     create_item('Tier 2 Computing Center Interpreter', common.interpreters)
+#     pretty_print(self, ar, 'Adding passive effect: +100 points on computer card activation.')
+#
+# common.card_dict.update({'Add Computer Bonus': Card(
+#     name='Add Computer Bonus', function=f_add_computer_bonus, prerun_function=f_prerun_add_computer_bonus,
+#     image_file='card_images/fp_add_computer_bonus.png',
+#     item_type='prototype', rarity=common.r_uncommon)})
+
 
 # Prototype Cards
 def f_neutrino_generator(self, rows, root):
@@ -240,7 +328,6 @@ common.card_dict.update({'Re-Trigger': Card(
     item_type='prototype', rarity=common.r_uncommon)})
 
 def f_add_computer_bonus(self, rows, root):
-    """Add an interpreter that gives bonus points for every computer card activation."""
     ar = rows['active']
     rr = rows['power']
 
@@ -248,6 +335,7 @@ def f_add_computer_bonus(self, rows, root):
     pretty_print(self, ar, 'Doing nothing! (Card has no active effect)')
     f_card_end(self, ar, root)
 def f_prerun_add_computer_bonus(self, rows, root):
+    """Add an interpreter that gives bonus points for every computer card activation."""
     ar = rows['active']
 
     from main import create_item

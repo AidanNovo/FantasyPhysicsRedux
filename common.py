@@ -29,7 +29,7 @@ class Item:
 # MISCELLANEOUS FUNCTIONS
 def pretty_print(self, holder, message):
     """Print an item's activation message with some standardized formatting and spacing."""
-    target_length = 20  # The number of characters that will appear to the left of the message
+    target_length = 25  # The number of characters that will appear to the left of the message
     header_length = len(f'{holder.list.index(self)} {self.name}:')
     delta = target_length - header_length
 

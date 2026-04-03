@@ -38,6 +38,11 @@ def crack_booster_pack(pack_size=5,
 
     print('Deck:', common.deck.list)
 
+def crack_starter_pack():
+    """Add a detector, source, and analysis card to the deck."""
+    create_item('Neutrino Gen', holder=common.deck)
+    create_item('IceCube', holder=common.deck)
+    create_item('Shower Reconstruction', holder=common.deck)
 
 def get_all_cards():
     """Add one copy of each card in card_dict to the deck."""
