@@ -21,8 +21,11 @@ def f_e_neutrino_token(self, rows, root):
     common.pretty_print(self, pr, 'Oscillating to muon neutrino.')
 
     index = pr.list.index(self)
+    # Destroy the old GUI button before creating the new token
+    old_gui_button = self.gui_button
     self = item_factory('Muon Neutrino')
     pr.list[index] = self
+    old_gui_button.destroy()
 
     # Re-initialize some stuff that would normally get initialized in the create_item function
     initialize_item_gui_button(self, pr)
@@ -39,8 +42,11 @@ def f_muon_neutrino_token(self, rows, root):
     pretty_print(self, pr, 'Oscillating to tau neutrino.')
 
     index = pr.list.index(self)
+    # Destroy the old GUI button before creating the new token
+    old_gui_button = self.gui_button
     self = item_factory('Tau Neutrino')
     pr.list[index] = self
+    old_gui_button.destroy()
 
     # Re-initialize some stuff that would normally get initialized in the create_item function
     initialize_item_gui_button(self, pr)
@@ -57,8 +63,11 @@ def f_tau_neutrino_token(self, rows, root):
     pretty_print(self, pr, 'Oscillating to electron neutrino.')
 
     index = pr.list.index(self)
+    # Destroy the old GUI button before creating the new token
+    old_gui_button = self.gui_button
     self = item_factory('e- Neutrino')
     pr.list[index] = self
+    old_gui_button.destroy()
 
     # Re-initialize some stuff that would normally get initialized in the create_item function
     initialize_item_gui_button(self, pr)

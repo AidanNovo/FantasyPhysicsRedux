@@ -241,4 +241,22 @@ def activate_cards(root):
             for interpreter in common.interpreters.list:
                 interpreter.function(event)
 
+    # Clear out tokens and prepare for next round
+
+    # Clear power tokens from all active cards (and deck, just in case)
+    for card in common.active_row.list:
+        card.power_tokens = 0
+
+    for card in common.deck.list:
+        card.power_tokens = 0
+
+    # Remove leftover tokens so they do not build up round to round
+    for token in common.power_row.list[:]:
+        token.gui_button.destroy()
+        common.power_row.list.remove(token)
+
+    for token in common.particle_row.list[:]:
+        token.gui_button.destroy()
+        common.particle_row.list.remove(token)
+
     print('---------END---------')
